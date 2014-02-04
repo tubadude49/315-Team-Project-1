@@ -78,7 +78,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataManager.cpp" />
+    <ClCompile Include="DBMS Engine Tester.cpp" />
+    <ClCompile Include="DBMSAPI.cpp" />
+    <ClCompile Include="DMLParser.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Relation.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataManager.h" />
+    <ClInclude Include="DBMSAPI.h" />
+    <ClInclude Include="DMLParser.h" />
+    <ClInclude Include="Relation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

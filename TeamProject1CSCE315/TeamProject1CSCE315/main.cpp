@@ -1,3 +1,12 @@
-// HEY GUYS IF YOU CAN ACCESS THIS FILE... EDIT A LINE IN -- THOMAS
-// HEY GUYS, I THINK I'M GETTING THE HANG OF THIS NOW!!! --- JASON
-// Edit
+/*#include <iostream>
+
+#include "DBMSAPI.h"
+
+int main() {
+
+	cout << "You are in the main" << endl;
+
+	string tester;
+	cin >> tester;
+
+}*/

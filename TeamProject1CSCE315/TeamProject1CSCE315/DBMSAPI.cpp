@@ -9,11 +9,12 @@ DBMSAPI::DBMSAPI() {
 	dmlParser = new DMLParser(dataManager);
 }
 
+DBMSAPI::~DBMSAPI() {
+}
+
 /* 	Send the parseable program to the DMLParser.
 */
 void DBMSAPI::parseProgram(string &program, string &response) {
-	string response;
 	dmlParser->parseProgram(program, response);
-
 	cout << response << endl;
 }

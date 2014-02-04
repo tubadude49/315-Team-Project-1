@@ -12,6 +12,12 @@ Relation* DataManager::getRelationByName(string &relationName) {
 	return NULL;
 }
 
+DataManager::DataManager() {
+}
+
+DataManager::~DataManager() {
+}
+
 /*	Create a new relation with the given attribute names and attribute types
 */
 void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes) {
@@ -30,6 +36,7 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 
 string DataManager::show(string &relationName) {
 	//TODO: Beautiful ASCII output goes here.
+	return "";
 }
 
 /*	Remove the requested relation name from storage in this data manager.
@@ -45,6 +52,6 @@ void DataManager::close(string &relationName) {
 
 void DataManager::write(string &relationName) {
 	Relation* relation = getRelationByName(relationName);
-	vector<string>* buildCmds = relation->getBuildCmds();
+	vector<string> buildCmds = relation->getBuildCmds();
 	//TODO: write the build commands to a file
 }
