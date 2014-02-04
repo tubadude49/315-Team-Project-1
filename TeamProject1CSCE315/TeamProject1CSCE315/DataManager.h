@@ -21,6 +21,6 @@ public:
 	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes);
 	void insert(string &relationName, vector<string> &values);
 	string show(string &relationName);
-	void close(string &relationName);
+	void drop(string &relationName);
 	void write(string &relationName);
 };
