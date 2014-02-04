@@ -46,7 +46,7 @@ string DataManager::show(string &relationName) {
 /*	Remove the requested relation name from storage in this data manager.
 Effectively deletes it from memory
 */
-void DataManager::close(string &relationName) {
+void DataManager::drop(string &relationName) {
 	for (int i = relations.size() - 1; i >= 0; i--) {
 		if (relations[i]->is(relationName)) {
 			relations.erase(relations.begin() + i);
