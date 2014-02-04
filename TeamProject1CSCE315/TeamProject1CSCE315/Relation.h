@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "Attribute.h"
+
 using namespace std;
 
 /* 	Private class, only used by DataManager.
@@ -17,7 +19,8 @@ class Relation
 	friend class DataManager;
 
 	string name;
-	vector<vector<string>> relation; //relation[attribute][tuple]
+	vector<Attribute*> attributes;
+	vector<vector<string>> tuples; //relation[attribute][tuple]
 	vector<string> buildCmds;
 
 	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes);
