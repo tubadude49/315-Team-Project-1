@@ -11,20 +11,16 @@ Instantiating the relation without these fields is not possible.
 */
 Relation::Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes) {
 	name = relationName;
-	relation.push_back(attributeNames);
-	relation.push_back(attributeTypes);
+	for (int i = 0; i < attributeNames.size(); i++) {
+		attributes.push_back(new Attribute(attributeNames[i], attributeTypes[i]));
+	}
+	//relation.push_back(attributeNames);
+	//relation.push_back(attributeTypes);
 }
 
 /* 	Destructor
 */
 Relation::~Relation() {
-	/*if(relation.size()>0) {
-	for(int i=0;i<relation.size();i++) {
-	for(int j=0;j<relation.at(0).size();i++) {
-	delete relation[i][j];
-	}
-	}
-	}*/
 }
 
 /* 	Check the relations' name, true if there is a match, false otherwise.
@@ -45,16 +41,16 @@ string& const Relation::getName() {
 /* 	Getter function for the relations field.
 Call in the order of (attribute,tuple)
 */
-string const Relation::at(unsigned int attribute, unsigned int tuple) {
-	return relation[attribute][tuple];
+string const Relation::at(unsigned int tuple, unsigned int attribute) {
+	return tuples[tuple][attribute];
 }
 
 /*	Add a new tuple (row) onto the relation field.
 */
 void Relation::addTuple(vector<string> &values) {
-	unsigned int requiredSize = relation[0].size();
+	unsigned int requiredSize = attributes.size();
 	if (values.size() == requiredSize) { // This should never be false in a situation where the parsed program has no errors
-		relation.push_back(values);
+		tuples.push_back(values);
 	}
 }
 
