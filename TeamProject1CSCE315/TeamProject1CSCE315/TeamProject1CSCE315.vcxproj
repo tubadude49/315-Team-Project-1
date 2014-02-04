@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DBMS Engine Tester.cpp" />
     <ClCompile Include="DBMSAPI.cpp" />
@@ -86,6 +87,7 @@
     <ClCompile Include="Relation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Attribute.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DBMSAPI.h" />
     <ClInclude Include="DMLParser.h" />
