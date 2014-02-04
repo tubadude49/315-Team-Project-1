@@ -1,3 +1,7 @@
+// Shell code by Thomas Bateson
+// 2/3/2014
+// CSCE 315
+
 #pragma once
 
 #include <vector>
