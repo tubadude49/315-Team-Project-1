@@ -80,7 +80,6 @@
   <ItemGroup>
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="DataManager.cpp" />
-    <ClCompile Include="DBMS Engine Tester.cpp" />
     <ClCompile Include="DBMSAPI.cpp" />
     <ClCompile Include="DMLParser.cpp" />
     <ClCompile Include="main.cpp" />

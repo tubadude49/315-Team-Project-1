@@ -5,7 +5,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DMLParser.cpp" />
     <ClCompile Include="DBMSAPI.cpp" />
-    <ClCompile Include="DBMS Engine Tester.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="Attribute.cpp" />
   </ItemGroup>
