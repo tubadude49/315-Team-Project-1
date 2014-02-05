@@ -9,8 +9,9 @@
 /*	Constructor with field definitions.
 Instantiating the relation without these fields is not possible.
 */
-Relation::Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes) {
+Relation::Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt) {
 	name = relationName;
+	primaryKeyIndex = primaryKeyAt;
 	for (int i = 0; i < attributeNames.size(); i++) {
 		attributes.push_back(new Attribute(attributeNames[i], attributeTypes[i]));
 	}

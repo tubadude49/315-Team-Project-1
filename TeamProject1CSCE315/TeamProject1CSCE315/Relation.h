@@ -19,11 +19,12 @@ class Relation
 	friend class DataManager;
 
 	string name;
+	unsigned int primaryKeyIndex;
 	vector<Attribute*> attributes;
 	vector<vector<string>> tuples; //relation[attribute][tuple]
 	vector<string> buildCmds;
 
-	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes);
+	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
 	~Relation();
 	bool is(string &name);
 	string& const getName();

@@ -2,8 +2,6 @@
 // 2/3/2014
 // CSCE 315
 
-#pragma once
-
 #include "DataManager.h"
 
 Relation* DataManager::getRelationByName(string &relationName) {
@@ -24,8 +22,8 @@ DataManager::~DataManager() {
 
 /*	Create a new relation with the given attribute names and attribute types
 */
-void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes) {
-	relations.push_back(new Relation(relationName, attributeNames, attributeTypes));
+void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt) {
+	relations.push_back(new Relation(relationName, attributeNames, attributeTypes, primaryKeyAt));
 }
 
 /*	Insert a tuple (row) into a relation.

@@ -18,7 +18,7 @@ private:
 public:
 	DataManager();
 	~DataManager();
-	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes);
+	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
 	void insert(string &relationName, vector<string> &values);
 	string show(string &relationName);
 	void drop(string &relationName);
