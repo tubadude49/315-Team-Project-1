@@ -33,25 +33,21 @@ void DMLParser::parseProgram(string &program, string &response) {
 	response = "Completed!";
 	// please don't run the above
 }
-void DMLParser::parseInput(string &input){
+
+vector<string> split(string &input){
 	string output;
-	size_t found = input.find_first_of(" ,&<="); //READ THE ABOVE COMMENT BEFORE CHANGING THIS ERROR
+	vector<string> splitString;
+	size_t found = input.find_first_of(" ,&<=");
 	while (found != string::npos)
 	{
 		input[found] = '*';
 		found = input.find_first_of(" ,&<=", found + 1);
 	}
-	stringstream reader(input); //READ THE ABOVE COMMENT BEFORE CHANGING THIS ERROR
+	stringstream reader(input);
 	while (getline(reader, output, '*')){
-		if (output == "") {
+		if (output != "") {
+			splitString.push_back(output);
 		}
-		else{
-			parsedString.push_back(output);
-		}
-
 	}
-
-	for (int i = 0; i < parsedString.size(); i++) {
-		cout << parsedString[i] << "\n";
-	}
+	return splitString;
 }
