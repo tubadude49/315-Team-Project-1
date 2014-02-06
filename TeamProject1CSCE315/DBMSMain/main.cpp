@@ -13,8 +13,8 @@ int main() {
 	string dataRelatName1 = "Tester";
 	vector<string> dataAttrNames1 = { "test", "name" };
 	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-	vector<string> testTuple1 = { "test", "Thomas" };
-	vector<string> testTuple2 = { "test", "Colin" };
+	vector<string> testTuple1 = { "test1", "Thomas" };
+	vector<string> testTuple2 = { "test2", "Colin" };
 	unsigned int primaryKeyAt = 1;
 
 	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKeyAt);
