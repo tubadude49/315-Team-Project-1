@@ -19,7 +19,9 @@ public:
 	~DataManager();
 	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
 	void insert(string &relationName, vector<string> &values);
-	void show(string &relationName);
+	void show(string &relationName, ostream& os);
 	void drop(string &relationName);
 	void write(string &relationName);
+
+	void shellSort(vector<string> &toSort);
 };

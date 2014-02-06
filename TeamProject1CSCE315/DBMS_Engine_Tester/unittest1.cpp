@@ -20,10 +20,22 @@ namespace DBMS_Engine_Tester
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKeyAt);
 			//cout << dataManager.show(dataRelatName1) << endl;
-			dataManager.show(dataRelatName1);
+			dataManager.show(dataRelatName1, cout);
 
-			// Intentionally fail
-			Assert::IsTrue(false);
+			Assert::IsTrue(true);
+		}
+		TEST_METHOD(TestShellSort)
+		{
+			DataManager dataManager = DataManager();
+			vector<string> arraytest = { "Best", "Thomas", "At", "Jack", "Reverse" };
+			vector<string> arrayout = { "At", "Best", "Jack", "Reverse", "Thomas" };
+
+			dataManager.shellSort(arraytest);
+
+			for (int i = 0; i < arraytest.size(); i++) {
+				Assert::AreEqual(arraytest[i], arrayout[i]);
+			}
+
 		}
 
 	};

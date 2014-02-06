@@ -5,6 +5,8 @@
 #include "DataManager.h"
 #include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 using namespace std;
 
 Relation* DataManager::getRelationByName(string &relationName) {
@@ -39,27 +41,30 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 	}
 }
 
-void DataManager::show(string &relationName) {
+void DataManager::show(string &relationName, ostream& os) {
 	Relation* relation = getRelationByName(relationName);
-	cout << relation->getName() << "\n";
-	for(Attribute* attr : relation->getAttributes())
-	{
-		cout << setw(50) << attr->getName() << " [" << attr->getType() << "]";
-	}
-	cout << "\n";
-	for(int i = 0; i < relation->numOfTuples(); i++)
-	{
-		for(int j = 0; j < relation->tupleSize(i); j++)
+
+	if (relation != NULL) {
+		os << relation->getName() << "\n";
+		for (Attribute* attr : relation->getAttributes())
 		{
-			cout << setw(50) << relation->at(i,j);
+			os << setw(50) << attr->getName() << " [" << attr->getType() << "]";
 		}
-		cout << "\n";
-	}
-	cout << "\n";
+		os << "\n";
+		for (int i = 0; i < relation->numOfTuples(); i++)
+		{
+			for (int j = 0; j < relation->tupleSize(i); j++)
+			{
+				os << setw(50) << relation->at(i, j);
+			}
+			os << "\n";
+		}
+		os << "\n";
+	}	
 }
 
 /*	Remove the requested relation name from storage in this data manager.
-Effectively deletes it from memory
+	Effectively deletes it from memory
 */
 void DataManager::drop(string &relationName) {
 	for (int i = relations.size() - 1; i >= 0; i--) {
@@ -72,5 +77,26 @@ void DataManager::drop(string &relationName) {
 void DataManager::write(string &relationName) {
 	Relation* relation = getRelationByName(relationName);
 	vector<string> buildCmds = relation->getBuildCmds();
-	//TODO: write the build commands to a file
+	ofstream ofs(relationName + ".txt");
+	for (int i = 0; i < buildCmds.size(); i++){
+		ofs << buildCmds[i] << endl;
+	}
+	ofs.close();
+}
+
+/*	Perform a shell sort on a vector<string>.
+	Best performance is O(n). Worst is O(n*log^2(n)).
+*/
+void DataManager::shellSort(vector<string> &toSort) {
+	int h, i, j;
+	string k;
+	for (h = toSort.size(); h /= 2;) {
+		for (i = h; i < toSort.size(); i++) {
+			k = toSort[i];
+			for (j = i; j >= h && k < toSort[j - h]; j -= h) {
+				toSort[j] = toSort[j - h]; 							
+			}
+			toSort[j] = k; 										
+		}
+	}	
 }

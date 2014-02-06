@@ -19,9 +19,8 @@ int main() {
 
 	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKeyAt);
 	dataManager.insert(dataRelatName1, testTuple1);
-	dataManager.insert(dataRelatName1, testTuple2);
-	//cout << dataManager.show(dataRelatName1) << endl;
-	dataManager.show(dataRelatName1);
+	dataManager.insert(dataRelatName1, testTuple2);	
+	dataManager.show(dataRelatName1, cout);
 
 	string tester;
 	cin >> tester;

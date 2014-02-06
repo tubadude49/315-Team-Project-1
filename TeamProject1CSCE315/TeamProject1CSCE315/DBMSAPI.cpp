@@ -2,8 +2,6 @@
 // 2/3/2014
 // CSCE 315
 
-#pragma once
-
 #include <iostream>
 
 #include "DBMSAPI.h"

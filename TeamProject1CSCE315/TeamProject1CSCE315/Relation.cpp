@@ -2,8 +2,6 @@
 // 2/3/2014
 // CSCE 315
 
-#pragma once
-
 #include "Relation.h"
 
 /*	Constructor with field definitions.
@@ -15,8 +13,6 @@ Relation::Relation(string &relationName, vector<string> &attributeNames, vector<
 	for (int i = 0; i < attributeNames.size(); i++) {
 		attributes.push_back(new Attribute(attributeNames[i], attributeTypes[i]));
 	}
-	//relation.push_back(attributeNames);
-	//relation.push_back(attributeTypes);
 }
 
 /* 	Destructor
@@ -63,17 +59,17 @@ vector<string>& const Relation::getBuildCmds() {
 	return buildCmds;
 }
 
-vector<Attribute*> Relation::getAttributes()
+vector<Attribute*>& const Relation::getAttributes()
 {
 	return attributes;
 }
 
-int Relation::numOfTuples()
+unsigned int Relation::numOfTuples()
 {
 	return tuples.size();
 }
 
-int Relation::tupleSize(int pos)
+unsigned int Relation::tupleSize(int pos)
 {
 	return tuples[pos].size();
 }
