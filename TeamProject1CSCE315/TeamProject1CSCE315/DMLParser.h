@@ -15,11 +15,12 @@ class DataManager;
 class DMLParser {
 private:
 	DataManager* dataManager;
-	vector<string> parsedString; //contains the parsed input command line
+	//vector<string> parsedString; //contains the parsed input command line
 	void parse(string &line, string &response);
 public:
 	DMLParser(DataManager* dataManager);
 	~DMLParser();
 	void parseProgram(string &program, string &response);
-	void parseInput(string &input)
+	//vector<string> split(string &input);
+	//vector<string> static split(string &input);
 };
