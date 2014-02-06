@@ -6,7 +6,6 @@
 
 #include <vector>
 #include <string>
-
 #include "Relation.h"
 
 /*	Only one DataManager should be instantiated at a time.
@@ -20,7 +19,7 @@ public:
 	~DataManager();
 	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
 	void insert(string &relationName, vector<string> &values);
-	string show(string &relationName);
+	void show(string &relationName);
 	void drop(string &relationName);
 	void write(string &relationName);
 };

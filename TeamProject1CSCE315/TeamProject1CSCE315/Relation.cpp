@@ -62,3 +62,18 @@ void Relation::addCmd(string &command) {
 vector<string>& const Relation::getBuildCmds() {
 	return buildCmds;
 }
+
+vector<Attribute*> Relation::getAttributes()
+{
+	return attributes;
+}
+
+int Relation::numOfTuples()
+{
+	return tuples.size();
+}
+
+int Relation::tupleSize(int pos)
+{
+	return tuples[pos].size();
+}

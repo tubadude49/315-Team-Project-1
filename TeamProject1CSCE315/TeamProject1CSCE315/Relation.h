@@ -32,4 +32,7 @@ class Relation
 	void addTuple(vector<string> &values);
 	void addCmd(string &command);
 	vector<string>& const getBuildCmds();
+	vector<Attribute*> getAttributes();
+	int numOfTuples();
+	int tupleSize(int pos);
 };

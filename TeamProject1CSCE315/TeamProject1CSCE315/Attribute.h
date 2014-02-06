@@ -11,4 +11,6 @@ private:
 	string type;
 public:
 	Attribute(string& attributeName, string& attributeType);
+	string getName();
+	string getType();
 };

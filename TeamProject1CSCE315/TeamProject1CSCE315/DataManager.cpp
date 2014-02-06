@@ -3,6 +3,9 @@
 // CSCE 315
 
 #include "DataManager.h"
+#include <iomanip>
+#include <iostream>
+using namespace std;
 
 Relation* DataManager::getRelationByName(string &relationName) {
 	// Loop through this backwards to search through newly created relations first and older ones last
@@ -36,9 +39,23 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 	}
 }
 
-string DataManager::show(string &relationName) {
-	//TODO: Beautiful ASCII output goes here.
-	return "";
+void DataManager::show(string &relationName) {
+	Relation* relation = getRelationByName(relationName);
+	cout << relation->getName() << "\n";
+	for(Attribute* attr : relation->getAttributes())
+	{
+		cout << setw(50) << attr->getName() << " [" << attr->getType() << "]";
+	}
+	cout << "\n";
+	for(int i = 0; i < relation->numOfTuples(); i++)
+	{
+		for(int j = 0; j < relation->tupleSize(i); j++)
+		{
+			cout << setw(50) << relation->at(i,j);
+		}
+		cout << "\n";
+	}
+	cout << "\n"
 }
 
 /*	Remove the requested relation name from storage in this data manager.
