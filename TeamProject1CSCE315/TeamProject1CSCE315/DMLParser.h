@@ -21,4 +21,5 @@ public:
 	DMLParser(DataManager* dataManager);
 	~DMLParser();
 	void parseProgram(string &program, string &response);
+	void parseInput(string &input)
 };
