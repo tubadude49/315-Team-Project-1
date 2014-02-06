@@ -55,7 +55,7 @@ void DataManager::show(string &relationName) {
 		}
 		cout << "\n";
 	}
-	cout << "\n"
+	cout << "\n";
 }
 
 /*	Remove the requested relation name from storage in this data manager.

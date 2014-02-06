@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TeamProject1CSCE315", "Team
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBMS_Engine_Tester", "DBMS_Engine_Tester\DBMS_Engine_Tester.vcxproj", "{DF746781-896F-4F33-B26A-FB5C454DF84E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBMSMain", "DBMSMain\DBMSMain.vcxproj", "{C1D6D3D7-4063-4795-B765-8DBBDD264891}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{DF746781-896F-4F33-B26A-FB5C454DF84E}.Debug|Win32.Build.0 = Debug|Win32
 		{DF746781-896F-4F33-B26A-FB5C454DF84E}.Release|Win32.ActiveCfg = Release|Win32
 		{DF746781-896F-4F33-B26A-FB5C454DF84E}.Release|Win32.Build.0 = Release|Win32
+		{C1D6D3D7-4063-4795-B765-8DBBDD264891}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C1D6D3D7-4063-4795-B765-8DBBDD264891}.Debug|Win32.Build.0 = Debug|Win32
+		{C1D6D3D7-4063-4795-B765-8DBBDD264891}.Release|Win32.ActiveCfg = Release|Win32
+		{C1D6D3D7-4063-4795-B765-8DBBDD264891}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

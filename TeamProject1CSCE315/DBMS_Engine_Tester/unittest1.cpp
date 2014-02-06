@@ -19,7 +19,8 @@ namespace DBMS_Engine_Tester
 			unsigned int primaryKeyAt = 1;
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKeyAt);
-			cout << dataManager.show(dataRelatName1) << endl;
+			//cout << dataManager.show(dataRelatName1) << endl;
+			dataManager.show(dataRelatName1);
 
 			// Intentionally fail
 			Assert::IsTrue(false);

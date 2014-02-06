@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Relation.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="DMLParser.cpp" />
     <ClCompile Include="DBMSAPI.cpp" />
     <ClCompile Include="DataManager.cpp" />
