@@ -23,5 +23,13 @@ public:
 	void drop(string &relationName);
 	void write(string &relationName);
 
+	Relation* select(string &relationName1, string &relationName2);
+	Relation* project(string &relationName1, string &relationName2);
+	void rename(string &relationName, string &attributeOldName, string &attributeNewName);
+	Relation* setUnion(string &relationName1, string &relationName2);
+	Relation* setDifference(string &relationName1, string &relationName2);
+	Relation* crossProduct(string &relationName1, string &relationName2);
+	Relation* naturalJoin(string &relatioName1, string &relationName2);
+
 	void shellSort(vector<string> &toSort);
 };

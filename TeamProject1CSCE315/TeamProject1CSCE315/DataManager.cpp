@@ -9,6 +9,8 @@
 #include <fstream>
 using namespace std;
 
+/*	Get a relation by its name field.
+*/
 Relation* DataManager::getRelationByName(string &relationName) {
 	// Loop through this backwards to search through newly created relations first and older ones last
 	for (int i = relations.size() - 1; i >= 0; i--) {
@@ -107,4 +109,58 @@ void DataManager::shellSort(vector<string> &toSort) {
 			toSort[j] = k; 										
 		}
 	}
+}
+
+/*	select the tuples in a relation that satisfy a particular condition.
+	TODO
+*/
+Relation* select(string &relationName1, string &relationName2) {
+	return NULL;
+}
+
+/*	select a subset of the attributes in a relation.
+	TODO
+*/
+Relation* project(string &relationName1, string &relationName2) {
+	return NULL;
+}
+
+/*	rename the attributes in a relation.
+	TODO
+*/
+void rename(string &relationName, string &attributeOldName, string &attributeNewName) {
+}
+
+/*	compute the union of two relations; the relations must be union-compatible.
+	TODO
+*/
+Relation* setUnion(string &relationName1, string &relationName2) {
+	return NULL;
+}
+
+/*	compute the set difference of two relations; the relations must be union-compatible.
+	TODO
+*/
+Relation* setDifference(string &relationName1, string &relationName2) {
+	return NULL;
+}
+
+/*	compute the Cartesian product of two relations.
+	TODO
+*/
+Relation* crossProduct(string &relationName1, string &relationName2) {
+	return NULL;
+}
+
+/*	In addition to these operations, we include the natural join operation. 
+	The result of the natural join between relations R and S is the set of all combinations of tuples in R and S 
+	that are equal on their common attribute names. The common attributes only appear once in the result.
+
+	Natural join is expressible using the six fundamental operations,
+	but a direct implementation for joins can reduce the need to use the (expensive) Cartesian product operation.
+
+	TODO
+*/
+Relation* naturalJoin(string &relatioName1, string &relationName2) {
+	return NULL;
 }
