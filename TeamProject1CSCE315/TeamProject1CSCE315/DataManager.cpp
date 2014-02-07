@@ -19,9 +19,13 @@ Relation* DataManager::getRelationByName(string &relationName) {
 	return NULL;
 }
 
+/* Default Constructor.
+*/
 DataManager::DataManager() {
 }
 
+/*	Default Destructor.
+*/
 DataManager::~DataManager() {
 }
 
@@ -41,6 +45,9 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 	}
 }
 
+/*	Print the given relation to an ostream,
+	If unsure, send cout as the ostream.
+*/
 void DataManager::show(string &relationName, ostream& os) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -48,14 +55,14 @@ void DataManager::show(string &relationName, ostream& os) {
 		os << relation->getName() << "\n";
 		for (Attribute* attr : relation->getAttributes())
 		{
-			os << setw(50) << attr->getName() << " [" << attr->getType() << "]";
+			os << setw(10) << attr->getName() << " [" << attr->getType() << "]";
 		}
 		os << "\n";
-		for (int i = 0; i < relation->numOfTuples(); i++)
+		for (int i = 0; i < relation->getTuples().size(); i++)
 		{
 			for (int j = 0; j < relation->tupleSize(i); j++)
 			{
-				os << setw(50) << relation->at(i, j);
+				os << setw(10) << relation->at(i, j);
 			}
 			os << "\n";
 		}
@@ -74,6 +81,8 @@ void DataManager::drop(string &relationName) {
 	}
 }
 
+/*	Write the given relation to a file.
+*/
 void DataManager::write(string &relationName) {
 	Relation* relation = getRelationByName(relationName);
 	vector<string> buildCmds = relation->getBuildCmds();
@@ -88,15 +97,14 @@ void DataManager::write(string &relationName) {
 	Best performance is O(n). Worst is O(n*log^2(n)).
 */
 void DataManager::shellSort(vector<string> &toSort) {
-	int h, i, j;
-	string k;
-	for (h = toSort.size(); h /= 2;) {
-		for (i = h; i < toSort.size(); i++) {
-			k = toSort[i];
+	for (int h = toSort.size(); h /= 2;) {
+		for (int i = h; i < toSort.size(); i++) {
+			string k = toSort[i];
+			int j;
 			for (j = i; j >= h && k < toSort[j - h]; j -= h) {
 				toSort[j] = toSort[j - h]; 							
 			}
 			toSort[j] = k; 										
 		}
-	}	
+	}
 }

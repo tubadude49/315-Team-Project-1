@@ -64,9 +64,9 @@ vector<Attribute*>& const Relation::getAttributes()
 	return attributes;
 }
 
-unsigned int Relation::numOfTuples()
+vector<vector<string>>& Relation::getTuples()
 {
-	return tuples.size();
+	return tuples;
 }
 
 unsigned int Relation::tupleSize(int pos)

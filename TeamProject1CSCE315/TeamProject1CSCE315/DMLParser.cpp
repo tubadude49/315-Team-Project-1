@@ -34,19 +34,24 @@ void DMLParser::parseProgram(string &program, string &response) {
 	// please don't run the above
 }
 
-vector<string> split(string &input){
-	string output;
+static string terminalChars = " ,&<>=!()"; //TODO
+static string removeChars = " ";
+//static vector<char> terminalChars = { ',', '&', '<', '>', '=', '!', '(', ')' };
+//static vector<char> removeChars = { ' ' };
+
+vector<string> DMLParser::split(string &input){
 	vector<string> splitString;
-	size_t found = input.find_first_of(" ,&<=");
+	size_t found = input.find_first_of(terminalChars);
 	while (found != string::npos)
-	{
+	{		
 		input[found] = '*';
-		found = input.find_first_of(" ,&<=", found + 1);
+		found = input.find_first_of(removeChars, found + 1);
 	}
 	stringstream reader(input);
-	while (getline(reader, output, '*')){
-		if (output != "") {
-			splitString.push_back(output);
+	string tmp;
+	while (getline(reader, tmp, '*')){
+		if (tmp != "") {
+			splitString.push_back(tmp);
 		}
 	}
 	return splitString;

@@ -33,6 +33,6 @@ class Relation
 	void addCmd(string &command);
 	vector<string>& const getBuildCmds();
 	vector<Attribute*>& const getAttributes();
-	unsigned int numOfTuples();
+	vector<vector<string>>& getTuples();
 	unsigned int tupleSize(int pos);
 };

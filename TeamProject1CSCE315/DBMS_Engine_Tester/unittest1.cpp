@@ -9,21 +9,6 @@ namespace DBMS_Engine_Tester
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
-		{
-			DataManager dataManager = DataManager();
-
-			string dataRelatName1 = "Tester";
-			vector<string> dataAttrNames1 = { "test", "name" };
-			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-			unsigned int primaryKeyAt = 1;
-
-			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKeyAt);
-			//cout << dataManager.show(dataRelatName1) << endl;
-			dataManager.show(dataRelatName1, cout);
-
-			Assert::IsTrue(true);
-		}
 		TEST_METHOD(TestShellSort)
 		{
 			DataManager dataManager = DataManager();
@@ -34,6 +19,20 @@ namespace DBMS_Engine_Tester
 
 			for (int i = 0; i < arraytest.size(); i++) {
 				Assert::AreEqual(arraytest[i], arrayout[i]);
+			}
+
+		}
+		TEST_METHOD(TestSplit)
+		{
+			DataManager dataManager = DataManager();
+			DMLParser dmlParser = DMLParser(&dataManager);
+
+			string test_s = "(SPLIT && TEST==YES)";
+			vector<string> out = dmlParser.split(test_s);
+			vector<string> arrayout = { "(", "SPLIT", "&&", "TEST", "==", "YES", ")" };
+
+			for (int i = 0; i < arrayout.size(); i++) {
+				Assert::AreEqual(arrayout[i], out[i]);
 			}
 
 		}
