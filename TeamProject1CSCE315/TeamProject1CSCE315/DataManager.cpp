@@ -114,41 +114,41 @@ void DataManager::shellSort(vector<string> &toSort) {
 /*	select the tuples in a relation that satisfy a particular condition.
 	TODO
 */
-Relation* select(string &relationName1, string &relationName2) {
+Relation* DataManager::select(string &relationName) {
 	return NULL;
 }
 
 /*	select a subset of the attributes in a relation.
 	TODO
 */
-Relation* project(string &relationName1, string &relationName2) {
+Relation* DataManager::project(string &relationName) {
 	return NULL;
 }
 
 /*	rename the attributes in a relation.
 	TODO
 */
-void rename(string &relationName, string &attributeOldName, string &attributeNewName) {
+void DataManager::rename(string &relationName, string &attributeOldName, string &attributeNewName) {
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
 	TODO
 */
-Relation* setUnion(string &relationName1, string &relationName2) {
+Relation* DataManager::setUnion(string &relationName1, string &relationName2) {
 	return NULL;
 }
 
 /*	compute the set difference of two relations; the relations must be union-compatible.
 	TODO
 */
-Relation* setDifference(string &relationName1, string &relationName2) {
+Relation* DataManager::setDifference(string &relationName1, string &relationName2) {
 	return NULL;
 }
 
 /*	compute the Cartesian product of two relations.
 	TODO
 */
-Relation* crossProduct(string &relationName1, string &relationName2) {
+Relation* DataManager::crossProduct(string &relationName1, string &relationName2) {
 	return NULL;
 }
 
@@ -161,6 +161,6 @@ Relation* crossProduct(string &relationName1, string &relationName2) {
 
 	TODO
 */
-Relation* naturalJoin(string &relatioName1, string &relationName2) {
+Relation* DataManager::naturalJoin(string &relatioName1, string &relationName2) {
 	return NULL;
 }

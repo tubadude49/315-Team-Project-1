@@ -23,8 +23,8 @@ public:
 	void drop(string &relationName);
 	void write(string &relationName);
 
-	Relation* select(string &relationName1, string &relationName2);
-	Relation* project(string &relationName1, string &relationName2);
+	Relation* select(string &relationName);
+	Relation* project(string &relationName);
 	void rename(string &relationName, string &attributeOldName, string &attributeNewName);
 	Relation* setUnion(string &relationName1, string &relationName2);
 	Relation* setDifference(string &relationName1, string &relationName2);
