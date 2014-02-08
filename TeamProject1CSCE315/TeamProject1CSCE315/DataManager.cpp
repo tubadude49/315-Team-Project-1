@@ -84,7 +84,7 @@ void DataManager::show(string &relationName, ostream& os) {
 			os << "\n";
 		}
 		os << "\n";
-	}	
+	}
 }
 
 /*	Remove the requested relation name from storage in this data manager.
@@ -149,6 +149,7 @@ void DataManager::rename(string &relationName, vector<string> &attributeOldName,
 		if (attribute != NULL) {
 			attribute->setName(attributeNewName[i]);
 		}
+		cout << "old name: " << attributeOldName[i] << " | new name: " << attribute->getName() << endl;
 	}
 	relations.push_back(*relation);
 }
