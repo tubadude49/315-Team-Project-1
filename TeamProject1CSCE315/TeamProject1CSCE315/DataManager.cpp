@@ -143,6 +143,9 @@ Relation* DataManager::project(string &relationName) {
 	TODO
 */
 void DataManager::rename(string &relationName, string &attributeOldName, string &attributeNewName) {
+	Relation* relation = getRelationByName(relationName);
+	Attribute* attribute = relation->getAttributeByName(attributeOldName);
+	attribute->setName(attributeNewName);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.

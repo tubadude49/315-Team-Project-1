@@ -27,10 +27,13 @@ class Relation
 	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
 	//~Relation();
 	bool is(string &name);
-	string& const getName();
-	string const at(unsigned int i, unsigned int j);
+	string& const at(unsigned int i, unsigned int j);
+
 	void addTuple(vector<string> &values);
 	void addCmd(string &command);
+
+	string& const getName();
+	Attribute* getAttributeByName(string &attributeName);
 	vector<string>& const getBuildCmds();
 	vector<Attribute>& const getAttributes();
 	vector<vector<string>>& getTuples();

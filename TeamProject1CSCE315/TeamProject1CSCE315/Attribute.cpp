@@ -5,6 +5,10 @@ Attribute::Attribute(string& attributeName, string& attributeType) {
 	type = attributeType;
 }
 
+void Attribute::setName(string name) {
+	Attribute::name = name;
+}
+
 string& const Attribute::getName()
 {
 	return name;

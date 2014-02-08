@@ -38,7 +38,7 @@ string& const Relation::getName() {
 /* 	Getter function for the relations field.
 Call in the order of (attribute,tuple)
 */
-string const Relation::at(unsigned int tuple, unsigned int attribute) {
+string& const Relation::at(unsigned int tuple, unsigned int attribute) {
 	return tuples[tuple][attribute];
 }
 
@@ -53,6 +53,14 @@ void Relation::addTuple(vector<string> &values) {
 
 void Relation::addCmd(string &command) {
 	buildCmds.push_back(command);
+}
+
+Attribute* Relation::getAttributeByName(string &attributeName) {
+	for (Attribute attr : attributes) {
+		if (attr.getName() == attributeName) {
+			return &attr;
+		}
+	}
 }
 
 vector<string>& const Relation::getBuildCmds() {
