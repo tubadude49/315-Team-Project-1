@@ -58,7 +58,7 @@ void DataManager::show(string &relationName, ostream& os) {
 		os << relation->getName() << "\n";
 		
 		vector<Attribute> attrs = relation->getAttributes();
-		int widths[attrs.size()];
+		vector<int> widths(attrs.size());
 		for (int j = 0; j < attrs.size(); j++ )
 		{
 			Attribute attr = attrs[j];
