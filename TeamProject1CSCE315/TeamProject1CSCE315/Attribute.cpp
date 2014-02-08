@@ -5,8 +5,8 @@ Attribute::Attribute(string& attributeName, string& attributeType) {
 	type = attributeType;
 }
 
-void Attribute::setName(string name) {
-	Attribute::name = name;
+void Attribute::setName(string &newName) {
+	name = newName;
 }
 
 string& const Attribute::getName()

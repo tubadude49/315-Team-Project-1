@@ -33,8 +33,8 @@ DataManager::~DataManager() {
 
 /*	Create a new relation with the given attribute names and attribute types
 */
-void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt) {
-	relations.push_back(Relation(relationName, attributeNames, attributeTypes, primaryKeyAt));
+void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey) {
+	relations.push_back(Relation(relationName, attributeNames, attributeTypes, primaryKey));
 }
 
 /*	Insert a tuple (row) into a relation.
@@ -140,12 +140,16 @@ Relation* DataManager::project(string &relationName) {
 }
 
 /*	rename the attributes in a relation.
-	TODO
 */
-void DataManager::rename(string &relationName, string &attributeOldName, string &attributeNewName) {
-	Relation* relation = getRelationByName(relationName);
-	Attribute* attribute = relation->getAttributeByName(attributeOldName);
-	attribute->setName(attributeNewName);
+void DataManager::rename(string &relationName, vector<string> &attributeOldName, vector<string> &attributeNewName) {
+	Relation* relation = getRelationByName(relationName);		
+	for (int i = 0; i < attributeOldName.size();i++) {
+		Attribute* attribute = relation->getAttributeByName(attributeOldName[i]);
+		if (attribute != NULL) {
+			attribute->setName(attributeNewName[i]);
+		}
+	}
+	relations.push_back(*relation);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
@@ -180,4 +184,23 @@ Relation* DataManager::crossProduct(string &relationName1, string &relationName2
 */
 Relation* DataManager::naturalJoin(string &relatioName1, string &relationName2) {
 	return NULL;
+}
+
+bool DataManager::testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples) {	
+	Relation* relation = getRelationByName(relationName);
+
+	vector<Attribute> relationAttributes = relation->getAttributes();
+	if (attrNames.size() != relationAttributes.size() || attrTypes.size() != relationAttributes.size()) return false;
+	for (int i = 0; i < relationAttributes.size(); i++) {
+		if (attrNames[i] != relationAttributes[i].getName()) return false;
+		if (attrTypes[i] != relationAttributes[i].getType()) return false;
+	}
+	vector<vector<string>> relationTuples = relation->getTuples();
+	if (relationTuples.size() != tuples.size()) return false;
+	for (int i = 0; i < relationTuples.size(); i++) {
+		for (int j = 0; j < relationTuples[i].size(); j++) {
+			if (relationTuples[i][j] != tuples[i][j]) return false;
+		}
+	}
+	return true;
 }

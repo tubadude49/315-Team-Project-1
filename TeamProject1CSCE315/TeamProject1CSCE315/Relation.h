@@ -24,7 +24,7 @@ class Relation
 	vector<vector<string>> tuples; //relation[attribute][tuple]
 	vector<string> buildCmds;
 
-	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
+	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
 	//~Relation();
 	bool is(string &name);
 	string& const at(unsigned int i, unsigned int j);

@@ -17,7 +17,7 @@ private:
 public:
 	DataManager();
 	~DataManager();
-	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt);
+	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
 	void insert(string &relationName, vector<string> &values);
 	void show(string &relationName, ostream& os);
 	void drop(string &relationName);
@@ -25,11 +25,13 @@ public:
 
 	Relation* select(string &relationName);
 	Relation* project(string &relationName);
-	void rename(string &relationName, string &attributeOldName, string &attributeNewName);
+	void rename(string &relationName, vector<string> &attributeOldName, vector<string> &attributeNewName);
 	Relation* setUnion(string &relationName1, string &relationName2);
 	Relation* setDifference(string &relationName1, string &relationName2);
 	Relation* crossProduct(string &relationName1, string &relationName2);
 	Relation* naturalJoin(string &relatioName1, string &relationName2);
+
+	bool testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples);
 
 	void shellSort(vector<string> &toSort);
 };
