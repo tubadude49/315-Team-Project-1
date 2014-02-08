@@ -132,37 +132,32 @@ void DataManager::shellSort(vector<string> &toSort) {
 /*	select the tuples in a relation that satisfy a particular condition.
 	TODO
 */
-Relation* DataManager::select(string &relationName) {
-	return NULL;
+void DataManager::select(string &relationName) {
 }
 
 /*	select a subset of the attributes in a relation.
 	TODO
 */
-Relation* DataManager::project(string &relationName) {
-	return NULL;
+void DataManager::project(string &relationName) {
 }
 
 /*	rename the attributes in a relation.
 */
-void DataManager::rename(string &relationName, vector<string> &attributeOldName, vector<string> &attributeNewName) {
-	Relation* relation = getRelationByName(relationName);		
-	for (int i = 0; i < attributeOldName.size();i++) {
-		Attribute* attribute = relation->getAttributeByName(attributeOldName[i]);
-		if (attribute != NULL) {
-			attribute->setName(attributeNewName[i]);
-			string s = attribute->getName();
-			cout << "old name: " << attributeOldName[i] << " | new name: " << s << endl;
-		}
+void DataManager::rename(string &relationName, vector<string> &attributeNewName) {
+	Relation* relation = getRelationByName(relationName);
+	Relation newRelation = Relation(*relation);
+	for(int i=0;i<newRelation.attributes.size();i++) {
+		newRelation.attributes[i] = Attribute(newDataAttr[i], relation.attributes[i].getType());
+		// if this fails I swear to god
+		cout << newRelation.attributes[i].getName() << ", " << newRelation.attributes[i].getTypes() << endl;
 	}
-	database.push_back(*relation);
+	database.push_back(newRelation);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
 	TODO
 */
-Relation* DataManager::setUnion(string &relationName1, string &relationName2) {
-	return NULL;
+void DataManager::setUnion(string &relationName1, string &relationName2) {
 }
 
 /*	compute the set difference of two relations; the relations must be union-compatible.
@@ -191,8 +186,7 @@ void DataManager::setDifference(string &relationName1, string &relationName2) {
 /*	compute the Cartesian product of two relations.
 	TODO
 */
-Relation* DataManager::crossProduct(string &relationName1, string &relationName2) {
-	return NULL;
+void DataManager::crossProduct(string &relationName1, string &relationName2) {
 }
 
 /*	In addition to these operations, we include the natural join operation. 
@@ -204,8 +198,7 @@ Relation* DataManager::crossProduct(string &relationName1, string &relationName2
 
 	TODO
 */
-Relation* DataManager::naturalJoin(string &relatioName1, string &relationName2) {
-	return NULL;
+void DataManager::naturalJoin(string &relatioName1, string &relationName2) {
 }
 
 bool DataManager::testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples) {	

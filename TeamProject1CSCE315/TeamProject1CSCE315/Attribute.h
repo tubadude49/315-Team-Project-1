@@ -12,8 +12,6 @@ private:
 public:
 	Attribute(string& attributeName, string& attributeType);
 
-	void setName(string newName);
-
 	string& const getName();
 	string& const getType();
 };

@@ -21,7 +21,7 @@ class Relation
 	string name;
 	unsigned int primaryKeyIndex;
 	vector<Attribute> attributes;
-	vector<vector<string>> tuples; //relation[attribute][tuple]
+	vector<vector<string>> tuples; //relation[tuple][attribute]
 	vector<string> buildCmds;
 
 	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
@@ -32,11 +32,11 @@ class Relation
 	void addTuple(vector<string> &values);
 	void addCmd(string &command);
 
-	string& const getName();
+	//string& const getName();
 	Attribute* getAttributeByName(string &attributeName);
-	vector<string>& const getBuildCmds();
-	vector<Attribute>& const getAttributes();
-	vector<vector<string>>& getTuples();
+	//vector<string>& const getBuildCmds();
+	//vector<Attribute>& const getAttributes();
+	//vector<vector<string>>& getTuples();
 	unsigned int tupleSize(int pos);
 	unsigned int getPrimaryKeyIndex();
 };
