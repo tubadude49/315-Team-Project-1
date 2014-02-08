@@ -25,10 +25,10 @@ int main() {
 	DataManager dataManager = DataManager();
 
 	string dataRelatName1 = "Tester";
-	vector<string> dataAttrNames1 = { "test", "name" };
-	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-	vector<string> testTuple1 = { "test1", "Thomas" };
-	vector<string> testTuple2 = { "test2", "Colin" };
+	vector<string> dataAttrNames1 = { "Index", "Words" , "Num", "!"};
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(40)","INTEGER","VARCHAR(1)" };
+	vector<string> testTuple1 = { "23", "This is a test string","19","?" };
+	vector<string> testTuple2 = { "15", "This is also a test string","8","!" };
 	vector<vector<string>> testTuples;
 	string primaryKey = "test1";
 
