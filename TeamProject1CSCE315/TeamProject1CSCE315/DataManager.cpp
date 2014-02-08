@@ -182,7 +182,7 @@ void DataManager::setDifference(string &relationName1, string &relationName2) {
 	}
 
 	//Add r1 to the database
-	relations.push_back(r1);
+	database.push_back(r1);
 }
 
 /*	compute the Cartesian product of two relations.
