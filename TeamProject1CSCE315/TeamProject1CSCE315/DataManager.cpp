@@ -55,16 +55,30 @@ void DataManager::show(string &relationName, ostream& os) {
 
 	if (relation != NULL) {
 		os << relation->getName() << "\n";
-		for (Attribute attr : relation->getAttributes())
+		
+		vector<Attribute> attrs = relation->getAttributes();
+		int widths[attrs.size()];
+		for (int j = 0; j < attrs.size(); j++ )
 		{
-			os << setw(10) << attr.getName() << " [" << attr.getType() << "]";
+			Attribute attr = attrs[j];
+			
+			string typestr = attr.getType();
+			int varcharPos = typestr.find("(");
+			if(varcharPos != -1)//Type is VARCHAR
+			{
+				widths[j] = stoi(typestr.substr(varcharPos, typestr.length() - varcharPos));//Value in parens to int
+			}
+			
+			widths[j] = max(widths[j],10); //Gives room for VARCHARS less than 10
+			os << setw(widths[j]) << attr.getName() << " [" << attr.getType() << "]";
 		}
 		os << "\n";
+		
 		for (int i = 0; i < relation->getTuples().size(); i++)
 		{
 			for (int j = 0; j < relation->tupleSize(i); j++)
 			{
-				os << setw(10) << relation->at(i, j);
+				os << setw(widths[j]) << relation->at(i, j);
 			}
 			os << "\n";
 		}
