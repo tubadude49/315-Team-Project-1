@@ -14,9 +14,9 @@ using namespace std;
 */
 Relation* DataManager::getRelationByName(string &relationName) {
 	// Loop through this backwards to search through newly created relations first and older ones last
-	for (int i = relations.size() - 1; i >= 0; i--) {
-		if (relations[i].is(relationName)) {
-			return &relations[i];
+	for (int i = database.size() - 1; i >= 0; i--) {
+		if (database[i].is(relationName)) {
+			return &database[i];
 		}
 	}
 	return NULL;
@@ -35,7 +35,7 @@ DataManager::~DataManager() {
 /*	Create a new relation with the given attribute names and attribute types
 */
 void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey) {
-	relations.push_back(Relation(relationName, attributeNames, attributeTypes, primaryKey));
+	database.push_back(Relation(relationName, attributeNames, attributeTypes, primaryKey));
 }
 
 /*	Insert a tuple (row) into a relation.
@@ -91,9 +91,9 @@ void DataManager::show(string &relationName, ostream& os) {
 	Effectively deletes it from memory
 */
 void DataManager::drop(string &relationName) {
-	for (int i = relations.size() - 1; i >= 0; i--) {
-		if (relations[i].is(relationName)) {
-			relations.erase(relations.begin() + i);
+	for (int i = database.size() - 1; i >= 0; i--) {
+		if (database[i].is(relationName)) {
+			database.erase(database.begin() + i);
 		}
 	}
 }
@@ -152,7 +152,7 @@ void DataManager::rename(string &relationName, vector<string> &attributeOldName,
 			cout << "old name: " << attributeOldName[i] << " | new name: " << s << endl;		
 		}
 	}
-	relations.push_back(*relation);
+	database.push_back(*relation);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
