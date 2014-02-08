@@ -35,8 +35,8 @@ int main() {
 	vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
 	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
-	dataManager.rename(dataRelatName1, dataAttrNames1, newDataAttrNames1);
-	//dataManager.show(dataRelatName1, cout);
+	//dataManager.rename(dataRelatName1, dataAttrNames1, newDataAttrNames1);
+	dataManager.show(dataRelatName1, cout);
 
 	string tester;
 	cin >> tester;

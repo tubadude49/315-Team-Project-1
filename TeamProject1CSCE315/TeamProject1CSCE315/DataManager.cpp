@@ -67,11 +67,12 @@ void DataManager::show(string &relationName, ostream& os) {
 			int varcharPos = typestr.find("(");
 			if(varcharPos != -1)//Type is VARCHAR
 			{
-				widths[j] = stoi(typestr.substr(varcharPos, typestr.length() - varcharPos));//Value in parens to int
+				string parenContent =  typestr.substr(varcharPos + 1, typestr.length() - 2 - varcharPos);
+				widths[j] = stoi(parenContent);
 			}
 			
 			widths[j] = max(widths[j],10); //Gives room for VARCHARS less than 10
-			os << setw(widths[j]) << attr.getName() << " [" << attr.getType() << "]";
+			os << setw(widths[j]) << attr.getName() << " [" << typestr << "]";
 		}
 		os << "\n";
 		
