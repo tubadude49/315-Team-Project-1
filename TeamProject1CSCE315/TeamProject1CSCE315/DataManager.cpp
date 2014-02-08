@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
 using namespace std;
 
 /*	Get a relation by its name field.
