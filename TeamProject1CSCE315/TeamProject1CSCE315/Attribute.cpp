@@ -5,7 +5,7 @@ Attribute::Attribute(string& attributeName, string& attributeType) {
 	type = attributeType;
 }
 
-void Attribute::setName(string &newName) {
+void Attribute::setName(string newName) {
 	name = newName;
 }
 

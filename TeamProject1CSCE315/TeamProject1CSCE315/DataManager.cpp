@@ -149,7 +149,7 @@ void DataManager::rename(string &relationName, vector<string> &attributeOldName,
 		if (attribute != NULL) {
 			attribute->setName(attributeNewName[i]);
 			string s = attribute->getName();
-			cout << "old name: " << attributeOldName[i] << " | new name: " << s << endl;		
+			cout << "old name: " << attributeOldName[i] << " | new name: " << s << endl;
 		}
 	}
 	database.push_back(*relation);
