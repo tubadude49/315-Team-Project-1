@@ -71,8 +71,10 @@ void DataManager::show(string &relationName, ostream& os) {
 				widths[j] = stoi(parenContent);
 			}
 			
-			widths[j] = max(widths[j],10); //Gives room for VARCHARS less than 10
-			os << setw(widths[j]) << attr.getName() << " [" << typestr << "]";
+			string fullname = attr.getName() + "[" + typestr + "]";
+			int fieldLength = fullname.length();
+			widths[j] = max(widths[j], fieldLength);//Either length of title or largest data
+			os << setw(widths[j]) << fullname;
 		}
 		os << "\n";
 		
