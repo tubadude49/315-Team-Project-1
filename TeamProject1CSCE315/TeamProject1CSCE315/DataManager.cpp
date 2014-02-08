@@ -14,8 +14,8 @@ using namespace std;
 Relation* DataManager::getRelationByName(string &relationName) {
 	// Loop through this backwards to search through newly created relations first and older ones last
 	for (int i = relations.size() - 1; i >= 0; i--) {
-		if (relations[i]->is(relationName)) {
-			return relations[i];
+		if (relations[i].is(relationName)) {
+			return &relations[i];
 		}
 	}
 	return NULL;
@@ -34,7 +34,7 @@ DataManager::~DataManager() {
 /*	Create a new relation with the given attribute names and attribute types
 */
 void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, unsigned int primaryKeyAt) {
-	relations.push_back(new Relation(relationName, attributeNames, attributeTypes, primaryKeyAt));
+	relations.push_back(Relation(relationName, attributeNames, attributeTypes, primaryKeyAt));
 }
 
 /*	Insert a tuple (row) into a relation.
@@ -55,9 +55,9 @@ void DataManager::show(string &relationName, ostream& os) {
 
 	if (relation != NULL) {
 		os << relation->getName() << "\n";
-		for (Attribute* attr : relation->getAttributes())
+		for (Attribute attr : relation->getAttributes())
 		{
-			os << setw(10) << attr->getName() << " [" << attr->getType() << "]";
+			os << setw(10) << attr.getName() << " [" << attr.getType() << "]";
 		}
 		os << "\n";
 		for (int i = 0; i < relation->getTuples().size(); i++)
@@ -77,7 +77,7 @@ void DataManager::show(string &relationName, ostream& os) {
 */
 void DataManager::drop(string &relationName) {
 	for (int i = relations.size() - 1; i >= 0; i--) {
-		if (relations[i]->is(relationName)) {
+		if (relations[i].is(relationName)) {
 			relations.erase(relations.begin() + i);
 		}
 	}

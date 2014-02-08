@@ -11,14 +11,14 @@ Relation::Relation(string &relationName, vector<string> &attributeNames, vector<
 	name = relationName;
 	primaryKeyIndex = primaryKeyAt;
 	for (int i = 0; i < attributeNames.size(); i++) {
-		attributes.push_back(new Attribute(attributeNames[i], attributeTypes[i]));
+		attributes.push_back(Attribute(attributeNames[i], attributeTypes[i]));
 	}
 }
 
 /* 	Destructor
 */
-Relation::~Relation() {
-}
+//Relation::~Relation() { //causes error
+//}
 
 /* 	Check the relations' name, true if there is a match, false otherwise.
 */
@@ -59,7 +59,7 @@ vector<string>& const Relation::getBuildCmds() {
 	return buildCmds;
 }
 
-vector<Attribute*>& const Relation::getAttributes()
+vector<Attribute>& const Relation::getAttributes()
 {
 	return attributes;
 }

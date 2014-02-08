@@ -12,7 +12,7 @@
 */
 class DataManager {
 private:
-	vector<Relation*> relations;
+	vector<Relation> relations;
 	Relation* getRelationByName(string &relationName);
 public:
 	DataManager();
