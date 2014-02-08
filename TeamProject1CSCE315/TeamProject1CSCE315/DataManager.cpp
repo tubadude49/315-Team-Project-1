@@ -163,10 +163,26 @@ Relation* DataManager::setUnion(string &relationName1, string &relationName2) {
 }
 
 /*	compute the set difference of two relations; the relations must be union-compatible.
-	TODO
 */
-Relation* DataManager::setDifference(string &relationName1, string &relationName2) {
-	return NULL;
+void DataManager::setDifference(string &relationName1, string &relationName2) {
+	//Create pointers to the indicated relations
+	Relation* relationPointer1 = getRelationByName(relationName1);
+	Relation* relationPointer2 = getRelationByName(relationName2);
+
+	//Create a new relation with the same attributes, etc, as relation1
+	Relation r1 = *relationPointer1;
+
+	//Compute the difference: relation1 - relation2
+	for (int i = 0; i < relationPointer2->getTuples().size(); i++){
+		for (int j = 0; j < r1.getTuples().size(); j++){
+			if (relationPointer2->getTuples()[i] == r1.getTuples()[j]){	//If a tuple is found to be in both relations...
+				r1.getTuples().erase(r1.getTuples().begin() + j);		//...remove it from r1
+			}
+		}
+	}
+
+	//Add r1 to the database
+	relations.push_back(r1);
 }
 
 /*	compute the Cartesian product of two relations.

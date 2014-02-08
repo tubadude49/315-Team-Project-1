@@ -27,7 +27,7 @@ public:
 	Relation* project(string &relationName);
 	void rename(string &relationName, vector<string> &attributeOldName, vector<string> &attributeNewName);
 	Relation* setUnion(string &relationName1, string &relationName2);
-	Relation* setDifference(string &relationName1, string &relationName2);
+	void setDifference(string &relationName1, string &relationName2);
 	Relation* crossProduct(string &relationName1, string &relationName2);
 	Relation* naturalJoin(string &relatioName1, string &relationName2);
 

@@ -83,3 +83,8 @@ unsigned int Relation::tupleSize(int pos)
 {
 	return tuples[pos].size();
 }
+
+unsigned int Relation::getPrimaryKeyIndex()
+{
+	return primaryKeyIndex;
+}
