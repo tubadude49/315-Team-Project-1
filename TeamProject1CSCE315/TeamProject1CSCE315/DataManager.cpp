@@ -142,6 +142,7 @@ void DataManager::project(string &relationName) {
 }
 
 /*	rename the attributes in a relation.
+	code by Thomas Bateson.
 */
 void DataManager::rename(string &relationName, string &relationNewName, vector<string> &attributeNewName) {
 	Relation* relation = getRelationByName(relationName);
@@ -149,15 +150,46 @@ void DataManager::rename(string &relationName, string &relationNewName, vector<s
 	newRelation.name = relationNewName;
 	for(int i=0;i<newRelation.attributes.size();i++) {
 		newRelation.attributes[i] = Attribute(attributeNewName[i], relation->attributes[i].getType());
-	//	cout << newRelation.attributes[i].getName() << ", " << newRelation.attributes[i].getType() << endl;
 	}
 	database.push_back(newRelation);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
-	TODO
+	code by Thomas Bateson.
 */
-void DataManager::setUnion(string &relationName1, string &relationName2) {
+void DataManager::setUnion(string &relationName1, string &relationName2, string &newRelationName) {
+	Relation* relation1 = getRelationByName(relationName1);
+	Relation* relation2 = getRelationByName(relationName2);
+
+	if (relation1->attributes.size() != relation2->attributes.size()) return;
+	for (int i = 0; i < relation1->attributes.size();i++) {
+		if (relation1->attributes[i].getName() != relation2->attributes[i].getName() ||
+			relation1->attributes[i].getType() != relation2->attributes[i].getType()) {
+			return;		//these two sets are not relatable or union-compatible			
+		}
+	}	
+
+	Relation newRelation = Relation(*relation1);
+	newRelation.name = newRelationName;
+	newRelation.tuples.clear();
+
+	for (int i = 0; i < relation1->tuples.size(); i++) {
+		for (int h = 0; h < relation2->tuples.size(); h++) {		
+			bool isSame = true;
+			for (int j = 0; j < relation1->tuples[i].size(); j++) {
+				if (relation1->tuples[i][j] != relation2->tuples[h][j]) {
+					isSame = false;
+					break;
+				}				
+				if (!isSame) break;
+			}
+			if (isSame) {
+				newRelation.tuples.push_back(relation1->tuples[i]);
+			}
+		}
+	}
+	
+	database.push_back(newRelation);
 }
 
 /*	compute the set difference of two relations; the relations must be union-compatible.
@@ -204,17 +236,17 @@ void DataManager::naturalJoin(string &relatioName1, string &relationName2) {
 bool DataManager::testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples) {	
 	Relation* relation = getRelationByName(relationName);
 
-	vector<Attribute> relationAttributes = relation->attributes;
-	if (attrNames.size() != relationAttributes.size() || attrTypes.size() != relationAttributes.size()) return false;
-	for (int i = 0; i < relationAttributes.size(); i++) {
-		if (attrNames[i] != relationAttributes[i].getName()) return false;
-		if (attrTypes[i] != relationAttributes[i].getType()) return false;
+	if (relation == NULL) return false;
+
+	if (attrNames.size() != relation->attributes.size() || attrTypes.size() != relation->attributes.size()) return false;
+	for (int i = 0; i < relation->attributes.size(); i++) {
+		if (attrNames[i] != relation->attributes[i].getName()) return false;
+		if (attrTypes[i] != relation->attributes[i].getType()) return false;
 	}
-	vector<vector<string>> relationTuples = relation->tuples;
-	if (relationTuples.size() != tuples.size()) return false;
-	for (int i = 0; i < relationTuples.size(); i++) {
-		for (int j = 0; j < relationTuples[i].size(); j++) {
-			if (relationTuples[i][j] != tuples[i][j]) return false;
+	if (relation->tuples.size() != tuples.size()) return false;
+	for (int i = 0; i < relation->tuples.size(); i++) {
+		for (int j = 0; j < relation->tuples[i].size(); j++) {
+			if (relation->tuples[i][j] != tuples[i][j]) return false;
 		}
 	}
 	return true;

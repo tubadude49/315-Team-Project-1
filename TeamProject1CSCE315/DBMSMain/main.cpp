@@ -6,7 +6,8 @@
 
 #include "DBMSAPI.h"
 
-void runMyTest();
+void renameTest();
+void unionTest();
 
 int main() {
 
@@ -42,14 +43,15 @@ int main() {
 	//dataManager.rename(dataRelatName1, dataAttrNames1, newDataAttrNames1);
 	dataManager.show(dataRelatName1, cout);
 
-	runMyTest();
+	renameTest();
+	unionTest();
 
 	string tester;
 	cin >> tester;
 
 }
 
-void runMyTest() {
+void renameTest() {
 	DataManager dataManager = DataManager();
 
 	string dataRelatName1 = "Tester";
@@ -70,4 +72,43 @@ void runMyTest() {
 	dataManager.show(dataRelatName1, cout);
 	dataManager.show(newDataName, cout);
 
+}
+
+void unionTest() {
+	DataManager dataManager = DataManager();
+
+	string dataRelatName1 = "Tester1";
+	vector<string> dataAttrNames1 = { "test", "name" };
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+	vector<string> testTuple1_1 = { "test1", "Thomas" };
+	vector<string> testTuple1_2 = { "test2", "Colin" };
+	vector<vector<string>> testTuples;
+	string primaryKey1 = "test1";
+
+	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
+	dataManager.insert(dataRelatName1, testTuple1_1);
+	dataManager.insert(dataRelatName1, testTuple1_2);
+
+	string dataRelatName2 = "Tester2";
+	vector<string> dataAttrNames2 = { "test", "name" };
+	vector<string> dataAttrTypes2 = { "INTEGER", "VARCHAR(20)" };
+	vector<string> testTuple2_1 = { "test1", "Thomas" };
+	vector<string> testTuple2_2 = { "test2", "Jack" };
+	string primaryKey2 = "test1";
+
+	dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
+	dataManager.insert(dataRelatName2, testTuple2_1);
+	dataManager.insert(dataRelatName2, testTuple2_2);
+
+	string unionRelatName = "Unionize";
+	vector<string> unionAttrNames = { "test", "name" };
+	vector<string> unionAttrTypes = { "INTEGER", "VARCHAR(20)" };
+	vector<string> unionTuples = { "test1", "Thomas" };
+	vector<vector<string>> unionTupleResults = { unionTuples };
+
+	dataManager.setUnion(dataRelatName1, dataRelatName2, unionRelatName);
+
+	cout << dataManager.testRelation(unionRelatName, unionAttrNames, unionAttrTypes, unionTupleResults) << endl;
+
+	dataManager.show(unionRelatName, cout);
 }

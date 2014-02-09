@@ -57,6 +57,44 @@ namespace DBMS_Engine_Tester
 			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples));
 			Assert::IsTrue(dataManager.testRelation(newDataName, newDataAttrNames1, dataAttrTypes1, testTuples));
 		}
+		TEST_METHOD(TestSetUnion)
+		{
+			DataManager dataManager = DataManager();
+
+			string dataRelatName1 = "Tester1";
+			vector<string> dataAttrNames1 = { "test", "name" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+			vector<string> testTuple1_1 = { "test1", "Thomas" };
+			vector<string> testTuple1_2 = { "test2", "Colin" };
+			vector<vector<string>> testTuples;
+			string primaryKey1 = "test1";
+
+			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
+			dataManager.insert(dataRelatName1, testTuple1_1);
+			dataManager.insert(dataRelatName1, testTuple1_2);
+
+			string dataRelatName2 = "Tester2";
+			vector<string> dataAttrNames2 = { "test", "name" };
+			vector<string> dataAttrTypes2 = { "INTEGER", "VARCHAR(20)" };
+			vector<string> testTuple2_1 = { "test1", "Thomas" };
+			vector<string> testTuple2_2 = { "test2", "Jack" };
+			string primaryKey2 = "test1";
+
+			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
+			dataManager.insert(dataRelatName2, testTuple2_1);
+			dataManager.insert(dataRelatName2, testTuple2_2);
+
+			string unionRelatName = "Unionize";
+			vector<string> unionAttrNames = { "test", "name" };
+			vector<string> unionAttrTypes = { "INTEGER", "VARCHAR(20)" };
+			vector<string> unionTuples = { "test1", "Thomas" };
+			vector<vector<string>> unionTupleResults = { unionTuples };
+
+			dataManager.setUnion(dataRelatName1, dataRelatName2, unionRelatName);
+
+			Assert::IsTrue(dataManager.testRelation(unionRelatName, unionAttrNames, unionAttrTypes, unionTupleResults));
+
+		}
 
 	};
 }
