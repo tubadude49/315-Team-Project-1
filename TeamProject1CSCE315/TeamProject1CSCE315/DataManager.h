@@ -25,7 +25,7 @@ public:
 
 	void select(string &relationName);
 	void project(string &relationName);
-	void rename(string &relationName, vector<string> &attributeNewName);
+	void rename(string &relationName, string &relationNewName, vector<string> &attributeNewName);
 	void setUnion(string &relationName1, string &relationName2);
 	void setDifference(string &relationName1, string &relationName2);
 	void crossProduct(string &relationName1, string &relationName2);

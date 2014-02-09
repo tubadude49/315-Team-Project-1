@@ -48,12 +48,14 @@ namespace DBMS_Engine_Tester
 			vector<vector<string>> testTuples;
 			string primaryKey = "test1";
 
+			string newDataName = "Tester_Renamed";
 			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
-			dataManager.rename(dataRelatName1, dataAttrNames1, newDataAttrNames1);
+			dataManager.rename(dataRelatName1, newDataName, newDataAttrNames1);
 
-			Assert::IsTrue(dataManager.testRelation(dataRelatName1, newDataAttrNames1, dataAttrTypes1, testTuples));
+			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples));
+			Assert::IsTrue(dataManager.testRelation(newDataName, newDataAttrNames1, dataAttrTypes1, testTuples));
 		}
 
 	};

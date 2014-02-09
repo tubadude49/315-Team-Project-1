@@ -57,7 +57,7 @@ void DataManager::show(string &relationName, ostream& os) {
 	if (relation != NULL) {
 		os << relation->getName() << "\n";
 		
-		vector<Attribute> attrs = relation->getAttributes();
+		vector<Attribute> attrs = relation->attributes;
 		vector<int> widths(attrs.size());
 		for (int j = 0; j < attrs.size(); j++ )
 		{
@@ -78,7 +78,7 @@ void DataManager::show(string &relationName, ostream& os) {
 		}
 		os << "\n";
 		
-		for (int i = 0; i < relation->getTuples().size(); i++)
+		for (int i = 0; i < relation->tuples.size(); i++)
 		{
 			for (int j = 0; j < relation->tupleSize(i); j++)
 			{
@@ -105,7 +105,7 @@ void DataManager::drop(string &relationName) {
 */
 void DataManager::write(string &relationName) {
 	Relation* relation = getRelationByName(relationName);
-	vector<string> buildCmds = relation->getBuildCmds();
+	vector<string> buildCmds = relation->buildCmds;
 	ofstream ofs(relationName + ".txt");
 	for (int i = 0; i < buildCmds.size(); i++){
 		ofs << buildCmds[i] << endl;
@@ -143,13 +143,13 @@ void DataManager::project(string &relationName) {
 
 /*	rename the attributes in a relation.
 */
-void DataManager::rename(string &relationName, vector<string> &attributeNewName) {
+void DataManager::rename(string &relationName, string &relationNewName, vector<string> &attributeNewName) {
 	Relation* relation = getRelationByName(relationName);
 	Relation newRelation = Relation(*relation);
+	newRelation.name = relationNewName;
 	for(int i=0;i<newRelation.attributes.size();i++) {
-		newRelation.attributes[i] = Attribute(newDataAttr[i], relation.attributes[i].getType());
-		// if this fails I swear to god
-		cout << newRelation.attributes[i].getName() << ", " << newRelation.attributes[i].getTypes() << endl;
+		newRelation.attributes[i] = Attribute(attributeNewName[i], relation->attributes[i].getType());
+	//	cout << newRelation.attributes[i].getName() << ", " << newRelation.attributes[i].getType() << endl;
 	}
 	database.push_back(newRelation);
 }
@@ -171,10 +171,10 @@ void DataManager::setDifference(string &relationName1, string &relationName2) {
 	Relation r1 = *relationPointer1;
 
 	//Compute the difference: relation1 - relation2
-	for (int i = 0; i < relationPointer2->getTuples().size(); i++){
-		for (int j = 0; j < r1.getTuples().size(); j++){
-			if (relationPointer2->getTuples()[i] == r1.getTuples()[j]){	//If a tuple is found to be in both relations...
-				r1.getTuples().erase(r1.getTuples().begin() + j);		//...remove it from r1
+	for (int i = 0; i < relationPointer2->tuples.size(); i++){
+		for (int j = 0; j < r1.tuples.size(); j++){
+			if (relationPointer2->tuples[i] == r1.tuples[j]){	//If a tuple is found to be in both relations...
+				r1.tuples.erase(r1.tuples.begin() + j);			//...remove it from r1
 			}
 		}
 	}
@@ -204,13 +204,13 @@ void DataManager::naturalJoin(string &relatioName1, string &relationName2) {
 bool DataManager::testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples) {	
 	Relation* relation = getRelationByName(relationName);
 
-	vector<Attribute> relationAttributes = relation->getAttributes();
+	vector<Attribute> relationAttributes = relation->attributes;
 	if (attrNames.size() != relationAttributes.size() || attrTypes.size() != relationAttributes.size()) return false;
 	for (int i = 0; i < relationAttributes.size(); i++) {
 		if (attrNames[i] != relationAttributes[i].getName()) return false;
 		if (attrTypes[i] != relationAttributes[i].getType()) return false;
 	}
-	vector<vector<string>> relationTuples = relation->getTuples();
+	vector<vector<string>> relationTuples = relation->tuples;
 	if (relationTuples.size() != tuples.size()) return false;
 	for (int i = 0; i < relationTuples.size(); i++) {
 		for (int j = 0; j < relationTuples[i].size(); j++) {

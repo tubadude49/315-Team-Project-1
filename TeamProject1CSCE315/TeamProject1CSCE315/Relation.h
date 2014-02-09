@@ -32,7 +32,7 @@ class Relation
 	void addTuple(vector<string> &values);
 	void addCmd(string &command);
 
-	//string& const getName();
+	string& const getName();
 	Attribute* getAttributeByName(string &attributeName);
 	//vector<string>& const getBuildCmds();
 	//vector<Attribute>& const getAttributes();

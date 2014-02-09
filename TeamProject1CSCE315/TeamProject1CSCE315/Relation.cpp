@@ -65,7 +65,7 @@ Attribute* Relation::getAttributeByName(string &attributeName) {
 	}
 }
 
-vector<string>& const Relation::getBuildCmds() {
+/*vector<string>& const Relation::getBuildCmds() {
 	return buildCmds;
 }
 
@@ -77,7 +77,7 @@ vector<Attribute>& const Relation::getAttributes()
 vector<vector<string>>& Relation::getTuples()
 {
 	return tuples;
-}
+}*/
 
 unsigned int Relation::tupleSize(int pos)
 {
