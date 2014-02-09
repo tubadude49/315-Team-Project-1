@@ -193,27 +193,33 @@ void DataManager::setUnion(string &relationName1, string &relationName2, string 
 }
 
 /*	compute the set difference of two relations; the relations must be union-compatible.
+	Author: Josh Tutt
 */
 void DataManager::setDifference(string &relationName1, string &relationName2) {
 	//Create pointers to the indicated relations
 	Relation* relationPointer1 = getRelationByName(relationName1);
 	Relation* relationPointer2 = getRelationByName(relationName2);
 
-	//Create a new relation with the same attributes, etc, as relation1
-	Relation r1 = *relationPointer1;
+	//Create a new relation with the same attributes, etc, as the first relation
+	Relation relation1 = Relation(*relationPointer1);
 
 	//Compute the difference: relation1 - relation2
 	for (int i = 0; i < relationPointer2->tuples.size(); i++){
-		for (int j = 0; j < r1.tuples.size(); j++){
-			if (relationPointer2->tuples[i] == r1.tuples[j]){	//If a tuple is found to be in both relations...
-				r1.tuples.erase(r1.tuples.begin() + j);			//...remove it from r1
+		for (int j = 0; j < relation1.tuples.size(); j++){
+			if (relationPointer2->tuples[i] == relation1.tuples[j]){	//If a tuple is found to be in both relations...
+				relation1.tuples.erase(relation1.tuples.begin() + j);	//...remove it from relation1
 			}
 		}
 	}
 
-	//Add r1 to the database
-	database.push_back(r1);
+	//Add relation1 to database
+
+	//NOTE: setDifference() needs to be able to change the name of the newly-created deep-copied relation
+	//relation1.setName("Difference: \"" + relationName1 + "\" - \"" + relationName2 + "\"");
+	relation1.name = "Difference: \"" + relationName1 + "\" - \"" + relationName2 + "\"";
+	database.push_back(relation1);
 }
+
 
 /*	compute the Cartesian product of two relations.
 	TODO

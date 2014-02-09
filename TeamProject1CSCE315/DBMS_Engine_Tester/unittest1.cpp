@@ -95,6 +95,47 @@ namespace DBMS_Engine_Tester
 			Assert::IsTrue(dataManager.testRelation(unionRelatName, unionAttrNames, unionAttrTypes, unionTupleResults));
 
 		}
+		TEST_METHOD(TestSetDifference)
+			//Author: Josh Tutt
+		{
+			DataManager dataManager = DataManager();
+
+			string dataRelatName1 = "TesterA";
+			vector<string> dataAttrNames1 = { "test", "name" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+			vector<string> testTuple1 = { "test1", "Thomas" };
+			vector<string> testTuple2 = { "test2", "Colin" };
+			vector<string> testTuple3 = { "test3", "Josh" };
+
+			vector<vector<string>> solutionTuples(0);
+			solutionTuples.push_back(testTuple2);
+			solutionTuples.push_back(testTuple3);
+
+			string primaryKey = "test1";
+
+			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
+
+			//Create relation A
+			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+			dataManager.insert(dataRelatName1, testTuple1);
+			dataManager.insert(dataRelatName1, testTuple2);
+			dataManager.insert(dataRelatName1, testTuple3);
+
+			//Create relation B
+			string dataRelatName2 = "TesterB";
+			vector<string> testTuple4 = { "test4", "Frankie" };
+			dataManager.create(dataRelatName2, dataAttrNames1, dataAttrTypes1, primaryKey);
+			dataManager.insert(dataRelatName2, testTuple1);
+			dataManager.insert(dataRelatName2, testTuple4);
+
+			//Compute the difference, A - B
+			dataManager.setDifference(dataRelatName1, dataRelatName2);
+
+			string newName = "Difference: \"" + dataRelatName1 + "\" - \"" + dataRelatName2 + "\"";
+
+			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, solutionTuples));
+		}
+
 
 	};
 }
