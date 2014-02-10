@@ -24,7 +24,7 @@ public:
 	void write(string &relationName);
 
 	void select(string &relationName, string &newRelationName, vector<string> booleanArgs);
-	void project(string &relationName);
+	void project(string &relationName, string &newRelationName, vector<string> &newAttributes);
 	void rename(string &relationName, string &relationNewName, vector<string> &attributeNewName);
 	void setUnion(string &relationName1, string &relationName2, string &newRelationName);
 	void setDifference(string &relationName1, string &relationName2);

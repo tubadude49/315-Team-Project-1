@@ -229,12 +229,21 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 
 	database.push_back(newRelation);
 }
+
 /*	select a subset of the attributes in a relation.
 	TODO
 */
-void DataManager::project(string &relationName) {
-}
+void DataManager::project(string &relationName, string &newRelationName, vector<string> &newAttributes) {
+	Relation* relation = getRelationByName(relationName);
+	Relation newRelation = Relation(*relation);
+	newRelation.name = newRelationName;
 
+	for (int i = 0; i < newRelation.attributes.size(); i++) {
+		newRelation.attributes[i] = Attribute(newAttributes[i], relation->attributes[i].getType());
+	}
+	database.push_back(newRelation);
+}
+	
 /*	rename the attributes in a relation.
 	code by Thomas Bateson.
 */
