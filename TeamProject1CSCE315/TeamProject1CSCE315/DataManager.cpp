@@ -129,12 +129,98 @@ void DataManager::shellSort(vector<string> &toSort) {
 	}
 }
 
-/*	select the tuples in a relation that satisfy a particular condition.
-	TODO
-*/
-void DataManager::select(string &relationName) {
+bool parseBooleanStmt(string type, string arg1, string op, string arg2) {
+	if (type == "INTEGER") {
+		int intArg1 = stoi(arg1);
+		int intArg2 = stoi(arg2);
+		if (op == "<") {
+			return intArg1 < intArg2;
+		}
+		else if (op == ">") {
+			return intArg1 > intArg2;
+		}
+		else if (op == "<=") {
+			return intArg1 <= intArg2;
+		}
+		else if (op == ">=") {
+			return intArg1 >= intArg2;
+		}
+		else if (op == "==") {
+			return intArg1 == intArg2;
+		}
+		else if (op == "!=") {
+			return intArg1 != intArg2;
+		}
+	}
+	else {
+		if (op == "<") {
+			return arg1 < arg2;
+		}
+		else if (op == ">") {
+			return arg1 > arg2;
+		}
+		else if (op == "<=") {
+			return arg1 <= arg2;
+		}
+		else if (op == ">=") {
+			return arg1 >= arg2;
+		}
+		else if (op == "==") {
+			return arg1 == arg2;
+		}
+		else if (op == "!=") {
+			return arg1 != arg2;
+		}
+	}
+	return false;
 }
 
+bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> booleanArgs) {
+	bool shouldKeep = false;
+	for (int i = 0; i < booleanArgs.size(); i += 4) {
+		for (int j = 0; j < attributes.size(); j++) {
+			string op = booleanArgs[i + 1];
+			string constArg = booleanArgs[i + 2];
+			//cout << attributes[j].getType() << "(" << tuple[j] << op << constArg << ")" << endl;
+			if (i == 0) {
+				if (attributes[j].getName() == booleanArgs[i]) {
+					shouldKeep = parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
+				}
+			}
+			else {
+				if (attributes[j].getName() == booleanArgs[i] && booleanArgs[i - 1] == "&&") {
+					shouldKeep = shouldKeep && parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
+				}
+				else if (attributes[j].getName() == booleanArgs[i] && booleanArgs[i - 1] == "||") {
+					shouldKeep = shouldKeep || parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
+				}
+			}
+		}
+	}
+	return shouldKeep;
+}
+
+/*	select the tuples in a relation that satisfy a particular condition.
+code by Thomas Bateson
+*/
+void DataManager::select(string &relationName, string &newRelationName, vector<string> booleanArgs) {
+	Relation* relation = getRelationByName(relationName);
+	Relation newRelation = Relation(*relation);
+	newRelation.name = newRelationName;
+
+	vector<int> toDelete;
+	for (int i = 0; i < newRelation.tuples.size(); i++) {
+		if (!compare(newRelation.attributes, newRelation.tuples[i], booleanArgs)) {
+			toDelete.push_back(i);
+		}
+	}
+
+	for (int i = 0; i < toDelete.size(); i++) {
+		newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
+	}
+
+	database.push_back(newRelation);
+}
 /*	select a subset of the attributes in a relation.
 	TODO
 */

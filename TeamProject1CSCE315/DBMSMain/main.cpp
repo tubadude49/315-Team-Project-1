@@ -9,6 +9,7 @@
 void renameTest();
 void unionTest();
 void crossTest();
+void selectTest();
 
 int main() {
 
@@ -144,4 +145,32 @@ void crossTest()
 
 	string crossName = dataManager.crossProduct(dataRelatName1, dataRelatName2);
 	dataManager.show(crossName, cout);
+}
+
+void selectTest() {
+	DataManager dataManager = DataManager();
+
+	string dataRelatName1 = "Tester1";
+	vector<string> dataAttrNames1 = { "test", "name" };
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+	vector<string> testTuple1_1 = { "test1", "Thomas" };
+	vector<string> testTuple1_2 = { "test2", "Thomas" };
+	vector<string> testTuple1_3 = { "test3", "Colin" };
+	vector<vector<string>> testTuples;
+	string primaryKey1 = "test1";
+
+	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
+	dataManager.insert(dataRelatName1, testTuple1_1);
+	dataManager.insert(dataRelatName1, testTuple1_2);
+	dataManager.insert(dataRelatName1, testTuple1_3);
+
+	vector<string> booleanArgs = { "name", "==", "Thomas" };
+	string newName = "newTest";
+	vector<vector<string>> result = { testTuple1_1, testTuple1_2 };
+
+	dataManager.select(dataRelatName1, newName, booleanArgs);
+
+	//cout << dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, result) << endl;
+
+	dataManager.show(newName, cout);
 }

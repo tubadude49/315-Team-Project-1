@@ -23,7 +23,7 @@ public:
 	void drop(string &relationName);
 	void write(string &relationName);
 
-	void select(string &relationName);
+	void select(string &relationName, string &newRelationName, vector<string> booleanArgs);
 	void project(string &relationName);
 	void rename(string &relationName, string &relationNewName, vector<string> &attributeNewName);
 	void setUnion(string &relationName1, string &relationName2, string &newRelationName);
