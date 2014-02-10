@@ -39,4 +39,5 @@ class Relation
 	//vector<vector<string>>& getTuples();
 	unsigned int tupleSize(int pos);
 	unsigned int getPrimaryKeyIndex();
+	string getPrimaryKey();
 };

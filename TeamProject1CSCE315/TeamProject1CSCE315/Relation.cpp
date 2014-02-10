@@ -88,3 +88,8 @@ unsigned int Relation::getPrimaryKeyIndex()
 {
 	return primaryKeyIndex;
 }
+
+string Relation::getPrimaryKey()
+{
+	return attributes[primaryKeyIndex].getName();
+}

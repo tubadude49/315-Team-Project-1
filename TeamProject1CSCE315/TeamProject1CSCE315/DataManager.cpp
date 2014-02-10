@@ -65,13 +65,13 @@ void DataManager::show(string &relationName, ostream& os) {
 			
 			string typestr = attr.getType();
 			int varcharPos = typestr.find("(");
-			if(varcharPos != -1)//Type is VARCHAR
+			if((varcharPos != -1) && (typestr.find(" X ") == -1))//Type is VARCHAR and field is not crossed
 			{
 				string parenContent =  typestr.substr(varcharPos + 1, typestr.length() - 2 - varcharPos);
 				widths[j] = stoi(parenContent);
 			}
 			
-			string fullname = attr.getName() + "[" + typestr + "]";
+			string fullname = " " + attr.getName() + "[" + typestr + "]";
 			int fieldLength = fullname.length();
 			widths[j] = max(widths[j], fieldLength);//Either length of title or largest data
 			os << setw(widths[j]) << fullname;
@@ -224,7 +224,27 @@ void DataManager::setDifference(string &relationName1, string &relationName2) {
 /*	compute the Cartesian product of two relations.
 	TODO
 */
-void DataManager::crossProduct(string &relationName1, string &relationName2) {
+string DataManager::crossProduct(string &relationName1, string &relationName2) {
+	Relation* rel1 = getRelationByName(relationName1);
+	Relation* rel2 = getRelationByName(relationName2);
+	vector<string> crossAttrNames;
+	vector<string> crossAttrTypes;
+	vector<vector<string>> crossTuples;
+	string crossName = rel1->getName() + " X " + rel2->getName();
+	string crossPrimaryKey = "{" + rel1->getPrimaryKey() + " X " + rel2->getPrimaryKey() + "}";
+	for (int i = 0; i < rel1->attributes.size(); i++)
+	{
+		for (int j = 0; j < rel2->attributes.size(); j++)
+		{
+			string crossAtName = "{" + rel1->attributes[i].getName() + " X " + rel2->attributes[j].getName() + "}";
+			crossAttrNames.push_back(crossAtName);
+			string crossTyName = "(" + rel1->attributes[i].getType() + " X " + rel2->attributes[j].getType() + ")";
+			crossAttrTypes.push_back(crossTyName);
+		}
+	}
+	create(crossName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
+
+	return crossName;//returns new relation name
 }
 
 /*	In addition to these operations, we include the natural join operation. 
