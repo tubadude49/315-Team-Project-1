@@ -129,6 +129,10 @@ void DataManager::shellSort(vector<string> &toSort) {
 	}
 }
 
+/*	parse the given boolean statement either by string or integer comparisons
+	internal function used by Select
+	code by Thomas Bateson
+*/
 bool parseBooleanStmt(string type, string arg1, string op, string arg2) {
 	if (type == "INTEGER") {
 		int intArg1 = stoi(arg1);
@@ -175,13 +179,17 @@ bool parseBooleanStmt(string type, string arg1, string op, string arg2) {
 	return false;
 }
 
+/*	Compare a given tuple. Attributes are used for type information. 
+	booleanArgs hold the necessarily comparison information.
+	For internal use by Select
+	code by Thomas Bateson
+*/
 bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> booleanArgs) {
 	bool shouldKeep = false;
 	for (int i = 0; i < booleanArgs.size(); i += 4) {
 		for (int j = 0; j < attributes.size(); j++) {
 			string op = booleanArgs[i + 1];
 			string constArg = booleanArgs[i + 2];
-			//cout << attributes[j].getType() << "(" << tuple[j] << op << constArg << ")" << endl;
 			if (i == 0) {
 				if (attributes[j].getName() == booleanArgs[i]) {
 					shouldKeep = parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
@@ -201,7 +209,7 @@ bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> 
 }
 
 /*	select the tuples in a relation that satisfy a particular condition.
-code by Thomas Bateson
+	code by Thomas Bateson
 */
 void DataManager::select(string &relationName, string &newRelationName, vector<string> booleanArgs) {
 	Relation* relation = getRelationByName(relationName);
@@ -308,15 +316,15 @@ void DataManager::setDifference(string &relationName1, string &relationName2) {
 
 
 /*	compute the Cartesian product of two relations.
-	TODO
+	code by Colin Lenzen
 */
-string DataManager::crossProduct(string &relationName1, string &relationName2) {
+void DataManager::crossProduct(string &relationName1, string &relationName2, string &newRelationName) {
 	Relation* rel1 = getRelationByName(relationName1);
 	Relation* rel2 = getRelationByName(relationName2);
 	vector<string> crossAttrNames;
 	vector<string> crossAttrTypes;
 	vector<vector<string>> crossTuples;
-	string crossName = rel1->getName() + " X " + rel2->getName();
+	//string crossName = rel1->getName() + " X " + rel2->getName();
 	string crossPrimaryKey = "{" + rel1->getPrimaryKey() + " X " + rel2->getPrimaryKey() + "}";
 	for (int i = 0; i < rel1->attributes.size(); i++)
 	{
@@ -328,9 +336,7 @@ string DataManager::crossProduct(string &relationName1, string &relationName2) {
 			crossAttrTypes.push_back(crossTyName);
 		}
 	}
-	create(crossName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
-
-	return crossName;//returns new relation name
+	create(newRelationName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
 }
 
 /*	In addition to these operations, we include the natural join operation. 
@@ -345,6 +351,10 @@ string DataManager::crossProduct(string &relationName1, string &relationName2) {
 void DataManager::naturalJoin(string &relatioName1, string &relationName2) {
 }
 
+/*	Tester function to determine if a given relation is "equal" to the given field information
+	For test purposes only***
+	code by Thomas Bateson
+*/
 bool DataManager::testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples) {	
 	Relation* relation = getRelationByName(relationName);
 

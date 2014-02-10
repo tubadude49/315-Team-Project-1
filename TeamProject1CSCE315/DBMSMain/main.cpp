@@ -48,6 +48,8 @@ int main() {
 	renameTest();
 	unionTest();
 	crossTest();
+	selectTest();
+
 	string tester;
 	cin >> tester;
 
@@ -143,7 +145,9 @@ void crossTest()
 	dataManager.show(dataRelatName1, cout);
 	dataManager.show(dataRelatName2, cout);
 
-	string crossName = dataManager.crossProduct(dataRelatName1, dataRelatName2);
+	string crossName = "crossproduction";
+
+	dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
 	dataManager.show(crossName, cout);
 }
 
