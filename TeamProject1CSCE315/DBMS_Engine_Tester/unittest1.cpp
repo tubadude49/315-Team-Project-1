@@ -153,8 +153,6 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName1, testTuple1_2);
 			dataManager.insert(dataRelatName1, testTuple1_3);
 
-<<<<<<< HEAD
-=======
 			vector<string> booleanArgs = { "name", "==", "Thomas" };
 			string newName = "newTest";
 			vector<vector<string>> result = { testTuple1_1, testTuple1_2 };
@@ -163,7 +161,6 @@ namespace DBMS_Engine_Tester
 
 			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, result));
 		}
->>>>>>> 2e9db6e7df7adb6cfa3a69269e248ec60e507a3b
 		TEST_METHOD(testCross)
 		{
 			DataManager dataManager = DataManager();
@@ -189,7 +186,9 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName2, tupleSet2[1]);
 			dataManager.insert(dataRelatName2, tupleSet2[2]);
 
-			string crossName = dataManager.crossProduct(dataRelatName1, dataRelatName2);
+			string crossName = dataRelatName1 + " X " + dataRelatName2;
+			dataManager.crossProduct(dataRelatName1, dataRelatName2,crossName);
+			
 			vector<vector<string>> solutionTuples;
 			vector<string> crossedNames = { "{Alpha X Bravo}", "{Alpha X Charlie}", "{Alpha X Echo}", "{Alpha X Foxtrot}", "{Beta X Bravo}", "{Beta X Charlie}", "{Beta X Echo}", "{Beta X Foxtrot}", "{Gamma X Bravo}", "{Gamma X Charlie}", "{Gamma X Echo}", "{Gamma X Foxtrot}" };
 			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(INTEGER X VARCHAR(4))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(5) X VARCHAR(4))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(18) X VARCHAR(10))", "(VARCHAR(18) X INTEGER)", "(VARCHAR(18) X VARCHAR(4))", "(VARCHAR(18) X INTEGER)" };
