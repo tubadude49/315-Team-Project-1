@@ -4,6 +4,11 @@
 
 #include "Relation.h"
 
+/*	Default constructor
+*/
+Relation::Relation(){
+}
+
 /*	Constructor with field definitions.
 Instantiating the relation without these fields is not possible.
 */

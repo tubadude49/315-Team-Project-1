@@ -10,6 +10,7 @@ private:
 	string name;
 	string type;
 public:
+	Attribute();
 	Attribute(string& attributeName, string& attributeType);
 
 	string& const getName();

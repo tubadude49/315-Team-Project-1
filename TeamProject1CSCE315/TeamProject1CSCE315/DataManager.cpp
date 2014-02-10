@@ -348,17 +348,117 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	create(newRelationName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
 }
 
-/*	In addition to these operations, we include the natural join operation. 
-	The result of the natural join between relations R and S is the set of all combinations of tuples in R and S 
-	that are equal on their common attribute names. The common attributes only appear once in the result.
+/*	In addition to these operations, we include the natural join operation.
+The result of the natural join between relations R and S is the set of all combinations of tuples in R and S
+that are equal on their common attribute names. The common attributes only appear once in the result.
 
-	Natural join is expressible using the six fundamental operations,
-	but a direct implementation for joins can reduce the need to use the (expensive) Cartesian product operation.
+Natural join is expressible using the six fundamental operations,
+but a direct implementation for joins can reduce the need to use the (expensive) Cartesian product operation.
 
-	TODO
+Author: Josh Tutt
+
+NOTE: Currently, this function creates a duplicate of the first relation if there are no shared attributes
+or attempts to create a new relation from a Natural Join of the two.
+However, it does not yet populate any rows of the new relation
+but only decides the correct attribute columns to include.
 */
-void DataManager::naturalJoin(string &relatioName1, string &relationName2) {
+void DataManager::naturalJoin(string &relationName1, string &relationName2, string newName) {
+	//Create pointers to the indicated relations
+	Relation* relationPointer1 = getRelationByName(relationName1);
+	Relation* relationPointer2 = getRelationByName(relationName2);
+	Relation joinedRelation;
+	joinedRelation.name = newName;
+
+	//Search for a common attribute
+	int commonAttr = -1;
+	for (int i = 0; i < relationPointer1->attributes.size(); i++){
+		for (int j = 0; j < relationPointer2->attributes.size(); j++){
+			if (relationPointer1->attributes[i].getName() == relationPointer2->attributes[j].getName()){
+				//If a common attribute is found, then write its index as commonAttr
+				commonAttr = i;
+			}
+		}
+	}
+
+	//If no common attribute exists, create a duplicate of relation1 and exit the function
+	if (commonAttr == -1){
+		joinedRelation = Relation(*relationPointer1);
+		database.push_back(joinedRelation);
+		return;
+	}
+
+	//Create a list from the union of the two attribute sets
+	vector<Attribute> newAttributes(0);
+	for (int i = 0; i < relationPointer1->attributes.size(); i++){ //Add all attributes from relation1
+		if (i == commonAttr)
+			continue;
+		newAttributes.push_back(relationPointer1->attributes[i]);
+	}
+	newAttributes.push_back(relationPointer1->attributes[commonAttr]);
+	for (int j = 0; j < relationPointer2->attributes.size(); j++){
+		if (relationPointer2->attributes[j].getName() == relationPointer1->attributes[commonAttr].getName())
+			continue;
+		newAttributes.push_back(relationPointer2->attributes[j]);
+	}
+	/*
+	//Create a list of lists containing the tuple values
+	vector<vector<string>> newTuples(0);
+	vector<string> tuple(0);
+	string commonElement;
+	//Find tuple values from relation1
+	std::cout << "size: " << relationPointer1->tuples.size() << "\n";
+	for (int i = 0; i < relationPointer1->tuples.size(); i++){
+	tuple.clear();
+	for (int j = 0; j < relationPointer1->tuples[i].size(); j++){
+	if (j == commonAttr)
+	continue;
+	tuple.push_back(relationPointer1->tuples[i][j]);
+	}
+	//Append the common element in the middle
+	commonElement = relationPointer1->tuples[i][commonAttr];
+	tuple.push_back(commonElement);
+
+	//Append the tuple values from relation2 to the end
+	for (int k = 0; k < relationPointer2->tuples.size(); k++){
+	for (int l = 0; l < relationPointer2->tuples[k].size(); l++){
+	if (relationPointer2->tuples[k][l] == commonElement)
+	continue;
+	tuple.push_back(relationPointer2->tuples[k][l]);
+	}
+	}
+
+
+	newTuples.push_back(tuple);
+	}
+	*/
+
+	//Set newAttributes to joinedRelation
+	joinedRelation.attributes = newAttributes;
+	//joinedRelation.tuples = newTuples;
+
+
+
+	database.push_back(joinedRelation);
+
+	/*
+	//Testing, will remove
+	std::cout << "Tuples from joinedRelation: size(" << joinedRelation.tuples.size() << ")\n";
+	for (int i = 0; i < joinedRelation.tuples.size(); i++){
+	std::cout << "tuples[" << i << "] = ";
+	for (int j = 0; j < joinedRelation.tuples[i].size(); j++){
+	std::cout << joinedRelation.tuples[i][j] << ", ";
+	}
+	std::cout << "|\n";
+	}
+	*/
+
 }
+
+void DataManager::naturalJoin(string &relationName1, string &relationName2){
+	string name = relationName1 + "+" + relationName2;
+	DataManager::naturalJoin(relationName1, relationName2, name);
+}
+
 
 /*	Tester function to determine if a given relation is "equal" to the given field information
 	For test purposes only***

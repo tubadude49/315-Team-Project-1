@@ -10,6 +10,7 @@ void renameTest();
 void unionTest();
 void crossTest();
 void selectTest();
+void naturalJoinTester();
 
 int main() {
 
@@ -49,6 +50,7 @@ int main() {
 	unionTest();
 	crossTest();
 	selectTest();
+	naturalJoinTester();
 
 	string tester;
 	cin >> tester;
@@ -115,6 +117,65 @@ void unionTest() {
 	cout << dataManager.testRelation(unionRelatName, unionAttrNames, unionAttrTypes, unionTupleResults) << endl;
 
 	dataManager.show(unionRelatName, cout);
+}
+
+
+void naturalJoinTester(){
+	DataManager dataManager = DataManager();
+
+	string dataRelatName1 = "TesterA";
+	vector<string> dataAttrNames1 = { "test", "name" };
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+	vector<string> testTuple1 = { "test1", "Thomas" };
+	vector<string> testTuple2 = { "test2", "Colin" };
+	vector<string> testTuple3 = { "test3", "Josh" };
+
+	vector<string> solutionAttrNames = { "test", "name", "number", "dog?" };
+	vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "BOOL" };
+	vector<vector<string>> solutionTuples;
+
+	/* Uncomment to enable testing for correct tuples
+	solutionTuples = {
+		vector<string> { "test1", "Thomas", "1", "true" },
+		vector<string> { "test2", "Colin", "2", "true" },
+		vector<string> { "test3", "Josh", "3", "false" },
+		vector<string> { "test3", "Josh", "5", "NULL" }
+	};
+	*/
+
+	string primaryKey = "test1";
+
+	vector<string> newDataAttrNames1 = { "new_test", "new_name" };
+
+	//Create relation A
+	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+	dataManager.insert(dataRelatName1, testTuple1);
+	dataManager.insert(dataRelatName1, testTuple2);
+	dataManager.insert(dataRelatName1, testTuple3);
+
+	//Create relation B
+	string dataRelatName2 = "TesterB";
+	vector<string> dataAttrNames2 = { "name", "number", "dog?" };
+	vector<string> dataAttrTypes2 = { "VARCHAR(20)", "INTEGER", "BOOL" };
+	vector<string> testTuple4 = { "Thomas", "1", "true" };
+	vector<string> testTuple5 = { "Colin", "2", "true" };
+	vector<string> testTuple6 = { "Josh", "3", "false" };
+	vector<string> testTuple7 = { "Jason", "4", "false" };
+	vector<string> testTuple8 = { "Josh", "5", "NULL" };
+
+	dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey);
+	dataManager.insert(dataRelatName2, testTuple4);
+	dataManager.insert(dataRelatName2, testTuple5);
+	dataManager.insert(dataRelatName2, testTuple6);
+	dataManager.insert(dataRelatName2, testTuple7);
+	dataManager.insert(dataRelatName2, testTuple8);
+
+	//Compute the Natural Join, A |><| B
+	string newName = "NaturalJoin";
+
+	dataManager.naturalJoin(dataRelatName1, dataRelatName2, newName);
+
+	cout << "Natural Join test: " << dataManager.testRelation(newName, solutionAttrNames, solutionAttrTypes, solutionTuples);
 }
 
 void crossTest()

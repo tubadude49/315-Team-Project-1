@@ -23,7 +23,8 @@ class Relation
 	vector<Attribute> attributes;
 	vector<vector<string>> tuples; //relation[tuple][attribute]
 	vector<string> buildCmds;
-
+	
+	Relation();
 	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
 	//~Relation();
 	bool is(string &name);

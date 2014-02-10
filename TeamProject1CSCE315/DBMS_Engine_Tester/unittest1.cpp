@@ -194,7 +194,6 @@ namespace DBMS_Engine_Tester
 			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(INTEGER X VARCHAR(4))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(5) X VARCHAR(4))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(18) X VARCHAR(10))", "(VARCHAR(18) X INTEGER)", "(VARCHAR(18) X VARCHAR(4))", "(VARCHAR(18) X INTEGER)" };
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
-
 		TEST_METHOD(testSetProject)
 		{
 			DataManager dataManager = DataManager();
@@ -216,5 +215,63 @@ namespace DBMS_Engine_Tester
 			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples));
 			Assert::IsTrue(dataManager.testRelation(newDataName, newDataAttrNames1, dataAttrTypes1, testTuples));
 		}
+		TEST_METHOD(TestNaturalJoin)
+			//Author: Josh Tutt
+		{
+			DataManager dataManager = DataManager();
+
+			string dataRelatName1 = "TesterA";
+			vector<string> dataAttrNames1 = { "test", "name" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+			vector<string> testTuple1 = { "test1", "Thomas" };
+			vector<string> testTuple2 = { "test2", "Colin" };
+			vector<string> testTuple3 = { "test3", "Josh" };
+
+			vector<string> solutionAttrNames = { "test", "name", "number", "dog?" };
+			vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "BOOL" };
+			vector<vector<string>> solutionTuples(0);
+
+			/* Uncomment to enable testing for correct tuples
+			solutionTuples = {
+			vector<string> { "test1", "Thomas", "1", "true" },
+			vector<string> { "test2", "Colin", "2", "true" },
+			vector<string> { "test3", "Josh", "3", "false" },
+			vector<string> { "test3", "Josh", "5", "NULL" }
+			};
+			*/
+
+			string primaryKey = "test1";
+
+			//Create relation A
+			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+			dataManager.insert(dataRelatName1, testTuple1);
+			dataManager.insert(dataRelatName1, testTuple2);
+			dataManager.insert(dataRelatName1, testTuple3);
+
+			//Create relation B
+			string dataRelatName2 = "TesterB";
+			vector<string> dataAttrNames2 = { "name", "number", "dog?" };
+			vector<string> dataAttrTypes2 = { "VARCHAR(20)", "INTEGER", "BOOL" };
+			vector<string> testTuple4 = { "Thomas", "1", "true" };
+			vector<string> testTuple5 = { "Colin", "2", "true" };
+			vector<string> testTuple6 = { "Josh", "3", "false" };
+			vector<string> testTuple7 = { "Jason", "4", "false" };
+			vector<string> testTuple8 = { "Josh", "5", "unknown" };
+
+			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey);
+			dataManager.insert(dataRelatName2, testTuple4);
+			dataManager.insert(dataRelatName2, testTuple5);
+			dataManager.insert(dataRelatName2, testTuple6);
+			dataManager.insert(dataRelatName2, testTuple7);
+			dataManager.insert(dataRelatName2, testTuple8);
+
+			//Compute the Natural Join, A |><| B
+			string newName = "NaturalJoin";
+
+			dataManager.naturalJoin(dataRelatName1, dataRelatName2, newName);
+
+			Assert::IsTrue(dataManager.testRelation(newName, solutionAttrNames, solutionAttrTypes, solutionTuples));
+		}
+
 	};
 }
