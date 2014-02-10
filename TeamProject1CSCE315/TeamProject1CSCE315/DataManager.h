@@ -23,12 +23,12 @@ public:
 	void drop(string &relationName);
 	void write(string &relationName);
 
-	void select(string &relationName);
+	void select(string &relationName, string &newRelationName, vector<string> booleanArgs);
 	void project(string &relationName);
 	void rename(string &relationName, string &relationNewName, vector<string> &attributeNewName);
 	void setUnion(string &relationName1, string &relationName2, string &newRelationName);
 	void setDifference(string &relationName1, string &relationName2);
-	string crossProduct(string &relationName1, string &relationName2);
+	void crossProduct(string &relationName1, string &relationName2, string &newRelationName);
 	void naturalJoin(string &relatioName1, string &relationName2);
 
 	bool testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples);

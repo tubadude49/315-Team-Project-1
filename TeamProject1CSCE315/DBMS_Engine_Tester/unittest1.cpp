@@ -135,7 +135,35 @@ namespace DBMS_Engine_Tester
 
 			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, solutionTuples));
 		}
+		TEST_METHOD(TestSelect)
+		{
+			DataManager dataManager = DataManager();
 
+			string dataRelatName1 = "Tester1";
+			vector<string> dataAttrNames1 = { "test", "name" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+			vector<string> testTuple1_1 = { "1", "Thomas" };
+			vector<string> testTuple1_2 = { "2", "Thomas" };
+			vector<string> testTuple1_3 = { "3", "Colin" };
+			vector<vector<string>> testTuples;
+			string primaryKey1 = "test1";
+
+			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
+			dataManager.insert(dataRelatName1, testTuple1_1);
+			dataManager.insert(dataRelatName1, testTuple1_2);
+			dataManager.insert(dataRelatName1, testTuple1_3);
+
+<<<<<<< HEAD
+=======
+			vector<string> booleanArgs = { "name", "==", "Thomas" };
+			string newName = "newTest";
+			vector<vector<string>> result = { testTuple1_1, testTuple1_2 };
+
+			dataManager.select(dataRelatName1, newName, booleanArgs);
+
+			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, result));
+		}
+>>>>>>> 2e9db6e7df7adb6cfa3a69269e248ec60e507a3b
 		TEST_METHOD(testCross)
 		{
 			DataManager dataManager = DataManager();
