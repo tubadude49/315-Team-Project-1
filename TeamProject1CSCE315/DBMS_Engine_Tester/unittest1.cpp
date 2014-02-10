@@ -136,6 +136,37 @@ namespace DBMS_Engine_Tester
 			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, solutionTuples));
 		}
 
+		TEST_METHOD(testCross)
+		{
+			DataManager dataManager = DataManager();
+
+			string dataRelatName1 = "Greek";
+			vector<string> dataAttrNames1 = { "Alpha", "Beta", "Gamma" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(5)", "VARCHAR(18)" };
+			vector<vector<string>> tupleSet1 = { { "1", ".exe", "Commentary" }, { "2", "and", "three-halves" } };
+			string primaryKey1 = "Beta";
+
+			string dataRelatName2 = "Phoenetic";
+			vector<string> dataAttrNames2 = { "Bravo", "Charlie", "Echo", "Foxtrot" };
+			vector<string> dataAttrTypes2 = { "VARCHAR(10)", "INTEGER", "VARCHAR(4)", "INTEGER" };
+			vector<vector<string>> tupleSet2 = { { "Directive", "363", "this", "1010" }, { "Anyway", "21", "yes", "0" }, { "none", "1", "two", "3" } };
+			string primaryKey2 = "Echo";
+
+			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
+			dataManager.insert(dataRelatName1, tupleSet1[0]);
+			dataManager.insert(dataRelatName1, tupleSet1[1]);
+
+			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
+			dataManager.insert(dataRelatName2, tupleSet2[0]);
+			dataManager.insert(dataRelatName2, tupleSet2[1]);
+			dataManager.insert(dataRelatName2, tupleSet2[2]);
+
+			string crossName = dataManager.crossProduct(dataRelatName1, dataRelatName2);
+			vector<vector<string>> solutionTuples;
+			vector<string> crossedNames = { "{Alpha X Bravo}", "{Alpha X Charlie}", "{Alpha X Echo}", "{Alpha X Foxtrot}", "{Beta X Bravo}", "{Beta X Charlie}", "{Beta X Echo}", "{Beta X Foxtrot}", "{Gamma X Bravo}", "{Gamma X Charlie}", "{Gamma X Echo}", "{Gamma X Foxtrot}" };
+			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(INTEGER X VARCHAR(4))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(5) X VARCHAR(4))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(18) X VARCHAR(10))", "(VARCHAR(18) X INTEGER)", "(VARCHAR(18) X VARCHAR(4))", "(VARCHAR(18) X INTEGER)" };
+			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
+		}
 
 	};
 }
