@@ -194,8 +194,8 @@ namespace DBMS_Engine_Tester
 			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(INTEGER X VARCHAR(4))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(5) X VARCHAR(4))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(18) X VARCHAR(10))", "(VARCHAR(18) X INTEGER)", "(VARCHAR(18) X VARCHAR(4))", "(VARCHAR(18) X INTEGER)" };
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
-		//this section isn't ready yet,...was way too tired to continue
-/*		TEST_METHOD(testProjection)
+
+		TEST_METHOD(testSetProject)
 		{
 			DataManager dataManager = DataManager();
 
@@ -204,7 +204,6 @@ namespace DBMS_Engine_Tester
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
 			vector<string> testTuple1 = { "test1", "Jason" };
 			vector<string> testTuple2 = { "test2", "SomeOtherGuy" };
-			//got to here before calling it a night
 			vector<vector<string>> testTuples;
 			string primaryKey = "test1";
 
@@ -212,10 +211,10 @@ namespace DBMS_Engine_Tester
 			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
-			dataManager.rename(dataRelatName1, newDataName, newDataAttrNames1);
+			dataManager.project(dataRelatName1, newDataName, newDataAttrNames1);
 
 			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples));
 			Assert::IsTrue(dataManager.testRelation(newDataName, newDataAttrNames1, dataAttrTypes1, testTuples));
-		}*/
+		}
 	};
 }
