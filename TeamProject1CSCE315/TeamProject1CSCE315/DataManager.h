@@ -1,5 +1,8 @@
-// Shell code by Thomas Bateson
-// 2/3/2014
+// Thomas Bateson
+// Jason Sitzman
+// Colin Lenzen
+// Josh Tutt
+// 2/10/2014
 // CSCE 315
 
 #pragma once
@@ -27,9 +30,8 @@ public:
 	void project(string &relationName, string &newRelationName, vector<string> &newAttributes);
 	void rename(string &relationName, string &relationNewName, vector<string> &attributeNewName);
 	void setUnion(string &relationName1, string &relationName2, string &newRelationName);
-	void setDifference(string &relationName1, string &relationName2);
+	void setDifference(string &relationName1, string &relationName2, string &newRelationName);
 	void crossProduct(string &relationName1, string &relationName2, string &newRelationName);
-	void naturalJoin(string &relationName1, string &relationName2);
 	void naturalJoin(string &relationName1, string &relationName2, string newName);
 
 	//Helper function

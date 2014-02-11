@@ -1,3 +1,10 @@
+// Thomas Bateson
+// Jason Sitzman
+// Colin Lenzen
+// Josh Tutt
+// 2/10/2014
+// CSCE 315
+
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
@@ -22,20 +29,6 @@ namespace DBMS_Engine_Tester
 			}
 
 		}
-		TEST_METHOD(TestSplit)
-		{
-			DataManager dataManager = DataManager();
-			DMLParser dmlParser = DMLParser(&dataManager);
-
-			string test_s = "(SPLIT && TEST==YES)";
-			vector<string> out = dmlParser.split(test_s);
-			vector<string> arrayout = { "(", "SPLIT", "&&", "TEST", "==", "YES", ")" };
-
-			for (int i = 0; i < arrayout.size(); i++) {
-				Assert::AreEqual(arrayout[i], out[i]);
-			}
-
-		}
 		TEST_METHOD(TestSetRename)
 		{
 			DataManager dataManager = DataManager();
@@ -48,7 +41,7 @@ namespace DBMS_Engine_Tester
 			vector<vector<string>> testTuples;
 			string primaryKey = "test1";
 
-			string newDataName = "Tester_Renamed";
+			string newDataName = "Test_Renamed";
 			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
@@ -84,7 +77,7 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName2, testTuple2_1);
 			dataManager.insert(dataRelatName2, testTuple2_2);
 
-			string unionRelatName = "Unionize";
+			string unionRelatName = "Test_SetUnion";
 			vector<string> unionAttrNames = { "test", "name" };
 			vector<string> unionAttrTypes = { "INTEGER", "VARCHAR(20)" };
 			vector<string> unionTuples = { "test1", "Thomas" };
@@ -128,11 +121,11 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName2, testTuple1);
 			dataManager.insert(dataRelatName2, testTuple4);
 
+			string newName = "Test_SetDifference";
+
 			//Compute the difference, A - B
-			dataManager.setDifference(dataRelatName1, dataRelatName2);
-
-			string newName = "Difference: \"" + dataRelatName1 + "\" - \"" + dataRelatName2 + "\"";
-
+			dataManager.setDifference(dataRelatName1, dataRelatName2, newName);
+			
 			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, solutionTuples));
 		}
 		TEST_METHOD(TestSelect)
@@ -153,15 +146,15 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName1, testTuple1_2);
 			dataManager.insert(dataRelatName1, testTuple1_3);
 
-			vector<string> booleanArgs = { "name", "==", "Thomas" };
-			string newName = "newTest";
+			vector<string> booleanArgs = { "test",">","0","&&","name", "==", "Thomas" };
+			string newName = "Test_Select";
 			vector<vector<string>> result = { testTuple1_1, testTuple1_2 };
 
 			dataManager.select(dataRelatName1, newName, booleanArgs);
 
 			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, result));
 		}
-		TEST_METHOD(testCross)
+		TEST_METHOD(TestCross)
 		{
 			DataManager dataManager = DataManager();
 
@@ -198,26 +191,28 @@ namespace DBMS_Engine_Tester
 
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
-		TEST_METHOD(testSetProject)
+		TEST_METHOD(TestSetProject)
 		{
 			DataManager dataManager = DataManager();
 
 			string dataRelatName1 = "TheBigOne";
 			vector<string> dataAttrNames1 = { "bangFactor", "name" };
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-			vector<string> testTuple1 = { "test1", "Jason" };
-			vector<string> testTuple2 = { "test2", "SomeOtherGuy" };
-			vector<vector<string>> testTuples;
+			vector<string> testTuple1 = { "1", "Jason" };
+			vector<string> testTuple2 = { "2", "SomeOtherGuy" };
 			string primaryKey = "test1";
 
-			string newDataName = "Tester_Renamed";
-			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
+			string newDataName = "Test_Renamed";
+			vector<string> newDataAttrNames1 = { "name" };
+			vector<string> newDataAttrTypes1 = { "VARCHAR(20)" };
+			vector<vector<string>> solution = { vector<string> { "Jason" }, vector<string> { "SomeOtherGuy" } };
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+			dataManager.insert(dataRelatName1, testTuple1);
+			dataManager.insert(dataRelatName1, testTuple2);
 			dataManager.project(dataRelatName1, newDataName, newDataAttrNames1);
 
-			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples));
-			Assert::IsTrue(dataManager.testRelation(newDataName, newDataAttrNames1, dataAttrTypes1, testTuples));
+			Assert::IsTrue(dataManager.testRelation(newDataName, newDataAttrNames1, newDataAttrTypes1, solution));
 		}
 		TEST_METHOD(TestNaturalJoin)
 			//Author: Josh Tutt
@@ -227,23 +222,23 @@ namespace DBMS_Engine_Tester
 			string dataRelatName1 = "TesterA";
 			vector<string> dataAttrNames1 = { "test", "name" };
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-			vector<string> testTuple1 = { "test1", "Thomas" };
-			vector<string> testTuple2 = { "test2", "Colin" };
-			vector<string> testTuple3 = { "test3", "Josh" };
-			vector<string> testTuple9 = { "test4", "Thomas" };
+			vector<string> testTuple1 = { "1", "Thomas" };
+			vector<string> testTuple2 = { "2", "Colin" };
+			vector<string> testTuple3 = { "3", "Josh" };
+			vector<string> testTuple9 = { "4", "Thomas" };
 
 
 			vector<string> solutionAttrNames = { "test", "name", "number", "dog?" };
-			vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "BOOL" };
+			vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "VARCHAR(5)" };
 			vector<vector<string>> solutionTuples;
 
 			// Uncomment to enable testing for correct tuples
 			solutionTuples = {
-				vector<string> { "test1", "Thomas", "1", "true" },
-				vector<string> { "test2", "Colin", "2", "true" },
-				vector<string> { "test3", "Josh", "3", "false" },
-				vector<string> { "test3", "Josh", "5", "NULL" },
-				vector<string> { "test4", "Thomas", "1", "true" }
+				vector<string> { "1", "Thomas", "1", "true" },
+				vector<string> { "2", "Colin", "2", "true" },
+				vector<string> { "3", "Josh", "3", "false" },
+				vector<string> { "3", "Josh", "5", "NULL" },
+				vector<string> { "4", "Thomas", "1", "true" }
 			};
 
 			string primaryKey = "test1";
@@ -260,7 +255,7 @@ namespace DBMS_Engine_Tester
 			//Create relation B
 			string dataRelatName2 = "TesterB";
 			vector<string> dataAttrNames2 = { "name", "number", "dog?" };
-			vector<string> dataAttrTypes2 = { "VARCHAR(20)", "INTEGER", "BOOL" };
+			vector<string> dataAttrTypes2 = { "VARCHAR(20)", "INTEGER", "VARCHAR(5)" };
 			vector<string> testTuple4 = { "Thomas", "1", "true" };
 			vector<string> testTuple5 = { "Colin", "2", "true" };
 			vector<string> testTuple6 = { "Josh", "3", "false" };
@@ -275,7 +270,7 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName2, testTuple8);
 
 			//Compute the Natural Join, A |><| B
-			string newName = "NaturalJoin";
+			string newName = "Test_NaturalJoin";
 
 			dataManager.naturalJoin(dataRelatName1, dataRelatName2, newName);
 

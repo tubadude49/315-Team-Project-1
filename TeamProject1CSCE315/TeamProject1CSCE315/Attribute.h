@@ -1,3 +1,10 @@
+// Thomas Bateson
+// Jason Sitzman
+// Colin Lenzen
+// Josh Tutt
+// 2/10/2014
+// CSCE 315
+
 #pragma once
 
 #include <string>
