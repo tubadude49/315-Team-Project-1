@@ -348,12 +348,12 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	
 	for (int i = 0; i < rel1->attributes.size(); i++)
 	{
-		for (int j = 0; j < rel2->attributes.size(); j++)
+		for (int x = 0; x < rel1->tuples.size(); x++)
 		{
 			vector<string> curTuple;
-			for (int x = 0; x < rel1->tuples.size(); x++)
+			for (int y = 0; y < rel2->tuples.size(); y++)
 			{
-				for (int y = 0; y < rel2->tuples.size(); y++)
+				for (int j = 0; j < rel2->attributes.size(); j++)
 				{
 					curTuple.push_back(rel1->tuples[x][i] + "~" + rel2->tuples[y][j]);
 					cout << curTuple[curTuple.size() - 1] << "\n";
