@@ -51,6 +51,36 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 	}
 }
 
+/*	Update a tuple to represent new information.
+	Search by tuple (not index).
+*/
+void DataManager::update(string &relationName, vector<string> &oldValues, vector<string> &newValues) {
+	Relation* relation = getRelationByName(relationName);
+
+	if (relation != NULL) {
+		for (int i = 0; i < relation->tuples.size(); i++) {
+			if (relation->tuples[i] == oldValues) {
+				relation->tuples[i] = newValues;
+			}
+		}
+	}
+}
+
+/*	Delete a tuple.
+	Search by tuple (not index).
+*/
+void DataManager::del(string &relationName, vector<string> &values) {
+	Relation* relation = getRelationByName(relationName);
+
+	if (relation != NULL) {
+		for (int i = 0; i < relation->tuples.size(); i++) {
+			if (relation->tuples[i] == values) {
+				relation->tuples.erase(relation->tuples.begin() + i);
+			}
+		}
+	}
+}
+
 /*	Print the given relation to an ostream,
 	If unsure, send cout as the ostream.
 */

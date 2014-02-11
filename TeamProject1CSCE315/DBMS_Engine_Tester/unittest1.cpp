@@ -15,7 +15,35 @@ namespace DBMS_Engine_Tester
 	TEST_CLASS(UnitTest1)
 	{
 	public:
+		TEST_METHOD(TestInsertUpdateDelete)
+		{
+			DataManager dataManager = DataManager();
 
+			string dataRelatName1 = "Tester";
+			vector<string> dataAttrNames1 = { "test", "name" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+			vector<string> testTuple1 = { "1", "Thomas" };
+			vector<string> testTuple2 = { "2", "Colin" };
+			vector<string> testTuple3 = { "3", "Jason" };
+			vector<vector<string>> testTuples1 = { testTuple1, testTuple2 };
+			vector<vector<string>> testTuples2 = { testTuple3, testTuple2 };
+			vector<vector<string>> testTuples3 = { testTuple3 };
+			string primaryKey = "test";
+			
+			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+			dataManager.insert(dataRelatName1, testTuple1);
+			dataManager.insert(dataRelatName1, testTuple2);
+
+			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples1));
+
+			dataManager.update(dataRelatName1, testTuple1, testTuple3);
+			
+			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples2));
+
+			dataManager.del(dataRelatName1, testTuple2);
+
+			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples3));
+		}
 		TEST_METHOD(TestShellSort)
 		{
 			DataManager dataManager = DataManager();

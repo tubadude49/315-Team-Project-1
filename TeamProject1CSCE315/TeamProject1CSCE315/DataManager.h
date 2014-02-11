@@ -22,6 +22,8 @@ public:
 	~DataManager();
 	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
 	void insert(string &relationName, vector<string> &values);
+	void update(string &relationName, vector<string> &oldValues, vector<string> &newValues);
+	void del(string &relationName, vector<string> &values);
 	void show(string &relationName, ostream& os);
 	void drop(string &relationName);
 	void write(string &relationName);
