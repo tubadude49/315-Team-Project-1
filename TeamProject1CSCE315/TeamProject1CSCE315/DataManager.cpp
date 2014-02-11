@@ -389,7 +389,6 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	vector<string> crossAttrNames;
 	vector<string> crossAttrTypes;
 	vector<vector<string>> crossTuples;
-	//string crossName = rel1->getName() + " X " + rel2->getName();
 	string crossPrimaryKey = "{" + rel1->getPrimaryKey() + " X " + rel2->getPrimaryKey() + "}";
 	for (int i = 0; i < rel1->attributes.size(); i++)
 	{
@@ -401,15 +400,17 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 			crossAttrTypes.push_back(crossTyName);
 		}
 	}
-	
-	for (int i = 0; i < rel1->attributes.size(); i++)
+
+	//cout << rel1->tuples.size() << " " << rel1->attributes.size() << endl;
+	//cout << rel2->tuples.size() << " " << rel2->attributes.size() << endl;
+	for (int x = 0; x < rel1->tuples.size(); x++)
 	{
-		for (int x = 0; x < rel1->tuples.size(); x++)
-		{
+		for (int i = 0; i < rel1->tuples[x].size(); i++)
+		{	
 			vector<string> curTuple;
 			for (int y = 0; y < rel2->tuples.size(); y++)
 			{
-				for (int j = 0; j < rel2->attributes.size(); j++)
+				for (int j = 0; j < rel2->tuples[y].size(); j++)
 				{
 					curTuple.push_back(rel1->tuples[x][i] + "~" + rel2->tuples[y][j]);
 				}
@@ -420,9 +421,13 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	}
 	create(newRelationName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
 	Relation* crossRel = getRelationByName(newRelationName);
+	cout << crossTuples.size() << endl;
 	for (int i = 0; i < crossTuples.size(); i++)
 	{
-		crossRel->addTuple(crossTuples[i]);
+		for (int j = 0; j < crossTuples[i].size(); j++) {
+			cout << crossTuples[i][j] << endl;
+		}
+		crossRel->tuples.push_back(crossTuples[i]);
 	}
 	
 }
