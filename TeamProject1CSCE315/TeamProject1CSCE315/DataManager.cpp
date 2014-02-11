@@ -345,7 +345,31 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 			crossAttrTypes.push_back(crossTyName);
 		}
 	}
+	
+	for (int i = 0; i < rel1->attributes.size(); i++)
+	{
+		for (int j = 0; j < rel2->attributes.size(); j++)
+		{
+			vector<string> curTuple;
+			for (int x = 0; x < rel1->tuples.size(); x++)
+			{
+				for (int y = 0; y < rel2->tuples.size(); y++)
+				{
+					curTuple.push_back(rel1->tuples[x][i] + "~" + rel2->tuples[y][j]);
+					cout << curTuple[curTuple.size() - 1] << "\n";
+				}
+			}
+			crossTuples.push_back(curTuple);
+			
+		}
+	}
 	create(newRelationName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
+	Relation* crossRel = getRelationByName(newRelationName);
+	for (int i = 0; i < crossTuples.size(); i++)
+	{
+		crossRel->addTuple(crossTuples[i]);
+	}
+	
 }
 
 /*	In addition to these operations, we include the natural join operation.
