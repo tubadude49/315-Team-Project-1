@@ -32,6 +32,9 @@ public:
 	void naturalJoin(string &relationName1, string &relationName2);
 	void naturalJoin(string &relationName1, string &relationName2, string newName);
 
+	//Helper function
+	vector<string> tupleJoiner(vector<string> tuple1, vector<string> tuple2, int index1, int index2); 
+
 	bool testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples);
 
 	void shellSort(vector<string> &toSort);

@@ -129,19 +129,21 @@ void naturalJoinTester(){
 	vector<string> testTuple1 = { "test1", "Thomas" };
 	vector<string> testTuple2 = { "test2", "Colin" };
 	vector<string> testTuple3 = { "test3", "Josh" };
+	vector<string> testTuple9 = { "test4", "Thomas" };
+
 
 	vector<string> solutionAttrNames = { "test", "name", "number", "dog?" };
 	vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "BOOL" };
 	vector<vector<string>> solutionTuples;
 
-	/* Uncomment to enable testing for correct tuples
+	// Uncomment to enable testing for correct tuples
 	solutionTuples = {
 		vector<string> { "test1", "Thomas", "1", "true" },
 		vector<string> { "test2", "Colin", "2", "true" },
 		vector<string> { "test3", "Josh", "3", "false" },
-		vector<string> { "test3", "Josh", "5", "NULL" }
+		vector<string> { "test3", "Josh", "5", "NULL" },
+		vector<string> { "test4", "Thomas", "1", "true" }
 	};
-	*/
 
 	string primaryKey = "test1";
 
@@ -152,6 +154,7 @@ void naturalJoinTester(){
 	dataManager.insert(dataRelatName1, testTuple1);
 	dataManager.insert(dataRelatName1, testTuple2);
 	dataManager.insert(dataRelatName1, testTuple3);
+	dataManager.insert(dataRelatName1, testTuple9);
 
 	//Create relation B
 	string dataRelatName2 = "TesterB";

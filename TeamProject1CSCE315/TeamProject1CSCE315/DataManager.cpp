@@ -370,18 +370,19 @@ void DataManager::naturalJoin(string &relationName1, string &relationName2, stri
 	joinedRelation.name = newName;
 
 	//Search for a common attribute
-	int commonAttr = -1;
+	int commonAttr1, commonAttr2 = -1; //Index numbers for a common attribute
 	for (int i = 0; i < relationPointer1->attributes.size(); i++){
 		for (int j = 0; j < relationPointer2->attributes.size(); j++){
 			if (relationPointer1->attributes[i].getName() == relationPointer2->attributes[j].getName()){
 				//If a common attribute is found, then write its index as commonAttr
-				commonAttr = i;
+				commonAttr1 = i;
+				commonAttr2 = j;
 			}
 		}
 	}
 
 	//If no common attribute exists, create a duplicate of relation1 and exit the function
-	if (commonAttr == -1){
+	if (commonAttr1 == -1 || commonAttr2 == -1){
 		joinedRelation = Relation(*relationPointer1);
 		database.push_back(joinedRelation);
 		return;
@@ -390,13 +391,13 @@ void DataManager::naturalJoin(string &relationName1, string &relationName2, stri
 	//Create a list from the union of the two attribute sets
 	vector<Attribute> newAttributes(0);
 	for (int i = 0; i < relationPointer1->attributes.size(); i++){ //Add all attributes from relation1
-		if (i == commonAttr)
+		if (i == commonAttr1)
 			continue;
 		newAttributes.push_back(relationPointer1->attributes[i]);
 	}
-	newAttributes.push_back(relationPointer1->attributes[commonAttr]);
+	newAttributes.push_back(relationPointer1->attributes[commonAttr1]);
 	for (int j = 0; j < relationPointer2->attributes.size(); j++){
-		if (relationPointer2->attributes[j].getName() == relationPointer1->attributes[commonAttr].getName())
+		if (j == commonAttr2)
 			continue;
 		newAttributes.push_back(relationPointer2->attributes[j]);
 	}
@@ -432,31 +433,61 @@ void DataManager::naturalJoin(string &relationName1, string &relationName2, stri
 	}
 	*/
 
-	//Set newAttributes to joinedRelation
+	//Select the sets of tuples, and make deep copies
+	vector<vector<string>> relation1Tuples = vector<vector<string>>(relationPointer1->tuples);
+	vector<vector<string>> relation2Tuples = vector<vector<string>>(relationPointer2->tuples);
+
+	//Create a new set of tuples
+	vector<vector<string>> newTuples(0);
+	vector<string> tuple(0);
+
+	for (int i = 0; i < relation1Tuples.size(); i++){
+		for (int j = 0; j < relation2Tuples.size(); j++){
+			if (relation1Tuples[i][commonAttr1] == relation2Tuples[j][commonAttr2]){
+				tuple = tupleJoiner(relation1Tuples[i], relation2Tuples[j], commonAttr1, commonAttr2);
+
+				//Testing, will remove
+				cout << "tuple created ";
+				for (int k = 0; k < tuple.size(); k++){
+					cout << tuple[k] << ", ";
+				}
+				cout << "\n";
+				//--------------------
+				
+				newTuples.push_back(tuple);
+			}
+		}
+	}
+
+	//Set newAttributes and newTuples to joinedRelation
 	joinedRelation.attributes = newAttributes;
-	//joinedRelation.tuples = newTuples;
+	joinedRelation.tuples = newTuples;
 
-
-
+	//Add joinedRelation to the database
 	database.push_back(joinedRelation);
-
-	/*
-	//Testing, will remove
-	std::cout << "Tuples from joinedRelation: size(" << joinedRelation.tuples.size() << ")\n";
-	for (int i = 0; i < joinedRelation.tuples.size(); i++){
-	std::cout << "tuples[" << i << "] = ";
-	for (int j = 0; j < joinedRelation.tuples[i].size(); j++){
-	std::cout << joinedRelation.tuples[i][j] << ", ";
-	}
-	std::cout << "|\n";
-	}
-	*/
-
 }
 
 void DataManager::naturalJoin(string &relationName1, string &relationName2){
 	string name = relationName1 + "+" + relationName2;
 	DataManager::naturalJoin(relationName1, relationName2, name);
+}
+
+/*	Helper function for naturalJoin()
+*/
+vector<string> DataManager::tupleJoiner(vector<string> tuple1, vector<string> tuple2, int index1, int index2){
+	vector<string> newTuple(0);
+	for (int i = 0; i < tuple1.size(); i++){
+		if (i == index1)
+			continue;
+		newTuple.push_back(tuple1[i]);
+	}
+	newTuple.push_back(tuple1[index1]);
+	for (int j = 0; j < tuple2.size(); j++){
+		if (j == index2)
+			continue;
+		newTuple.push_back(tuple2[j]);
+	}
+	return newTuple;
 }
 
 

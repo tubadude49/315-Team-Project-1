@@ -226,27 +226,32 @@ namespace DBMS_Engine_Tester
 			vector<string> testTuple1 = { "test1", "Thomas" };
 			vector<string> testTuple2 = { "test2", "Colin" };
 			vector<string> testTuple3 = { "test3", "Josh" };
+			vector<string> testTuple9 = { "test4", "Thomas" };
+
 
 			vector<string> solutionAttrNames = { "test", "name", "number", "dog?" };
 			vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "BOOL" };
-			vector<vector<string>> solutionTuples(0);
+			vector<vector<string>> solutionTuples;
 
-			/* Uncomment to enable testing for correct tuples
+			// Uncomment to enable testing for correct tuples
 			solutionTuples = {
-			vector<string> { "test1", "Thomas", "1", "true" },
-			vector<string> { "test2", "Colin", "2", "true" },
-			vector<string> { "test3", "Josh", "3", "false" },
-			vector<string> { "test3", "Josh", "5", "NULL" }
+				vector<string> { "test1", "Thomas", "1", "true" },
+				vector<string> { "test2", "Colin", "2", "true" },
+				vector<string> { "test3", "Josh", "3", "false" },
+				vector<string> { "test3", "Josh", "5", "NULL" },
+				vector<string> { "test4", "Thomas", "1", "true" }
 			};
-			*/
 
 			string primaryKey = "test1";
+
+			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
 			//Create relation A
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
 			dataManager.insert(dataRelatName1, testTuple1);
 			dataManager.insert(dataRelatName1, testTuple2);
 			dataManager.insert(dataRelatName1, testTuple3);
+			dataManager.insert(dataRelatName1, testTuple9);
 
 			//Create relation B
 			string dataRelatName2 = "TesterB";
@@ -256,7 +261,7 @@ namespace DBMS_Engine_Tester
 			vector<string> testTuple5 = { "Colin", "2", "true" };
 			vector<string> testTuple6 = { "Josh", "3", "false" };
 			vector<string> testTuple7 = { "Jason", "4", "false" };
-			vector<string> testTuple8 = { "Josh", "5", "unknown" };
+			vector<string> testTuple8 = { "Josh", "5", "NULL" };
 
 			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey);
 			dataManager.insert(dataRelatName2, testTuple4);
