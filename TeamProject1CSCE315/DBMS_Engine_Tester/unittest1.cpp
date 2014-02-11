@@ -207,15 +207,14 @@ namespace DBMS_Engine_Tester
 
 			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
 			dataManager.insert(dataRelatName2, tupleSet2[0]);
-			dataManager.insert(dataRelatName2, tupleSet2[1]);
-			dataManager.insert(dataRelatName2, tupleSet2[2]);
+
 
 			string crossName = dataRelatName1 + " X " + dataRelatName2;
 			dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
 
 			vector<vector<string>> solutionTuples;
-			vector<string> crossedNames = { "{Alpha X Bravo}", "{Alpha X Charlie}", "{Alpha X Echo}", "{Alpha X Foxtrot}", "{Beta X Bravo}", "{Beta X Charlie}", "{Beta X Echo}", "{Beta X Foxtrot}", "{Gamma X Bravo}", "{Gamma X Charlie}", "{Gamma X Echo}", "{Gamma X Foxtrot}" };
-			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(INTEGER X VARCHAR(4))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(5) X VARCHAR(4))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(18) X VARCHAR(10))", "(VARCHAR(18) X INTEGER)", "(VARCHAR(18) X VARCHAR(4))", "(VARCHAR(18) X INTEGER)" };
+			vector<string> crossedNames = { "{A X X}", "{B X X}"};
+			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))","(VARCHAR(1) X VARCHAR(10))" };
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
 		TEST_METHOD(TestSetProject)
