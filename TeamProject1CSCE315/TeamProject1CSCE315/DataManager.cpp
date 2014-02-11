@@ -356,7 +356,6 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 				for (int j = 0; j < rel2->attributes.size(); j++)
 				{
 					curTuple.push_back(rel1->tuples[x][i] + "~" + rel2->tuples[y][j]);
-					cout << curTuple[curTuple.size() - 1] << "\n";
 				}
 			}
 			crossTuples.push_back(curTuple);
