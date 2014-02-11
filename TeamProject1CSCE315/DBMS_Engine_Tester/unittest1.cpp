@@ -192,13 +192,13 @@ namespace DBMS_Engine_Tester
 			string dataRelatName1 = "A";
 			vector<string> dataAttrNames1 = { "A", "B" };
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(1)" };
-			vector<vector<string>> tupleSet1 = { { "1", "2" }, { "3", "4" } };
+			vector<vector<string>> tupleSet1 = { { "1", "label1" }, { "3", "label2" } };
 			string primaryKey1 = "B";
 
 			string dataRelatName2 = "W";
 			vector<string> dataAttrNames2 = { "X" };
 			vector<string> dataAttrTypes2 = { "VARCHAR(10)" };
-			vector<vector<string>> tupleSet2 = { { "a", "and", "b", "or" } };
+			vector<vector<string>> tupleSet2 = { { "test" } };
 			string primaryKey2 = "X";
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
@@ -209,10 +209,10 @@ namespace DBMS_Engine_Tester
 			dataManager.insert(dataRelatName2, tupleSet2[0]);
 
 
-			string crossName = dataRelatName1 + " X " + dataRelatName2;
+			string crossName = "Test_CrossProduct";
 			dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
 
-			vector<vector<string>> solutionTuples;
+			vector<vector<string>> solutionTuples = { vector<string> { "1~test", "label1~test" }, vector<string> { "3~test", "label2~test" } };
 			vector<string> crossedNames = { "{A X X}", "{B X X}"};
 			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))","(VARCHAR(1) X VARCHAR(10))" };
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));

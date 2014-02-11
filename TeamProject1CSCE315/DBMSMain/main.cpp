@@ -214,10 +214,10 @@ void crossTest()
 	dataManager.insert(dataRelatName2, tupleSet2[0]);
 
 
-	string crossName = dataRelatName1 + " X " + dataRelatName2;
+	string crossName = "Test_CrossProduct";
 	dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
 
-	vector<vector<string>> solutionTuples;
+	vector<vector<string>> solutionTuples = { vector<string> { "1~test", "label1~test" }, vector<string> { "3~test", "label2~test" } };
 	vector<string> crossedNames = { "{A X X}", "{B X X}" };
 	vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(VARCHAR(1) X VARCHAR(10))" };
 
