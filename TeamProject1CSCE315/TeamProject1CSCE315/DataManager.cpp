@@ -1,5 +1,8 @@
-// Shell code by Thomas Bateson
-// 2/3/2014
+// Thomas Bateson
+// Jason Sitzman
+// Colin Lenzen
+// Josh Tutt
+// 2/10/2014
 // CSCE 315
 
 #include "DataManager.h"
@@ -22,7 +25,7 @@ Relation* DataManager::getRelationByName(string &relationName) {
 	return NULL;
 }
 
-/* Default Constructor.
+/*	Default Constructor.
 */
 DataManager::DataManager() {
 }
@@ -186,21 +189,22 @@ bool parseBooleanStmt(string type, string arg1, string op, string arg2) {
 */
 bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> booleanArgs) {
 	bool shouldKeep = false;
-	for (int i = 0; i < booleanArgs.size(); i += 4) {
-		for (int j = 0; j < attributes.size(); j++) {
-			string op = booleanArgs[i + 1];
-			string constArg = booleanArgs[i + 2];
-			if (i == 0) {
-				if (attributes[j].getName() == booleanArgs[i]) {
-					shouldKeep = parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
+	for (int i = 0; i < attributes.size(); i++) {
+		for (int j = 0; j < booleanArgs.size(); j += 4) {		
+			string field = booleanArgs[j];
+			string op = booleanArgs[j + 1];
+			string constArg = booleanArgs[j + 2];
+			if (j == 0) {
+				if (attributes[i].getName() == field) {
+					shouldKeep = parseBooleanStmt(attributes[i].getType(), tuple[i], op, constArg);
 				}
 			}
 			else {
-				if (attributes[j].getName() == booleanArgs[i] && booleanArgs[i - 1] == "&&") {
-					shouldKeep = shouldKeep && parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
+				if (attributes[i].getName() == field && booleanArgs[j - 1] == "&&") {
+					shouldKeep = shouldKeep && parseBooleanStmt(attributes[i].getType(), tuple[i], op, constArg);
 				}
-				else if (attributes[j].getName() == booleanArgs[i] && booleanArgs[i - 1] == "||") {
-					shouldKeep = shouldKeep || parseBooleanStmt(attributes[j].getType(), tuple[j], op, constArg);
+				else if (attributes[i].getName() == field && booleanArgs[j - 1] == "||") {
+					shouldKeep = shouldKeep || parseBooleanStmt(attributes[i].getType(), tuple[i], op, constArg);
 				}
 			}
 		}
@@ -216,6 +220,7 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 	Relation newRelation = Relation(*relation);
 	newRelation.name = newRelationName;
 
+	// Find the relations to remove
 	vector<int> toDelete;
 	for (int i = 0; i < newRelation.tuples.size(); i++) {
 		if (!compare(newRelation.attributes, newRelation.tuples[i], booleanArgs)) {
@@ -223,23 +228,46 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 		}
 	}
 
+	// Remove the marked relations
 	for (int i = 0; i < toDelete.size(); i++) {
 		newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
+		for (int j = i + 1; j < toDelete.size(); j++) {
+			toDelete[i]--;
+		}
 	}
 
 	database.push_back(newRelation);
 }
 
 /*	select a subset of the attributes in a relation.
-	TODO
+	code by Jason Sitzman
 */
 void DataManager::project(string &relationName, string &newRelationName, vector<string> &newAttributes) {
 	Relation* relation = getRelationByName(relationName);
 	Relation newRelation = Relation(*relation);
 	newRelation.name = newRelationName;
-
+	
+	vector<int> toRemove;
 	for (int i = 0; i < newRelation.attributes.size(); i++) {
-		newRelation.attributes[i] = Attribute(newAttributes[i], relation->attributes[i].getType());
+		bool keep = false;
+		for (int j = 0; j < newAttributes.size(); j++) {
+			if (newAttributes[j] == newRelation.attributes[i].getName()) {
+				keep = true;
+			}
+		}
+		if (!keep) {
+			toRemove.push_back(i);
+		}
+	}
+
+	for (int i = 0; i < toRemove.size(); i++) {
+		newRelation.attributes.erase(newRelation.attributes.begin() + toRemove[i]);
+		for (int j = 0; j < newRelation.tuples.size(); j++) {
+			newRelation.tuples[j].erase(newRelation.tuples[j].begin() + toRemove[i]);
+		}
+		for (int j = i + 1; j < toRemove.size(); j++) {
+			toRemove[j]--;
+		}
 	}
 	database.push_back(newRelation);
 }
@@ -268,7 +296,7 @@ void DataManager::setUnion(string &relationName1, string &relationName2, string 
 	for (int i = 0; i < relation1->attributes.size();i++) {
 		if (relation1->attributes[i].getName() != relation2->attributes[i].getName() ||
 			relation1->attributes[i].getType() != relation2->attributes[i].getType()) {
-			return;		//these two sets are not relatable or union-compatible			
+			return;		//these two sets are not relatable or union-compatible
 		}
 	}	
 
@@ -276,6 +304,7 @@ void DataManager::setUnion(string &relationName1, string &relationName2, string 
 	newRelation.name = newRelationName;
 	newRelation.tuples.clear();
 
+	// Find similar tuples then add them to the new relation
 	for (int i = 0; i < relation1->tuples.size(); i++) {
 		for (int h = 0; h < relation2->tuples.size(); h++) {		
 			bool isSame = true;
@@ -298,29 +327,26 @@ void DataManager::setUnion(string &relationName1, string &relationName2, string 
 /*	compute the set difference of two relations; the relations must be union-compatible.
 	Author: Josh Tutt
 */
-void DataManager::setDifference(string &relationName1, string &relationName2) {
+void DataManager::setDifference(string &relationName1, string &relationName2, string &newRelationName) {
 	//Create pointers to the indicated relations
-	Relation* relationPointer1 = getRelationByName(relationName1);
-	Relation* relationPointer2 = getRelationByName(relationName2);
+	Relation* relation1 = getRelationByName(relationName1);
+	Relation* relation2 = getRelationByName(relationName2);
 
 	//Create a new relation with the same attributes, etc, as the first relation
-	Relation relation1 = Relation(*relationPointer1);
+	Relation newRelation = Relation(*relation1);
+	newRelation.name = newRelationName;
 
 	//Compute the difference: relation1 - relation2
-	for (int i = 0; i < relationPointer2->tuples.size(); i++){
-		for (int j = 0; j < relation1.tuples.size(); j++){
-			if (relationPointer2->tuples[i] == relation1.tuples[j]){	//If a tuple is found to be in both relations...
-				relation1.tuples.erase(relation1.tuples.begin() + j);	//...remove it from relation1
+	for (int i = 0; i < relation2->tuples.size(); i++){
+		for (int j = 0; j < newRelation.tuples.size(); j++){
+			if (relation2->tuples[i] == newRelation.tuples[j]){	//If a tuple is found to be in both relations...
+				newRelation.tuples.erase(newRelation.tuples.begin() + j);	//...remove it from relation1
 			}
 		}
 	}
 
 	//Add relation1 to database
-
-	//NOTE: setDifference() needs to be able to change the name of the newly-created deep-copied relation
-	//relation1.setName("Difference: \"" + relationName1 + "\" - \"" + relationName2 + "\"");
-	relation1.name = "Difference: \"" + relationName1 + "\" - \"" + relationName2 + "\"";
-	database.push_back(relation1);
+	database.push_back(newRelation);
 }
 
 
@@ -373,18 +399,18 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 }
 
 /*	In addition to these operations, we include the natural join operation.
-The result of the natural join between relations R and S is the set of all combinations of tuples in R and S
-that are equal on their common attribute names. The common attributes only appear once in the result.
+	The result of the natural join between relations R and S is the set of all combinations of tuples in R and S
+	that are equal on their common attribute names. The common attributes only appear once in the result.
 
-Natural join is expressible using the six fundamental operations,
-but a direct implementation for joins can reduce the need to use the (expensive) Cartesian product operation.
+	Natural join is expressible using the six fundamental operations,
+	but a direct implementation for joins can reduce the need to use the (expensive) Cartesian product operation.
 
-Author: Josh Tutt
+	Author: Josh Tutt
 
-NOTE: Currently, this function creates a duplicate of the first relation if there are no shared attributes
-or attempts to create a new relation from a Natural Join of the two.
-However, it does not yet populate any rows of the new relation
-but only decides the correct attribute columns to include.
+	NOTE: Currently, this function creates a duplicate of the first relation if there are no shared attributes
+	or attempts to create a new relation from a Natural Join of the two.
+	However, it does not yet populate any rows of the new relation
+	but only decides the correct attribute columns to include.
 */
 void DataManager::naturalJoin(string &relationName1, string &relationName2, string newName) {
 	//Create pointers to the indicated relations
@@ -425,37 +451,6 @@ void DataManager::naturalJoin(string &relationName1, string &relationName2, stri
 			continue;
 		newAttributes.push_back(relationPointer2->attributes[j]);
 	}
-	/*
-	//Create a list of lists containing the tuple values
-	vector<vector<string>> newTuples(0);
-	vector<string> tuple(0);
-	string commonElement;
-	//Find tuple values from relation1
-	std::cout << "size: " << relationPointer1->tuples.size() << "\n";
-	for (int i = 0; i < relationPointer1->tuples.size(); i++){
-	tuple.clear();
-	for (int j = 0; j < relationPointer1->tuples[i].size(); j++){
-	if (j == commonAttr)
-	continue;
-	tuple.push_back(relationPointer1->tuples[i][j]);
-	}
-	//Append the common element in the middle
-	commonElement = relationPointer1->tuples[i][commonAttr];
-	tuple.push_back(commonElement);
-
-	//Append the tuple values from relation2 to the end
-	for (int k = 0; k < relationPointer2->tuples.size(); k++){
-	for (int l = 0; l < relationPointer2->tuples[k].size(); l++){
-	if (relationPointer2->tuples[k][l] == commonElement)
-	continue;
-	tuple.push_back(relationPointer2->tuples[k][l]);
-	}
-	}
-
-
-	newTuples.push_back(tuple);
-	}
-	*/
 
 	//Select the sets of tuples, and make deep copies
 	vector<vector<string>> relation1Tuples = vector<vector<string>>(relationPointer1->tuples);
@@ -469,15 +464,6 @@ void DataManager::naturalJoin(string &relationName1, string &relationName2, stri
 		for (int j = 0; j < relation2Tuples.size(); j++){
 			if (relation1Tuples[i][commonAttr1] == relation2Tuples[j][commonAttr2]){
 				tuple = tupleJoiner(relation1Tuples[i], relation2Tuples[j], commonAttr1, commonAttr2);
-
-				//Testing, will remove
-				cout << "tuple created ";
-				for (int k = 0; k < tuple.size(); k++){
-					cout << tuple[k] << ", ";
-				}
-				cout << "\n";
-				//--------------------
-				
 				newTuples.push_back(tuple);
 			}
 		}
@@ -489,11 +475,6 @@ void DataManager::naturalJoin(string &relationName1, string &relationName2, stri
 
 	//Add joinedRelation to the database
 	database.push_back(joinedRelation);
-}
-
-void DataManager::naturalJoin(string &relationName1, string &relationName2){
-	string name = relationName1 + "+" + relationName2;
-	DataManager::naturalJoin(relationName1, relationName2, name);
 }
 
 /*	Helper function for naturalJoin()
