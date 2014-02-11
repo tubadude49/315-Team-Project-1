@@ -11,11 +11,11 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace DBMS_Engine_Tester
-{		
+{
 	TEST_CLASS(UnitTest1)
 	{
 	public:
-		
+
 		TEST_METHOD(TestShellSort)
 		{
 			DataManager dataManager = DataManager();
@@ -38,13 +38,16 @@ namespace DBMS_Engine_Tester
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
 			vector<string> testTuple1 = { "1", "Thomas" };
 			vector<string> testTuple2 = { "2", "Colin" };
-			vector<vector<string>> testTuples;
-			string primaryKey = "test1";
+			vector<vector<string>> testTuples = { testTuple1, testTuple2 };
+			string primaryKey = "test";
 
 			string newDataName = "Test_Renamed";
 			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+			dataManager.insert(dataRelatName1, testTuple1);
+			dataManager.insert(dataRelatName1, testTuple2);
+
 			dataManager.rename(dataRelatName1, newDataName, newDataAttrNames1);
 
 			Assert::IsTrue(dataManager.testRelation(dataRelatName1, dataAttrNames1, dataAttrTypes1, testTuples));
@@ -60,7 +63,7 @@ namespace DBMS_Engine_Tester
 			vector<string> testTuple1_1 = { "1", "Thomas" };
 			vector<string> testTuple1_2 = { "2", "Colin" };
 			vector<vector<string>> testTuples;
-			string primaryKey1 = "test1";
+			string primaryKey1 = "test";
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
 			dataManager.insert(dataRelatName1, testTuple1_1);
@@ -71,7 +74,7 @@ namespace DBMS_Engine_Tester
 			vector<string> dataAttrTypes2 = { "INTEGER", "VARCHAR(20)" };
 			vector<string> testTuple2_1 = { "1", "Thomas" };
 			vector<string> testTuple2_2 = { "2", "Jack" };
-			string primaryKey2 = "test1";
+			string primaryKey2 = "test";
 
 			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
 			dataManager.insert(dataRelatName2, testTuple2_1);
@@ -104,7 +107,7 @@ namespace DBMS_Engine_Tester
 			solutionTuples.push_back(testTuple2);
 			solutionTuples.push_back(testTuple3);
 
-			string primaryKey = "test1";
+			string primaryKey = "test";
 
 			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
@@ -125,7 +128,7 @@ namespace DBMS_Engine_Tester
 
 			//Compute the difference, A - B
 			dataManager.setDifference(dataRelatName1, dataRelatName2, newName);
-			
+
 			Assert::IsTrue(dataManager.testRelation(newName, dataAttrNames1, dataAttrTypes1, solutionTuples));
 		}
 		TEST_METHOD(TestSelect)
@@ -139,14 +142,14 @@ namespace DBMS_Engine_Tester
 			vector<string> testTuple1_2 = { "2", "Thomas" };
 			vector<string> testTuple1_3 = { "3", "Colin" };
 			vector<vector<string>> testTuples;
-			string primaryKey1 = "test1";
+			string primaryKey1 = "test";
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
 			dataManager.insert(dataRelatName1, testTuple1_1);
 			dataManager.insert(dataRelatName1, testTuple1_2);
 			dataManager.insert(dataRelatName1, testTuple1_3);
 
-			vector<string> booleanArgs = { "test",">","0","&&","name", "==", "Thomas" };
+			vector<string> booleanArgs = { "test", ">", "0", "&&", "name", "==", "Thomas" };
 			string newName = "Test_Select";
 			vector<vector<string>> result = { testTuple1_1, testTuple1_2 };
 
@@ -158,17 +161,17 @@ namespace DBMS_Engine_Tester
 		{
 			DataManager dataManager = DataManager();
 
-			string dataRelatName1 = "Left";
-			vector<string> dataAttrNames1 = { "L1","L2"};
-			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(5)"};
-			vector<vector<string>> tupleSet1 = { { "1", ".exe"}, { "2", "and" } };
-			string primaryKey1 = "L2";
+			string dataRelatName1 = "Greek";
+			vector<string> dataAttrNames1 = { "Alpha", "Beta", "Gamma" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(5)", "VARCHAR(18)" };
+			vector<vector<string>> tupleSet1 = { { "1", ".exe", "Commentary" }, { "2", "and", "three-halves" } };
+			string primaryKey1 = "Beta";
 
-			string dataRelatName2 = "Right";
-			vector<string> dataAttrNames2 = { "R1", "R2",};
-			vector<string> dataAttrTypes2 = { "VARCHAR(10)", "INTEGER"};
-			vector<vector<string>> tupleSet2 = { { "Directive", "363"} };
-			string primaryKey2 = "R2";
+			string dataRelatName2 = "Phoenetic";
+			vector<string> dataAttrNames2 = { "Bravo", "Charlie", "Echo", "Foxtrot" };
+			vector<string> dataAttrTypes2 = { "VARCHAR(10)", "INTEGER", "VARCHAR(4)", "INTEGER" };
+			vector<vector<string>> tupleSet2 = { { "Directive", "363", "this", "1010" }, { "Anyway", "21", "yes", "0" }, { "none", "1", "two", "3" } };
+			string primaryKey2 = "Echo";
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
 			dataManager.insert(dataRelatName1, tupleSet1[0]);
@@ -176,17 +179,15 @@ namespace DBMS_Engine_Tester
 
 			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
 			dataManager.insert(dataRelatName2, tupleSet2[0]);
-
+			dataManager.insert(dataRelatName2, tupleSet2[1]);
+			dataManager.insert(dataRelatName2, tupleSet2[2]);
 
 			string crossName = dataRelatName1 + " X " + dataRelatName2;
-			dataManager.crossProduct(dataRelatName1, dataRelatName2,crossName);
-			
-			vector<string> crossedNames = { "{L1 X R1}", "{L1 X R2}", "{L1 X R3}", "{L2 X R1}", "{L2 X R2}", "{L2 X R3}" };
-			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)" };
+			dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
+
 			vector<vector<string>> solutionTuples;
-			solutionTuples.push_back({ "1~Directive", "1~363", "2~Directive", "2~363" });
-			solutionTuples.push_back({ ".exe~Directive", ".exe~363", "and~Directive", "and~363" });
-			
+			vector<string> crossedNames = { "{Alpha X Bravo}", "{Alpha X Charlie}", "{Alpha X Echo}", "{Alpha X Foxtrot}", "{Beta X Bravo}", "{Beta X Charlie}", "{Beta X Echo}", "{Beta X Foxtrot}", "{Gamma X Bravo}", "{Gamma X Charlie}", "{Gamma X Echo}", "{Gamma X Foxtrot}" };
+			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(INTEGER X VARCHAR(4))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(5) X VARCHAR(4))", "(VARCHAR(5) X INTEGER)", "(VARCHAR(18) X VARCHAR(10))", "(VARCHAR(18) X INTEGER)", "(VARCHAR(18) X VARCHAR(4))", "(VARCHAR(18) X INTEGER)" };
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
 		TEST_METHOD(TestSetProject)
@@ -198,7 +199,7 @@ namespace DBMS_Engine_Tester
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
 			vector<string> testTuple1 = { "1", "Jason" };
 			vector<string> testTuple2 = { "2", "SomeOtherGuy" };
-			string primaryKey = "test1";
+			string primaryKey = "test";
 
 			string newDataName = "Test_Renamed";
 			vector<string> newDataAttrNames1 = { "name" };
@@ -239,7 +240,7 @@ namespace DBMS_Engine_Tester
 				vector<string> { "4", "Thomas", "1", "true" }
 			};
 
-			string primaryKey = "test1";
+			string primaryKey = "test";
 
 			vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 

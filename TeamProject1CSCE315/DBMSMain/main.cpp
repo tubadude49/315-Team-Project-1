@@ -12,6 +12,7 @@
 void renameTest();
 void projectTest();
 void unionTest();
+void differenceTest();
 void crossTest();
 void selectTest();
 void naturalJoinTester();
@@ -20,7 +21,8 @@ int main() {
 	renameTest();
 	projectTest();
 	unionTest();
-	crossTest();
+	differenceTest();
+	//crossTest();
 	selectTest();
 	naturalJoinTester();
 
@@ -34,10 +36,10 @@ void renameTest() {
 	string dataRelatName1 = "Tester";
 	vector<string> dataAttrNames1 = { "test", "name" };
 	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-	vector<string> testTuple1 = { "test1", "Thomas" };
-	vector<string> testTuple2 = { "test2", "Colin" };
+	vector<string> testTuple1 = { "1", "Thomas" };
+	vector<string> testTuple2 = { "2", "Colin" };
 	vector<vector<string>> testTuples;
-	string primaryKey = "test1";
+	string primaryKey = "test";
 
 	string newDataName = "Test_Renamed";
 	vector<string> newDataAttrNames1 = { "new_test", "new_name" };
@@ -45,9 +47,10 @@ void renameTest() {
 	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
 	dataManager.insert(dataRelatName1, testTuple1);
 	dataManager.insert(dataRelatName1, testTuple2);
-	dataManager.rename(dataRelatName1, newDataName, newDataAttrNames1);
-	dataManager.show(newDataName, cout);
 
+	dataManager.rename(dataRelatName1, newDataName, newDataAttrNames1);
+
+	dataManager.show(newDataName, cout);
 }
 
 void unionTest() {
@@ -56,10 +59,10 @@ void unionTest() {
 	string dataRelatName1 = "Tester1";
 	vector<string> dataAttrNames1 = { "test", "name" };
 	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-	vector<string> testTuple1_1 = { "test1", "Thomas" };
-	vector<string> testTuple1_2 = { "test2", "Colin" };
+	vector<string> testTuple1_1 = { "1", "Thomas" };
+	vector<string> testTuple1_2 = { "2", "Colin" };
 	vector<vector<string>> testTuples;
-	string primaryKey1 = "test1";
+	string primaryKey1 = "test";
 
 	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
 	dataManager.insert(dataRelatName1, testTuple1_1);
@@ -68,25 +71,63 @@ void unionTest() {
 	string dataRelatName2 = "Tester2";
 	vector<string> dataAttrNames2 = { "test", "name" };
 	vector<string> dataAttrTypes2 = { "INTEGER", "VARCHAR(20)" };
-	vector<string> testTuple2_1 = { "test1", "Thomas" };
-	vector<string> testTuple2_2 = { "test2", "Jack" };
-	string primaryKey2 = "test1";
+	vector<string> testTuple2_1 = { "1", "Thomas" };
+	vector<string> testTuple2_2 = { "2", "Jack" };
+	string primaryKey2 = "test";
 
 	dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
 	dataManager.insert(dataRelatName2, testTuple2_1);
 	dataManager.insert(dataRelatName2, testTuple2_2);
 
-	string unionRelatName = "Test_Union";
+	string unionRelatName = "Test_SetUnion";
 	vector<string> unionAttrNames = { "test", "name" };
 	vector<string> unionAttrTypes = { "INTEGER", "VARCHAR(20)" };
-	vector<string> unionTuples = { "test1", "Thomas" };
+	vector<string> unionTuples = { "1", "Thomas" };
 	vector<vector<string>> unionTupleResults = { unionTuples };
 
 	dataManager.setUnion(dataRelatName1, dataRelatName2, unionRelatName);
-	
+
 	dataManager.show(unionRelatName, cout);
 }
 
+void differenceTest() {
+	DataManager dataManager = DataManager();
+
+	string dataRelatName1 = "TesterA";
+	vector<string> dataAttrNames1 = { "test", "name" };
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+	vector<string> testTuple1 = { "1", "Thomas" };
+	vector<string> testTuple2 = { "2", "Colin" };
+	vector<string> testTuple3 = { "3", "Josh" };
+
+	vector<vector<string>> solutionTuples(0);
+	solutionTuples.push_back(testTuple2);
+	solutionTuples.push_back(testTuple3);
+
+	string primaryKey = "test";
+
+	vector<string> newDataAttrNames1 = { "new_test", "new_name" };
+
+	//Create relation A
+	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+	dataManager.insert(dataRelatName1, testTuple1);
+	dataManager.insert(dataRelatName1, testTuple2);
+	dataManager.insert(dataRelatName1, testTuple3);
+
+	//Create relation B
+	string dataRelatName2 = "TesterB";
+	vector<string> testTuple4 = { "4", "Frankie" };
+	dataManager.create(dataRelatName2, dataAttrNames1, dataAttrTypes1, primaryKey);
+	dataManager.insert(dataRelatName2, testTuple1);
+	dataManager.insert(dataRelatName2, testTuple4);
+
+	string newName = "Test_SetDifference";
+
+	//Compute the difference, A - B
+	dataManager.setDifference(dataRelatName1, dataRelatName2, newName);
+
+	dataManager.show(newName, cout);
+}
 
 void naturalJoinTester(){
 	DataManager dataManager = DataManager();
@@ -94,26 +135,26 @@ void naturalJoinTester(){
 	string dataRelatName1 = "TesterA";
 	vector<string> dataAttrNames1 = { "test", "name" };
 	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-	vector<string> testTuple1 = { "test1", "Thomas" };
-	vector<string> testTuple2 = { "test2", "Colin" };
-	vector<string> testTuple3 = { "test3", "Josh" };
-	vector<string> testTuple9 = { "test4", "Thomas" };
+	vector<string> testTuple1 = { "1", "Thomas" };
+	vector<string> testTuple2 = { "2", "Colin" };
+	vector<string> testTuple3 = { "3", "Josh" };
+	vector<string> testTuple9 = { "4", "Thomas" };
 
 
 	vector<string> solutionAttrNames = { "test", "name", "number", "dog?" };
-	vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "BOOL" };
+	vector<string> solutionAttrTypes = { "INTEGER", "VARCHAR(20)", "INTEGER", "VARCHAR(5)" };
 	vector<vector<string>> solutionTuples;
 
 	// Uncomment to enable testing for correct tuples
 	solutionTuples = {
-		vector<string> { "test1", "Thomas", "1", "true" },
-		vector<string> { "test2", "Colin", "2", "true" },
-		vector<string> { "test3", "Josh", "3", "false" },
-		vector<string> { "test3", "Josh", "5", "NULL" },
-		vector<string> { "test4", "Thomas", "1", "true" }
+		vector<string> { "1", "Thomas", "1", "true" },
+		vector<string> { "2", "Colin", "2", "true" },
+		vector<string> { "3", "Josh", "3", "false" },
+		vector<string> { "3", "Josh", "5", "NULL" },
+		vector<string> { "4", "Thomas", "1", "true" }
 	};
 
-	string primaryKey = "test1";
+	string primaryKey = "test";
 
 	vector<string> newDataAttrNames1 = { "new_test", "new_name" };
 
@@ -127,7 +168,7 @@ void naturalJoinTester(){
 	//Create relation B
 	string dataRelatName2 = "TesterB";
 	vector<string> dataAttrNames2 = { "name", "number", "dog?" };
-	vector<string> dataAttrTypes2 = { "VARCHAR(20)", "INTEGER", "BOOL" };
+	vector<string> dataAttrTypes2 = { "VARCHAR(20)", "INTEGER", "VARCHAR(5)" };
 	vector<string> testTuple4 = { "Thomas", "1", "true" };
 	vector<string> testTuple5 = { "Colin", "2", "true" };
 	vector<string> testTuple6 = { "Josh", "3", "false" };
@@ -145,6 +186,8 @@ void naturalJoinTester(){
 	string newName = "Test_NaturalJoin";
 
 	dataManager.naturalJoin(dataRelatName1, dataRelatName2, newName);
+
+	dataManager.show(newName, cout);
 }
 
 void crossTest()
@@ -152,14 +195,14 @@ void crossTest()
 	DataManager dataManager = DataManager();
 
 	string dataRelatName1 = "Greek";
-	vector<string> dataAttrNames1 = { "Alpha", "Beta","Gamma" };
-	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(5)","VARCHAR(18)"};
+	vector<string> dataAttrNames1 = { "Alpha", "Beta", "Gamma" };
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(5)", "VARCHAR(18)" };
 	vector<vector<string>> tupleSet1 = { { "1", ".exe", "Commentary" }, { "2", "and", "three-halves" } };
 	string primaryKey1 = "Beta";
 
 	string dataRelatName2 = "Phoenetic";
-	vector<string> dataAttrNames2 = { "Bravo", "Charlie" , "Echo", "Foxtrot"};
-	vector<string> dataAttrTypes2 = { "VARCHAR(10)", "INTEGER", "VARCHAR(4)","INTEGER" };
+	vector<string> dataAttrNames2 = { "Bravo", "Charlie", "Echo", "Foxtrot" };
+	vector<string> dataAttrTypes2 = { "VARCHAR(10)", "INTEGER", "VARCHAR(4)", "INTEGER" };
 	vector<vector<string>> tupleSet2 = { { "Directive", "363", "this", "1010" }, { "Anyway", "21", "yes", "0" }, { "none", "1", "two", "3" } };
 	string primaryKey2 = "Echo";
 
@@ -178,6 +221,7 @@ void crossTest()
 	string crossName = "crossproduction";
 
 	dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
+
 	dataManager.show(crossName, cout);
 }
 
@@ -191,7 +235,7 @@ void selectTest() {
 	vector<string> testTuple1_2 = { "2", "Thomas" };
 	vector<string> testTuple1_3 = { "3", "Colin" };
 	vector<vector<string>> testTuples;
-	string primaryKey1 = "test1";
+	string primaryKey1 = "test";
 
 	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
 	dataManager.insert(dataRelatName1, testTuple1_1);
@@ -203,7 +247,7 @@ void selectTest() {
 	vector<vector<string>> result = { testTuple1_1, testTuple1_2 };
 
 	dataManager.select(dataRelatName1, newName, booleanArgs);
-	
+
 	dataManager.show(newName, cout);
 }
 
@@ -215,7 +259,7 @@ void projectTest() {
 	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
 	vector<string> testTuple1 = { "1", "Jason" };
 	vector<string> testTuple2 = { "2", "SomeOtherGuy" };
-	string primaryKey = "test1";
+	string primaryKey = "test";
 
 	string newDataName = "Test_Project";
 	vector<string> newDataAttrNames1 = { "name" };
