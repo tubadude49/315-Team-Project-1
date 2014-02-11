@@ -189,17 +189,17 @@ namespace DBMS_Engine_Tester
 		{
 			DataManager dataManager = DataManager();
 
-			string dataRelatName1 = "Greek";
-			vector<string> dataAttrNames1 = { "Alpha", "Beta", "Gamma" };
-			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(5)", "VARCHAR(18)" };
-			vector<vector<string>> tupleSet1 = { { "1", ".exe", "Commentary" }, { "2", "and", "three-halves" } };
-			string primaryKey1 = "Beta";
+			string dataRelatName1 = "A";
+			vector<string> dataAttrNames1 = { "A", "B" };
+			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(1)" };
+			vector<vector<string>> tupleSet1 = { { "1", "2" }, { "3", "4" } };
+			string primaryKey1 = "B";
 
-			string dataRelatName2 = "Phoenetic";
-			vector<string> dataAttrNames2 = { "Bravo", "Charlie", "Echo", "Foxtrot" };
-			vector<string> dataAttrTypes2 = { "VARCHAR(10)", "INTEGER", "VARCHAR(4)", "INTEGER" };
-			vector<vector<string>> tupleSet2 = { { "Directive", "363", "this", "1010" }, { "Anyway", "21", "yes", "0" }, { "none", "1", "two", "3" } };
-			string primaryKey2 = "Echo";
+			string dataRelatName2 = "W";
+			vector<string> dataAttrNames2 = { "X" };
+			vector<string> dataAttrTypes2 = { "VARCHAR(10)" };
+			vector<vector<string>> tupleSet2 = { { "a", "and", "b", "or" } };
+			string primaryKey2 = "X";
 
 			dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey1);
 			dataManager.insert(dataRelatName1, tupleSet1[0]);
