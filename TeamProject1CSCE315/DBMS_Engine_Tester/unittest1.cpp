@@ -36,8 +36,8 @@ namespace DBMS_Engine_Tester
 			string dataRelatName1 = "Tester";
 			vector<string> dataAttrNames1 = { "test", "name" };
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-			vector<string> testTuple1 = { "test1", "Thomas" };
-			vector<string> testTuple2 = { "test2", "Colin" };
+			vector<string> testTuple1 = { "1", "Thomas" };
+			vector<string> testTuple2 = { "2", "Colin" };
 			vector<vector<string>> testTuples;
 			string primaryKey = "test1";
 
@@ -57,8 +57,8 @@ namespace DBMS_Engine_Tester
 			string dataRelatName1 = "Tester1";
 			vector<string> dataAttrNames1 = { "test", "name" };
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-			vector<string> testTuple1_1 = { "test1", "Thomas" };
-			vector<string> testTuple1_2 = { "test2", "Colin" };
+			vector<string> testTuple1_1 = { "1", "Thomas" };
+			vector<string> testTuple1_2 = { "2", "Colin" };
 			vector<vector<string>> testTuples;
 			string primaryKey1 = "test1";
 
@@ -69,8 +69,8 @@ namespace DBMS_Engine_Tester
 			string dataRelatName2 = "Tester2";
 			vector<string> dataAttrNames2 = { "test", "name" };
 			vector<string> dataAttrTypes2 = { "INTEGER", "VARCHAR(20)" };
-			vector<string> testTuple2_1 = { "test1", "Thomas" };
-			vector<string> testTuple2_2 = { "test2", "Jack" };
+			vector<string> testTuple2_1 = { "1", "Thomas" };
+			vector<string> testTuple2_2 = { "2", "Jack" };
 			string primaryKey2 = "test1";
 
 			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
@@ -80,7 +80,7 @@ namespace DBMS_Engine_Tester
 			string unionRelatName = "Test_SetUnion";
 			vector<string> unionAttrNames = { "test", "name" };
 			vector<string> unionAttrTypes = { "INTEGER", "VARCHAR(20)" };
-			vector<string> unionTuples = { "test1", "Thomas" };
+			vector<string> unionTuples = { "1", "Thomas" };
 			vector<vector<string>> unionTupleResults = { unionTuples };
 
 			dataManager.setUnion(dataRelatName1, dataRelatName2, unionRelatName);
@@ -96,9 +96,9 @@ namespace DBMS_Engine_Tester
 			string dataRelatName1 = "TesterA";
 			vector<string> dataAttrNames1 = { "test", "name" };
 			vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
-			vector<string> testTuple1 = { "test1", "Thomas" };
-			vector<string> testTuple2 = { "test2", "Colin" };
-			vector<string> testTuple3 = { "test3", "Josh" };
+			vector<string> testTuple1 = { "1", "Thomas" };
+			vector<string> testTuple2 = { "2", "Colin" };
+			vector<string> testTuple3 = { "3", "Josh" };
 
 			vector<vector<string>> solutionTuples(0);
 			solutionTuples.push_back(testTuple2);
@@ -116,7 +116,7 @@ namespace DBMS_Engine_Tester
 
 			//Create relation B
 			string dataRelatName2 = "TesterB";
-			vector<string> testTuple4 = { "test4", "Frankie" };
+			vector<string> testTuple4 = { "4", "Frankie" };
 			dataManager.create(dataRelatName2, dataAttrNames1, dataAttrTypes1, primaryKey);
 			dataManager.insert(dataRelatName2, testTuple1);
 			dataManager.insert(dataRelatName2, testTuple4);
