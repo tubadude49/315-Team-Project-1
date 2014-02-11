@@ -176,19 +176,17 @@ namespace DBMS_Engine_Tester
 
 			dataManager.create(dataRelatName2, dataAttrNames2, dataAttrTypes2, primaryKey2);
 			dataManager.insert(dataRelatName2, tupleSet2[0]);
-			dataManager.insert(dataRelatName2, tupleSet2[1]);
-			dataManager.insert(dataRelatName2, tupleSet2[2]);
+
 
 			string crossName = dataRelatName1 + " X " + dataRelatName2;
 			dataManager.crossProduct(dataRelatName1, dataRelatName2,crossName);
-			
 			
 			vector<string> crossedNames = { "{L1 X R1}", "{L1 X R2}", "{L1 X R3}", "{L2 X R1}", "{L2 X R2}", "{L2 X R3}" };
 			vector<string> crossedTypes = { "(INTEGER X VARCHAR(10))", "(INTEGER X INTEGER)", "(VARCHAR(5) X VARCHAR(10))", "(VARCHAR(5) X INTEGER)" };
 			vector<vector<string>> solutionTuples;
 			solutionTuples.push_back({ "1~Directive", "1~363", "2~Directive", "2~363" });
 			solutionTuples.push_back({ ".exe~Directive", ".exe~363", "and~Directive", "and~363" });
-
+			
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
 		TEST_METHOD(TestSetProject)
