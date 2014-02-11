@@ -20,4 +20,5 @@ public:
 	DMLParser(DataManager* dataManager);
 	~DMLParser();
 	int parseProgram(string &program);
+	vector<string> splitProgram(string &input);
 };

@@ -141,6 +141,19 @@ int DMLParser::parseProgram(string &program) {
 	return 0x0;
 }
 
+/*assumptions: takes in a command string such as "SHOW animals;\nWRITE animals;\nOPEN animals;", and produces,
+a vector<string> that contains { "SHOW animals;" "WRITE animals;" "OPEN animals;" } thus fulfilling the,
+requirement described being no whitespace, and no new line characters*/
+vector<string> DMLParser::splitProgram(string &input) {
+	vector<string> commands;
+	stringstream copyOfInput(input);
+	string reader;
+	while (!copyOfInput.eof()) {
+		getline(copyOfInput, reader);
+		commands.push_back(reader);
+	}
+	return commands;
+}
 
 static string terminalChars = " ,&<>=!()"; //TODO
 static string removeChars = " ";
