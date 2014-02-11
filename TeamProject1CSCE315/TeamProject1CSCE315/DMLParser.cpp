@@ -9,6 +9,20 @@
 /* 	Main implementation of the DMLParser.
 All functionality of the parser is here.
 */
+
+/*
+Parse Response Codes
+
+0x0: Program returns without any non-0 responses.
+0x1: Program encountered EXIT Command
+0x2: parse(line) encountered an assignment which did not include "<-" as its second argument
+0x3: invalid operator sent
+0x4: missing keywords "VALUES" and "FROM" in "INSERT INTO"
+0x5: missing ; at end of statement
+0x6: missing opening "("
+
+0xE: not yet implemented
+*/
 int DMLParser::parse(string &line) {
 	//add try/catch for bounds checking (std::invalid_argument)
 	vector<string> split = split(line);
