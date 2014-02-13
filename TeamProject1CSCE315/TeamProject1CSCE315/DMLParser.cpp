@@ -18,9 +18,13 @@ Parse Response Codes
 0x1: Program encountered EXIT Command
 0x2: parse(line) encountered an assignment which did not include "<-" as its second argument
 0x3: invalid operator sent
-0x4: missing keywords "VALUES" and "FROM" in "INSERT INTO"
-0x5: missing ; at end of statement
+0x4: missing keywords "VALUES FROM" in "INSERT INTO"
+0x5: Unknown command, argument
 0x6: missing opening "("
+0x7: missing keyword "SET" in "UPDATE"
+0x8: missing keyword "WHERE" in "UPDATE"
+
+0xA: std::invalid_argument was thrown by DMLParser::parse
 
 0xE: not yet implemented
 */
@@ -28,29 +32,50 @@ int DMLParser::parse(string &line) {
 	//add try/catch for bounds checking (std::invalid_argument)
 	vector<string> tokens = split(line);
 	
-	if (tokens[0] == "EXIT") { // IMPL
+	if (tokens[0] == "EXIT") {
 		return 0x1;
 	}
 	else if (tokens[0] == "UPDATE") {
+		string outputRelation = tokens[1];
+		if (tokens[2] == "SET") {
+			vector<string> setArgs;
+			for (int i = 3; i < 6; i++) {
+				setArgs.push_back(tokens[i]);
+			}			
+			if (tokens[6] == "WHERE") {
+				vector<string> booleanArgs;
+				for (int i = 7; i < 10; i++) {
+					booleanArgs.push_back(tokens[i]);
+				}
+				dataManager->update(outputRelation, setArgs, booleanArgs);
+				dataManager->addBuildCmd(outputRelation, line);
+			}
+			else {
+				return 0x8;
+			}
+		}
+		else {
+			return 0x7;
+		}
 		return 0xE;
 	}
 	else if (tokens[0] == "SHOW") {
-		return 0xE;
+		string outputRelation = tokens[1];
+		dataManager->show(outputRelation, cout);
 	}
 	else if (tokens[0] == "WRITE") {
 		string outputRelation = tokens[1];
-		return 0xE;
+		dataManager->relationToFile(outputRelation);		
 	}
 	else if (tokens[0] == "OPEN") {
 		string outputRelation = tokens[1];
-		return 0xE;		
+		dataManager->relationFromFile(outputRelation, outputRelation + ".txt");
 	}
-	else if ((tokens[0] == "CREATE") && (tokens[1] == "TABLE")) { // IMPL
-		//CREATE TABLE
-		string outputRelation = tokens[2];
-		if (tokens[3] == "(") {
+	else if (tokens[0] == "CREATE TABLE") {
+		string outputRelation = tokens[1];
+		if (tokens[2] == "(") {
 			vector<string> tuple;
-			for (int i = 4; tokens[i] != ")"; i++) {
+			for (int i = 3; tokens[i] != ")"; i++) {
 				tuple.push_back(tokens[i]);
 			}
 			dataManager->insert(outputRelation, tuple);
@@ -60,38 +85,55 @@ int DMLParser::parse(string &line) {
 			return 0x6;
 		}
 	}
-	else if ((tokens[0] == "INSERT") && (tokens[1] == "INTO")) {
-		string outputRelation = tokens[2];
-		if ((tokens[3] == "VALUES") && (tokens[4] == "FROM")) {
-			if (tokens[5] == "(") {
-				for (int i = 6; tokens[i] != ")"; i++) {
-					
+	else if (tokens[0] == "INSERT INTO") {
+		string outputRelation = tokens[1];
+		if (tokens[2] == "VALUES FROM") {
+			if (tokens[3] == "(") {
+				vector<string> values;
+				for (int i = 4; tokens[i] != ")"; i++) {
+					values.push_back(tokens[i]);
 				}
+				dataManager->insert(outputRelation, values);
+				dataManager->addBuildCmd(outputRelation, line);
+			}
+			else {
+				return 0x6;
 			}
 		}
 		else {
 			return 0x4;
 		}
-		return 0xE;
 	}
-	else if ((tokens[0] == "DELETE") && (tokens[1] == "FROM")) {
+	else if (tokens[0] == "DELETE FROM") {
 
 	}
-	else {
+	else if (tokens[1] == "<-") {
 		string outputRelation = tokens[0];
-		if (tokens[1] != "<-") return 0x2;
-		if (tokens[2] == "project") {
-			//PROJECT
-			return 0xE;
-		}
-		else if (tokens[2] == "rename") {
-			//RENAME
-			return 0xE;
-		}
-		else if (tokens[2] == "select") {
-			//SELECT
-			return 0xE;
-		}
+		if (tokens[2] == "project" || tokens[2] == "rename" || tokens[2] == "select") {
+			if (tokens[3] == "(") {
+				vector<string> newArgs;
+				int oldRelationIndex = 0;
+				for (int i = 0; tokens[i] != ")"; i++) {
+					newArgs.push_back(tokens[i]);
+				}
+				string oldRelation = tokens[oldRelationIndex];
+				if (tokens[2] == "project") {
+					dataManager->project(oldRelation, outputRelation, newArgs);
+					dataManager->addBuildCmd(outputRelation, line);
+				}
+				else if (tokens[2] == "rename") {
+					dataManager->rename(oldRelation, outputRelation, newArgs);
+					dataManager->addBuildCmd(outputRelation, line);
+				}
+				else if (tokens[2] == "select") {
+					dataManager->select(oldRelation, outputRelation, newArgs);
+					dataManager->addBuildCmd(outputRelation, line);
+				}
+			}
+			else {
+				return 0x6;
+			}
+		}	
 		else {
 			string firstRelation = tokens[2];
 			string op = tokens[3];
@@ -99,31 +141,30 @@ int DMLParser::parse(string &line) {
 			if(op == "+") {
 				dataManager->setUnion(firstRelation, secondRelation, outputRelation);
 				dataManager->addBuildCmd(outputRelation, line);
-				if (tokens[5] != ";") return 0x5;
 			}
 			else if(op == "-") {
 				dataManager->setDifference(firstRelation, secondRelation, outputRelation);
 				dataManager->addBuildCmd(outputRelation, line);
-				if (tokens[5] != ";") return 0x5;
 			}
 			else if(op == "*") {
 				dataManager->crossProduct(firstRelation, secondRelation, outputRelation);
 				dataManager->addBuildCmd(outputRelation, line);
-				if (tokens[5] != ";") return 0x5;
 			}
 			else if(op == "JOIN") {
 				dataManager->naturalJoin(firstRelation, secondRelation, outputRelation);
 				dataManager->addBuildCmd(outputRelation, line);
-				if (tokens[5] != ";") return 0x5;
 			}
 			else {
 				return 0x3;
 			}
 		}
 	}
-	
-	
+	else {
+		return 0x5;
+	}
+		
 	cout << "[DMLParser]: " << line << endl;
+	return 0x0;
 }
 
 DMLParser::DMLParser(DataManager* dataManager) {
@@ -135,11 +176,16 @@ DMLParser::~DMLParser() {
 
 int DMLParser::parseProgram(string &programs) {
 	vector<string> program = splitProgram(programs);
-	for(string line : program) {
-		int error;
-		if (error = parse(line)) {
-			return error;
+	try {
+		for (string line : program) {
+			int error;
+			if (error = parse(line)) {
+				return error;
+			}
 		}
+	}
+	catch (std::invalid_argument) {
+		return 0xA;
 	}
 	return 0x0;
 }
