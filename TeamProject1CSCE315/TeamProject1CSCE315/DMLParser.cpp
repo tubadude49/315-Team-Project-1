@@ -144,24 +144,25 @@ int DMLParser::parseProgram(string &programs) {
 	return 0x0;
 }
 
-/*assumptions: takes in a command string such as "SHOW animals;\nWRITE animals;\nOPEN animals;", and 
+/*assumptions: takes in a command string such as "SHOW animals; \n WRITE animals; \nOPEN animals;", and 
 produces a vector<string> that contains { "SHOW animals", "WRITE animals", "OPEN animals" }*/
 vector<string> DMLParser::splitProgram(string &input) {
-	vector<string> commands;
-	stringstream copyOfInput(input);
-	string reader;
-
-	while (!copyOfInput.eof()) {
-		getline(copyOfInput, reader);
-		commands.push_back(reader);
+	string removeChars = " \n;"; //Characters to be removed
+	vector<string> splitString;
+	size_t found = input.find_first_of(removeChars);
+	while (found != string::npos)
+	{
+		input[found] = '*';
+		found = input.find_first_of(removeChars, found + 1);
 	}
-
-	for (int i = 0; i < commands.size(); i++) {
-		reader = commands[i];
-		commands.push_back(reader.substr(0, reader.size() - 1));
+	stringstream reader(input);
+	string tmp;
+	while (getline(reader, tmp, '*')){
+		if (tmp != "") {
+			splitString.push_back(tmp);
+		}
 	}
-
-	return commands;
+	return splitString;
 }
 
 static string terminalChars = " ,&<>=!()"; //TODO
