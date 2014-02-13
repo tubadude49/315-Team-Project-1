@@ -184,6 +184,7 @@ vector<string> DMLParser::split(string &input){
 	{
 		string next = "";
 		reader >> next;
+
 		if (next.size() <= 0)
 		{
 			break;
@@ -196,6 +197,18 @@ vector<string> DMLParser::split(string &input){
 		}
 		if (next.find("\"") == 0)//Objects enclosed in quotes are one string 
 		{
+			int lastQ = next.find_last_of("\"");
+			if (lastQ != 0)//no spaces
+			{
+				splitString.push_back(next.substr(1, lastQ - 1));
+				string remainder = next.substr(lastQ + 1);
+				if (remainder != "")
+				{
+					splitString.push_back(remainder);
+				}
+				continue;
+			}
+
 			next = next.substr(1);
 			while (reader.peek() != 34)
 			{
@@ -211,7 +224,7 @@ vector<string> DMLParser::split(string &input){
 			splitString.push_back(")");
 			continue;
 		}
-
+		
 		splitString.push_back(next);
 		if (next == "INSERT" || next == "CREATE" || next == "VALUES" || next == "PRIMARY")//INSERT INTO,CREATE TABLE, VALUES FROM, & PRIMARY KEY are one token
 		{

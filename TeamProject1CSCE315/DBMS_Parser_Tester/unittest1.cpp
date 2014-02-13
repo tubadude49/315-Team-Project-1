@@ -84,7 +84,7 @@ namespace DBMS_Parser_Tester
 		}
 		TEST_METHOD(TestSplitSelect)
 		{
-			/*DataManager dataManager = DataManager();
+			DataManager dataManager = DataManager();
 			DMLParser dmlParser = DMLParser(&dataManager);
 
 			string toSplit = "dinosaur_players <- select (team == \"Dinosaurs\") baseball_players;";
@@ -95,7 +95,7 @@ namespace DBMS_Parser_Tester
 				"(",
 				"team",
 				"==",
-				"\"Dinosaurs\"",
+				"Dinosaurs",
 				")",
 				"baseball_players"
 			};
@@ -104,7 +104,7 @@ namespace DBMS_Parser_Tester
 			for (int i = 0; i < result.size(); i++) {
 				Assert::AreEqual(solution[i], result[i]);
 			}
-			Assert::AreEqual(result.size(), solution.size());*/
+			Assert::AreEqual(result.size(), solution.size());
 		}
 		TEST_METHOD(TestSplitShow)
 		{
