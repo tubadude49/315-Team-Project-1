@@ -50,40 +50,31 @@ vector<string> DMLParser::split(string &input){
 	input = input.substr(0, input.size() - 1);//Remove semicolon
 	std::replace(input.begin(),input.end(),',', ' ');
 	stringstream reader(input);
+	
 
 	while (reader)//No eof or errors
 	{
 		string next = "";
 		reader >> next;
-		if (next.size() <= 0)
-		{
-			break;
-		}
 
 		if ((next.size() > 1) && next.find("(") == 0)//Seperate open paren from following data
 		{
 			splitString.push_back("(");
 			next = next.substr(1);
 		}
+		cout << next << "\n";
 		if (next.find("\"") == 0)//Objects enclosed in quotes are one string 
 		{
 			next = next.substr(1);
-			while (reader.peek() != 34)
-			{
-				next += reader.get();
-			}
-			reader.get();
 		}
-
-		if (next.size() > 1 && next.find("V") != 0 && next.find(")") == next.size() - 1)//Seperate ) if not VARCHAR
+		if (next.find("V") != 0 && next.find_last_of(")") == next.size() - 1)//Seperate ) if not VARCHAR
 		{
-			next = next.substr(0, next.size() - 1);
-			splitString.push_back(next);
+			splitString.push_back(next.substr(0, next.size() - 1));
 			splitString.push_back(")");
 			continue;
 		}
-
 		splitString.push_back(next);
+
 		if (next == "INSERT" || next == "CREATE" || next == "VALUES" || next == "PRIMARY")//INSERT INTO,CREATE TABLE, VALUES FROM, & PRIMARY KEY are one token
 		{
 			reader >> next;

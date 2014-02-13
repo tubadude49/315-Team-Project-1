@@ -16,6 +16,7 @@ void differenceTest();
 void crossTest();
 void selectTest();
 void naturalJoinTester();
+void splitTest();
 
 int main() {
 	renameTest();
@@ -25,6 +26,7 @@ int main() {
 	crossTest();
 	selectTest();
 	naturalJoinTester();
+	splitTest();
 
 	string tester;
 	cin >> tester;
@@ -271,4 +273,20 @@ void projectTest() {
 	dataManager.project(dataRelatName1, newDataName, newDataAttrNames1);
 
 	dataManager.show(newDataName, cout);
+}
+
+void splitTest()
+{
+	DataManager dataManager = DataManager();
+	DMLParser parser = DMLParser(&dataManager);
+	string input = "INSERT INTO tools VALUES FROM (\"blow torch\", 3, 25);";
+	
+	vector<string> response = parser.split(input);
+	vector<string> expectedResponse = { "INSERT INTO", "tools", "VALUES FROM", "(", "blow torch", "3", "25", ")" };
+
+	cout << input << endl;
+	for (string part : response)
+	{
+		cout << part << "\n";
+	}
 }
