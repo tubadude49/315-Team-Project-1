@@ -10,15 +10,15 @@ namespace DBMS_Parser_Tester
 	public:		
 		TEST_METHOD(TestSplitProgram)
 		{
-			/*DataManager dataManager = DataManager();
+			DataManager dataManager = DataManager();
 			DMLParser dmlParser = DMLParser(&dataManager);
 
 			string toSplit =
 				"CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);"
-				"INSERT INTO animals VALUES FROM(\"Joe\", \"cat\", 4);"
-				"INSERT INTO animals VALUES FROM(\"Spot\", \"dog\", 10);"
-				"INSERT INTO animals VALUES FROM(\"Snoopy\", \"dog\", 3);"
-				"INSERT INTO animals VALUES FROM(\"Tweety\", \"bird\", 1);"
+				"INSERT INTO animals VALUES FROM(\"Joe\", \"cat\", 4);\n"
+				"INSERT INTO animals VALUES FROM(\"Spot\", \"dog\", 10);   "
+				"  INSERT INTO animals VALUES FROM(\"Snoopy\", \"dog\", 3);\n"
+				"  INSERT INTO animals VALUES FROM(\"Tweety\", \"bird\", 1);"
 				"INSERT INTO animals VALUES FROM(\"Joe\", \"bird\", 2); ";
 			vector<string> solution = { "CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);",
 				"INSERT INTO animals VALUES FROM(\"Joe\", \"cat\", 4);",
@@ -26,8 +26,12 @@ namespace DBMS_Parser_Tester
 				"INSERT INTO animals VALUES FROM(\"Snoopy\", \"dog\", 3);",
 				"INSERT INTO animals VALUES FROM(\"Tweety\", \"bird\", 1);",
 				"INSERT INTO animals VALUES FROM(\"Joe\", \"bird\", 2);" };
+			vector<string> result = dmlParser.splitProgram(toSplit);
 
-			Assert::IsTrue(solution == dmlParser.splitProgram(toSplit));*/
+			for (int i = 0; i < result.size(); i++) {
+				Assert::AreEqual(solution[i], result[i]);
+			}
+			Assert::AreEqual(result.size(), solution.size());
 		}
 		TEST_METHOD(TestSplitCreate)
 		{
@@ -229,6 +233,19 @@ namespace DBMS_Parser_Tester
 				Assert::AreEqual(solution[i], result[i]);
 			}
 			Assert::AreEqual(result.size(), solution.size());
+		}
+		TEST_METHOD(TestParse)
+		{
+			DataManager dataManager = DataManager();
+			DMLParser dmlParser = DMLParser(&dataManager);
+
+			string myProgram = "My Program";
+
+			Assert::IsFalse(dmlParser.parseProgram(myProgram));
+
+			/*	Input from a file name
+				Return the contents of the file in a single string
+			*/
 		}
 	};
 }
