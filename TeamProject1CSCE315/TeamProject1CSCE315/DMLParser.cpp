@@ -147,20 +147,17 @@ int DMLParser::parseProgram(string &programs) {
 /*assumptions: takes in a command string such as "SHOW animals; \n WRITE animals; \nOPEN animals;", and 
 produces a vector<string> that contains { "SHOW animals", "WRITE animals", "OPEN animals" }*/
 vector<string> DMLParser::splitProgram(string &input) {
-	string removeChars = " \n;"; //Characters to be removed
-	vector<string> splitString;
-	size_t found = input.find_first_of(removeChars);
-	while (found != string::npos)
-	{
-		input[found] = '*';
-		found = input.find_first_of(removeChars, found + 1);
-	}
 	stringstream reader(input);
-	string tmp;
-	while (getline(reader, tmp, '*')){
-		if (tmp != "") {
-			splitString.push_back(tmp);
+	vector<string> splitString;
+	while (reader)
+	{
+		string next = "";
+		if (reader.peek() != ';')
+		{
+			next += reader.get();
 		}
+		next += reader.get();
+		splitString.push_back(next);
 	}
 	return splitString;
 }
