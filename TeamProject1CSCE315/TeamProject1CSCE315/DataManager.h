@@ -45,5 +45,5 @@ public:
 	void shellSort(vector<string> &toSort);
 
 	void relationToFile(string relationName);
-	vector<string> relationFromFile(string relationName, string fileName);
+	string relationFromFile(string relationName);
 };
