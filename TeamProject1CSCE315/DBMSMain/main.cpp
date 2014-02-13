@@ -6,7 +6,6 @@
 // CSCE 315
 
 #include <iostream>
-
 #include "DBMSAPI.h"
 
 void renameTest();
@@ -17,6 +16,7 @@ void crossTest();
 void selectTest();
 void naturalJoinTester();
 void splitTest();
+void readWriteTester();
 
 int main() {
 	renameTest();
@@ -27,9 +27,50 @@ int main() {
 	selectTest();
 	naturalJoinTester();
 	splitTest();
+	readWriteTester();
 
 	string tester;
 	cin >> tester;
+}
+
+void readWriteTester(){
+	cout << "readWriteTester()\n";
+	DataManager dataManager = DataManager();
+
+	string dataRelatName1 = "TesterA";
+	vector<string> dataAttrNames1 = { "test", "name" };
+	vector<string> dataAttrTypes1 = { "INTEGER", "VARCHAR(20)" };
+	vector<string> testTuple1 = { "1", "Thomas" };
+	vector<string> testTuple2 = { "2", "Colin" };
+	vector<string> testTuple3 = { "3", "Josh" };
+	vector<string> testTuple4 = { "4", "Thomas" };
+
+	string primaryKey = "test";
+
+	//Create relation A
+	dataManager.create(dataRelatName1, dataAttrNames1, dataAttrTypes1, primaryKey);
+	dataManager.insert(dataRelatName1, testTuple1);
+	dataManager.insert(dataRelatName1, testTuple2);
+	dataManager.insert(dataRelatName1, testTuple3);
+	dataManager.insert(dataRelatName1, testTuple4);
+
+	
+	dataManager.addBuildCmd(dataRelatName1, string("This was a triumph;"));
+	dataManager.addBuildCmd(dataRelatName1, string("I'm making a note here;"));
+	dataManager.addBuildCmd(dataRelatName1, string("HUGE SUCCESS;"));
+	dataManager.addBuildCmd(dataRelatName1, string("It's hard to overstate my satisfaction;"));
+	dataManager.addBuildCmd(dataRelatName1, string("~Apeture Science~;"));
+	dataManager.addBuildCmd(dataRelatName1, string("We do what we must, because we can;"));
+	dataManager.addBuildCmd(dataRelatName1, string("for the good of all of us;"));
+
+	dataManager.relationToFile(dataRelatName1);
+
+	dataManager.relationFromFile(dataRelatName1, string("TesterA2.txt"));
+
+	dataManager.addBuildCmd(dataRelatName1, string("\nStill Alive;"));
+
+	dataManager.relationToFile(dataRelatName1);
+
 }
 
 void renameTest() {

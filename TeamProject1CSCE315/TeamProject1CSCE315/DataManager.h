@@ -43,4 +43,7 @@ public:
 	bool testRelation(string &relationName, vector<string> attrNames, vector<string> attrTypes, vector<vector<string>> tuples);
 
 	void shellSort(vector<string> &toSort);
+
+	void relationToFile(string relationName);
+	vector<string> relationFromFile(string relationName, string fileName);
 };

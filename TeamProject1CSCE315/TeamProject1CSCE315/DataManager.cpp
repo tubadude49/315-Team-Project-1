@@ -556,3 +556,38 @@ bool DataManager::testRelation(string &relationName, vector<string> attrNames, v
 	}
 	return true;
 }
+
+/*	Write the buildCmds of a Relation to a file
+*/
+void DataManager::relationToFile(string relationName){
+	Relation* relation = getRelationByName(relationName);
+	string name = relation->name + ".txt";
+	ofstream out(name.c_str());
+	out << relation->name << "\n";
+	for (int i = 0; i < relation->buildCmds.size(); i++){
+		out << relation->buildCmds[i] << "\n";
+	}
+	out.close();
+}
+
+/*	Read build commands from fileName and set them to the specified relation.
+	If no relation specified (i.e., relationName = ""), just return the vector<string> of build commands
+*/
+vector<string> DataManager::relationFromFile(string relationName, string fileName){
+	ifstream in(fileName.c_str());
+	string line;
+	vector<string> commands(0);
+
+	getline(in, line); //throw away first line
+	while (getline(in, line)){
+		commands.push_back(line);
+	}
+
+	if (relationName != ""){
+		Relation* relation = getRelationByName(relationName);
+		relation->buildCmds = commands;
+	}
+
+	in.close();
+	return commands;
+}
