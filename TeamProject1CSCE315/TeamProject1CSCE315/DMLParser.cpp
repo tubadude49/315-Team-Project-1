@@ -227,7 +227,7 @@ vector<string> DMLParser::split(string &input){
 		}
 		
 		splitString.push_back(next);
-		if (next == "INSERT" || next == "CREATE" || next == "VALUES" || next == "PRIMARY")//INSERT INTO,CREATE TABLE, VALUES FROM, & PRIMARY KEY are one token
+		if (next == "INSERT" || next == "CREATE" || next == "VALUES" || next == "PRIMARY" || "DELETE")//INSERT INTO,CREATE TABLE, VALUES FROM, DELETE FROM, & PRIMARY KEY are one token
 		{
 			reader >> next;
 			splitString[splitString.size() - 1] += " " + next;
