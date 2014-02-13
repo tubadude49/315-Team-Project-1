@@ -7,11 +7,11 @@
 
 #include "targetver.h"
 
+#include "DBMSAPI.h"
+
 #include <vector>
 #include <string>
 #include <iostream>
-
-#include "DBMSAPI.h"
 
 using namespace std;
 

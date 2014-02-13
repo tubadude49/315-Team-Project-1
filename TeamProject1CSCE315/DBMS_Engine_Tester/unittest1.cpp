@@ -302,17 +302,5 @@ namespace DBMS_Engine_Tester
 
 			Assert::IsTrue(dataManager.testRelation(newName, solutionAttrNames, solutionAttrTypes, solutionTuples));
 		}
-
-		TEST_METHOD(testSplit)
-		{
-			DataManager dataManager = DataManager();
-			DMLParser parser = DMLParser(&dataManager);
-			string input = "INSERT INTO tools VALUES FROM (\"blow torch\", 3, 25);";
-			vector<string> response = parser.split(input);
-			vector<string> expectedResponse = { "INSERT INTO", "tools", "VALUES FROM", "(", "blow torch", "3", "25", ")" };
-			
-			Assert::AreEqual(response, expectedResponse);
-
-		}
 	};
 }

@@ -35,6 +35,16 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
+/*	Add a build command to a relation, to be saved to file.
+*/
+void DataManager::addBuildCmd(string &relationName, string &buildCmd) {
+	Relation* relation = getRelationByName(relationName);
+
+	if (relation != NULL) {
+		relation->addCmd(buildCmd);
+	}
+}
+
 /*	Create a new relation with the given attribute names and attribute types
 */
 void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey) {

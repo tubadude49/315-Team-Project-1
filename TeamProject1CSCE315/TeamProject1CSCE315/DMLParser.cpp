@@ -26,45 +26,45 @@ Parse Response Codes
 */
 int DMLParser::parse(string &line) {
 	//add try/catch for bounds checking (std::invalid_argument)
-	vector<string> split = split(line);
+	vector<string> tokens = split(line);
 	
-	if(split[0] == "EXIT") { // IMPL
+	if (tokens[0] == "EXIT") { // IMPL
 		return 0x1;
 	}
-	else if(split[0] == "UPDATE") {
+	else if (tokens[0] == "UPDATE") {
 		return 0xE;
 	}
-	else if(split[0] == "SHOW") {
+	else if (tokens[0] == "SHOW") {
 		return 0xE;
 	}
-	else if(split[0] == "WRITE") {
-		string outputRelation = split[1];
+	else if (tokens[0] == "WRITE") {
+		string outputRelation = tokens[1];
 		return 0xE;
 	}
-	else if(split[0] == "OPEN") {
-		string outputRelation = split[1];
+	else if (tokens[0] == "OPEN") {
+		string outputRelation = tokens[1];
 		return 0xE;		
 	}
-	else if((split[0] == "CREATE") && (split[1] == "TABLE")) { // IMPL
+	else if ((tokens[0] == "CREATE") && (tokens[1] == "TABLE")) { // IMPL
 		//CREATE TABLE
-		string outputRelation = split[2];
-		if(split[3] == "(") {
+		string outputRelation = tokens[2];
+		if (tokens[3] == "(") {
 			vector<string> tuple;
-			for(int i=4; split[i] != ")";i++) {
-				tuple.push_back(split[i]);
+			for (int i = 4; tokens[i] != ")"; i++) {
+				tuple.push_back(tokens[i]);
 			}
-			dataManager.insert(outputRelation, tuple);
-			dataManager.addBuildCmd(outputRelation, line);
+			dataManager->insert(outputRelation, tuple);
+			dataManager->addBuildCmd(outputRelation, line);
 		}
 		else {
 			return 0x6;
 		}
 	}
-	else if((split[0] == "INSERT") && (split[1] == "INTO")) {
-		string outputRelation = split[2];
-		if((split[3] == "VALUES") && (split[4] == "FROM")) {
-			if(split[5] == "(") {
-				for(int i=6; split[i] != ")";i++) {
+	else if ((tokens[0] == "INSERT") && (tokens[1] == "INTO")) {
+		string outputRelation = tokens[2];
+		if ((tokens[3] == "VALUES") && (tokens[4] == "FROM")) {
+			if (tokens[5] == "(") {
+				for (int i = 6; tokens[i] != ")"; i++) {
 					
 				}
 			}
@@ -74,45 +74,47 @@ int DMLParser::parse(string &line) {
 		}
 		return 0xE;
 	}
-	else if((split[0] == "DELETE") && (split[1] == "FROM"))
+	else if ((tokens[0] == "DELETE") && (tokens[1] == "FROM")) {
+
+	}
 	else {
-		string outputRelation = split[0];
-		if(split[1] != "<-") return 0x2;
-		if(split[2] == "project") {
+		string outputRelation = tokens[0];
+		if (tokens[1] != "<-") return 0x2;
+		if (tokens[2] == "project") {
 			//PROJECT
 			return 0xE;
 		}
-		else if(split[2] == "rename") {
+		else if (tokens[2] == "rename") {
 			//RENAME
 			return 0xE;
 		}
-		else if(split[2] == "select") {
+		else if (tokens[2] == "select") {
 			//SELECT
 			return 0xE;
 		}
 		else {
-			string firstRelation = split[2];
-			string op = split[3];
-			string secondRelation = split[4];
+			string firstRelation = tokens[2];
+			string op = tokens[3];
+			string secondRelation = tokens[4];
 			if(op == "+") {
-				dataManager.setUnion(firstRelation, secondRelation, outputRelation);
-				dataManager.addBuildCmd(outputRelation, line);				
-				if(split[5] != ";") return 0x5;
+				dataManager->setUnion(firstRelation, secondRelation, outputRelation);
+				dataManager->addBuildCmd(outputRelation, line);
+				if (tokens[5] != ";") return 0x5;
 			}
 			else if(op == "-") {
-				dataManager.setDifference(firstRelation, secondRelation, outputRelation);
-				dataManager.addBuildCmd(outputRelation, line);
-				if(split[5] != ";") return 0x5;
+				dataManager->setDifference(firstRelation, secondRelation, outputRelation);
+				dataManager->addBuildCmd(outputRelation, line);
+				if (tokens[5] != ";") return 0x5;
 			}
 			else if(op == "*") {
-				dataManager.crossProduct(firstRelation, secondRelation, outputRelation);
-				dataManager.addBuildCmd(outputRelation, line);			
-				if(split[5] != ";") return 0x5;
+				dataManager->crossProduct(firstRelation, secondRelation, outputRelation);
+				dataManager->addBuildCmd(outputRelation, line);
+				if (tokens[5] != ";") return 0x5;
 			}
 			else if(op == "JOIN") {
-				dataManager.naturalJoin(firstRelation, secondRelation, outputRelation);				
-				dataManager.addBuildCmd(outputRelation, line);
-				if(split[5] != ";") return 0x5;
+				dataManager->naturalJoin(firstRelation, secondRelation, outputRelation);
+				dataManager->addBuildCmd(outputRelation, line);
+				if (tokens[5] != ";") return 0x5;
 			}
 			else {
 				return 0x3;
@@ -131,12 +133,12 @@ DMLParser::DMLParser(DataManager* dataManager) {
 DMLParser::~DMLParser() {
 }
 
-int DMLParser::parseProgram(string &program) {
-	vector<string> program = splitPrograms(program);
+int DMLParser::parseProgram(string &programs) {
+	vector<string> program = splitProgram(programs);
 	for(string line : program) {
-		int response;
-		if(response = parse(line)) {
-			return response;
+		int error;
+		if (error = parse(line)) {
+			return error;
 		}
 	}
 	return 0x0;
@@ -167,7 +169,7 @@ static string removeChars = " ";
 //static vector<char> terminalChars = { ',', '&', '<', '>', '=', '!', '(', ')' };
 //static vector<char> removeChars = { ' ' };
 
-vector<string> split(string &input){
+vector<string> DMLParser::split(string &input){
 	vector<string> splitString;
 	if ((input.size() == 0) || (input.at(input.size() - 1) != ';'))
 	{

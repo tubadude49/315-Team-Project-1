@@ -20,6 +20,7 @@ private:
 public:
 	DataManager();
 	~DataManager();
+	void addBuildCmd(string &relationName, string &buildCmd);
 	void create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
 	void insert(string &relationName, vector<string> &values);
 	void update(string &relationName, vector<string> &oldValues, vector<string> &newValues);

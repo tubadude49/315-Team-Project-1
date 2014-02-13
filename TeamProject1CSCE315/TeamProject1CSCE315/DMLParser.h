@@ -8,6 +8,8 @@
 #include <sstream>
 #include <vector>
 
+#include "DataManager.h"
+
 using namespace std;
 
 class DataManager;
@@ -21,5 +23,5 @@ public:
 	~DMLParser();
 	int parseProgram(string &program);
 	vector<string> splitProgram(string &input);
-	vector<string> split(string &line);
+	vector<string> split(string &input);
 };
