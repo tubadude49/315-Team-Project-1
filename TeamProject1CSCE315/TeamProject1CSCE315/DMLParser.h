@@ -21,4 +21,5 @@ public:
 	~DMLParser();
 	int parseProgram(string &program);
 	vector<string> splitProgram(string &input);
+	vector<string> split(string &line);
 };
