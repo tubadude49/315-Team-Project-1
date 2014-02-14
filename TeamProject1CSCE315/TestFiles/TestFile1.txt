@@ -1,0 +1,44 @@
+CREATE TABLE table1 (Test_Names VARCHAR(20), Test_Types VARCHAR(12), Test_Numbers INTEGER) PRIMARY KEY (Test_Names, Test_Types);
+INSERT INTO table1 VALUES FROM ("TestName1", "TestType1", 111);
+INSERT INTO table1 VALUES FROM ("TestName2", "TestType2", 222);
+INSERT INTO table1 VALUES FROM ("TestName3", "TestType2", 333);
+INSERT INTO table1 VALUES FROM ("TestName4", "TestType3", 444);
+INSERT INTO table1 VALUES FROM ("TestName5", "TestType3", 555);
+SHOW table1;
+WRITE table1;
+OPEN table1;
+
+CREATE TABLE table2 (Test_Types VARCHAR(12), Test_Numbers1 INTEGER, Test_Numbers2 INTEGER) PRIMARY KEY (Test_Types);
+INSERT INTO table2 VALUES FROM ("TestType1", 333, 1000);
+INSERT INTO table2 VALUES FROM ("TestType2", 111, 222);
+INSERT INTO table2 VALUES FROM ("TestType3", 222, 1000);
+INSERT INTO table2 VALUES FROM ("TestType4", 222, 222);
+INSERT INTO table2 VALUES FROM ("TestType5", 333, 2500);
+INSERT INTO table2 VALUES FROM ("TestType6", 555555, 3000);
+INSERT INTO table2 VALUES FROM ("TestType7", 300300300, 5000);
+SHOW table2;
+
+CREATE TABLE table3 (Test_First_Names1 VARCHAR(20), Test_Last_Names1 VARCHAR(20), Test_Types1 VARCHAR(20), Test_Numbers1 INTEGER) PRIMARY KEY (Test_First_Names1, Test_Last_Names1);
+INSERT INTO table3 VALUES FROM ("TestFirstName1", "N/A", "TestType1", 111);
+INSERT INTO table3 VALUES FROM ("TestFirstName2", "TestLastName1", "TestType2", 555);
+INSERT INTO table3 VALUES FROM ("TestFirstName3", "TestLastName2", "TestType3", -111);
+SHOW table3;
+
+CREATE TABLE table4 (Test_First_Names2 VARCHAR(20), Test_Last_Names2 VARCHAR(20), Test_Types2 VARCHAR(20), Test_Numbers2 INTEGER) PRIMARY KEY (Test_First_Names2, Test_Last_Names2);
+INSERT INTO table4 VALUES FROM ("TestFirstName1", "N/A", "TestType1", 111);
+INSERT INTO table4 VALUES FROM ("TestFirstName4", "TestLastName3", "TestType4", 111);
+INSERT INTO table4 VALUES FROM ("TestFirstName5", "N/A", "TestType4", 123);
+
+Test_Project <- project (Test_First_Names1, Test_Last_Names1) table3;
+SHOW test_Project;
+
+Test_Rename <- rename (NEW_Test_First_Names2, NEW_Test_Last_Names2, NEW_Test_Types2, NEW_Test_Numbers2) table4;
+SHOW test_Rename;
+
+test_Add <- table3 + table4;
+SHOW test_Add;
+
+test_Diff <- table3 - table4;
+SHOW test_Diff;
+
+EXIT;
