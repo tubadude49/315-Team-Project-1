@@ -1,0 +1,39 @@
+CREATE TABLE table1 (Test_First_Names VARCHAR(20), Test_Last_Names VARCHAR(30), Test_Types VARCHAR(20), Test_Numbers1 INTEGER, Test_Numbers2 INTEGER) PRIMARY KEY (Test_First_Names, Test_Last_Names);
+INSERT INTO table1 VALUES FROM ("First1", "Last1", "Type1", 444, 1111111);
+INSERT INTO table1 VALUES FROM ("First2", "Last2", "Type2", 111, 5555555);
+INSERT INTO table1 VALUES FROM ("First3", "Last3", "Type1", 333, 222222);
+INSERT INTO table1 VALUES FROM ("First4", "Last4", "Type2", 888, 222222);
+INSERT INTO table1 VALUES FROM ("First5", "Last5", "Type1", 222, 151515);
+
+test_Select1 <- select (Test_Numbers1 >= 444) table1;
+SHOW test_Select1;
+
+test_Select2 <- select (Test_Types == "Type2") table1;
+SHOW test_Select2;
+
+test_ <- select (Test_Types == "Type1") (select (Test_Numbers1 >= 444) table1);
+SHOW test_Double_Select;
+
+CREATE TABLE table2 (Test_Names1 VARCHAR(20)) PRIMARY KEY (Test_Names1);
+INSERT INTO table2 VALUES FROM ("Name1");
+INSERT INTO table2 VALUES FROM ("Name2");
+INSERT INTO table2 VALUES FROM ("Name3");
+INSERT INTO table2 VALUES FROM ("Name4");
+
+CREATE TABLE table3 (Test_Names2 VARCHAR(20)) PRIMARY KEY (color);
+INSERT INTO table3 VALUES FROM ("Name5");
+INSERT INTO table3 VALUES FROM ("Name6");
+
+test_Product <- table2 * table3;
+SHOW test_Product;
+
+CREATE TABLE table4 (Test_Names1 VARCHAR(20), Test_Names2 VARCHAR(20)) PRIMARY KEY (Test_Names1, Test_Names2);
+INSERT INTO table4 VALUES FROM ("Name1", "Name5");
+INSERT INTO table4 VALUES FROM ("Name1", "Name6");
+INSERT INTO table4 VALUES FROM ("Name2", "Name5");
+INSERT INTO table4 VALUES FROM ("Name3", "Name6");
+INSERT INTO table4 VALUES FROM ("Name4", "Name7");
+
+test_Set_Diff <- test_Product - table4;
+SHOW test_Set_Diff;
+EXIT;
