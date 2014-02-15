@@ -268,6 +268,7 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 		}
 	}
 
+	cout << toDelete.size() << endl;
 	// Remove the marked relations
 	for (int i = 0; i < toDelete.size(); i++) {
 		newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
@@ -576,19 +577,9 @@ string DataManager::relationFromFile(string relationName){
 	string fileName = relationName + ".txt";
 	ifstream in(fileName.c_str());
 	string line;
-	/*vector<string> commands(0);*/
 
-	getline(in, line); //throw away first line
-	/*while (getline(in, line)){
-		commands.push_back(line);
-	}*/
-
-	/*if (relationName != ""){
-		Relation* relation = getRelationByName(relationName);
-		relation->buildCmds = commands;
-	}*/
+	getline(in, line); 
 
 	in.close();
-	/*return commands;*/
 	return line;
 }

@@ -23,6 +23,7 @@ Parse Response Codes
 0x6: missing opening "("
 0x7: missing keyword "SET" in "UPDATE"
 0x8: missing keyword "WHERE" in "UPDATE"
+0x9: missing keyword "PRIMARY KEY" in "CREATE TABLE"
 
 0xA: std::invalid_argument was thrown by DMLParser::parse
 
@@ -57,7 +58,6 @@ int DMLParser::parse(string &line) {
 		else {
 			return 0x7;
 		}
-		return 0xE;
 	}
 	else if (tokens[0] == "SHOW") {
 		string outputRelation = tokens[1];
@@ -69,16 +69,27 @@ int DMLParser::parse(string &line) {
 	}
 	else if (tokens[0] == "OPEN") {
 		string outputRelation = tokens[1];
-		//dataManager->relationFromFile(outputRelation, outputRelation + ".txt");
+		//dataManager->relationFromFile(outputRelation);
 	}
 	else if (tokens[0] == "CREATE TABLE") {
 		string outputRelation = tokens[1];
 		if (tokens[2] == "(") {
-			vector<string> tuple;
-			for (int i = 3; tokens[i] != ")"; i++) {
-				tuple.push_back(tokens[i]);
+			vector<string> attrNames;
+			vector<string> attrTypes;
+			int resumeAt;
+			for (int i = 3; tokens[i] != ")"; i+=2) {
+				attrNames.push_back(tokens[i]);
+				attrTypes.push_back(tokens[i + 1]);
+				resumeAt = i + 3;
 			}
-			dataManager->insert(outputRelation, tuple);
+			string primaryKey;
+			if (tokens[resumeAt] == "PRIMARY KEY") {
+				primaryKey = tokens[resumeAt + 1];
+			}
+			else {
+				return 0x9;
+			}
+			dataManager->create(outputRelation, attrNames, attrTypes, primaryKey);
 			dataManager->addBuildCmd(outputRelation, line);
 		}
 		else {
@@ -105,7 +116,7 @@ int DMLParser::parse(string &line) {
 		}
 	}
 	else if (tokens[0] == "DELETE FROM") {
-
+		return 0xE;
 	}
 	else if (tokens[1] == "<-") {
 		string outputRelation = tokens[0];
@@ -115,8 +126,10 @@ int DMLParser::parse(string &line) {
 				int oldRelationIndex = 0;
 				for (int i = 0; tokens[i] != ")"; i++) {
 					newArgs.push_back(tokens[i]);
+					oldRelationIndex = i + 2;
 				}
 				string oldRelation = tokens[oldRelationIndex];
+				cout << "old relation = " << oldRelation << " new relation = " << outputRelation << endl;
 				if (tokens[2] == "project") {
 					dataManager->project(oldRelation, outputRelation, newArgs);
 					dataManager->addBuildCmd(outputRelation, line);
@@ -163,7 +176,7 @@ int DMLParser::parse(string &line) {
 		return 0x5;
 	}
 		
-	cout << "[DMLParser]: " << line << endl;
+	//cout << "[DMLParser]: " << line << endl;
 	return 0x0;
 }
 
@@ -220,11 +233,6 @@ vector<string> DMLParser::splitProgram(string &input) {
 	}
 	return splitString;
 }
-
-static string terminalChars = " ,&<>=!()"; //TODO
-static string removeChars = " ";
-//static vector<char> terminalChars = { ',', '&', '<', '>', '=', '!', '(', ')' };
-//static vector<char> removeChars = { ' ' };
 
 vector<string> DMLParser::split(string &input){
 	vector<string> splitString;
