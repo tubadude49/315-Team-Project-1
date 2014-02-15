@@ -273,7 +273,7 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 	for (int i = 0; i < toDelete.size(); i++) {
 		newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
 		for (int j = i + 1; j < toDelete.size(); j++) {
-			toDelete[i]--;
+			toDelete[j]--;
 		}
 	}
 
