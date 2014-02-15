@@ -17,6 +17,7 @@ void selectTest();
 void naturalJoinTester();
 void splitTest();
 void readWriteTester();
+void splitProgramTest();
 
 int main() {
 	renameTest();
@@ -28,6 +29,7 @@ int main() {
 	naturalJoinTester();
 	splitTest();
 	readWriteTester();
+	splitProgramTest();
 
 	string tester;
 	cin >> tester;
@@ -65,7 +67,7 @@ void readWriteTester(){
 
 	dataManager.relationToFile(dataRelatName1);
 
-	dataManager.relationFromFile(dataRelatName1, string("TesterA2.txt"));
+	//dataManager.relationFromFile(dataRelatName1, string("TesterA2.txt"));
 
 	dataManager.addBuildCmd(dataRelatName1, string("\nStill Alive;"));
 
@@ -329,5 +331,30 @@ void splitTest()
 	for (string part : response)
 	{
 		cout << part << "\n";
+	}
+}
+
+void splitProgramTest()
+{
+	DataManager dataManager = DataManager();
+	DMLParser dmlParser = DMLParser(&dataManager);
+
+	string toSplit =
+		"CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);"
+		"INSERT INTO animals VALUES FROM(\"Joe\", \"cat\", 4);\n"
+		"INSERT INTO animals VALUES FROM(\"Spot\", \"dog\", 10);   "
+		"  INSERT INTO animals VALUES FROM(\"Snoopy\", \"dog\", 3);\n"
+		"  INSERT INTO animals VALUES FROM(\"Tweety\", \"bird\", 1);"
+		"INSERT INTO animals VALUES FROM(\"Joe\", \"bird\", 2); ";
+	vector<string> solution = { "CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);",
+		"INSERT INTO animals VALUES FROM(\"Joe\", \"cat\", 4);",
+		"INSERT INTO animals VALUES FROM(\"Spot\", \"dog\", 10);",
+		"INSERT INTO animals VALUES FROM(\"Snoopy\", \"dog\", 3);",
+		"INSERT INTO animals VALUES FROM(\"Tweety\", \"bird\", 1);",
+		"INSERT INTO animals VALUES FROM(\"Joe\", \"bird\", 2);" };
+	vector<string> result = dmlParser.splitProgram(toSplit);
+
+	for (int i = 0; i < result.size(); i++) {
+		cout << result[i] << "\n";
 	}
 }

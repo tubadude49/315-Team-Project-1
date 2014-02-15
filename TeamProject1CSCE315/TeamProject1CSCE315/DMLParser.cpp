@@ -69,7 +69,7 @@ int DMLParser::parse(string &line) {
 	}
 	else if (tokens[0] == "OPEN") {
 		string outputRelation = tokens[1];
-		dataManager->relationFromFile(outputRelation, outputRelation + ".txt");
+		//dataManager->relationFromFile(outputRelation, outputRelation + ".txt");
 	}
 	else if (tokens[0] == "CREATE TABLE") {
 		string outputRelation = tokens[1];
@@ -198,11 +198,24 @@ vector<string> DMLParser::splitProgram(string &input) {
 	while (reader)
 	{
 		string next = "";
-		if (reader.peek() != ';')
+		while (isspace(reader.peek()))
+		{
+			reader.get();
+		}
+		while (reader && reader.peek() != ';')
 		{
 			next += reader.get();
 		}
-		next += reader.get();
+		char c = reader.get();
+		if (c == ';')
+		{
+			next += c;
+		}
+		else
+		{
+			break;
+		}
+		
 		splitString.push_back(next);
 	}
 	return splitString;
