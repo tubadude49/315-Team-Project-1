@@ -15,14 +15,15 @@ Relation::Relation(){
 /*	Constructor with field definitions.
 Instantiating the relation without these fields is not possible.
 */
-Relation::Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey) {
+Relation::Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKeyIn) {
 	name = relationName;
 	for (int i = 0; i < attributeNames.size(); i++) {
 		attributes.push_back(Attribute(attributeNames[i], attributeTypes[i]));
-		if (primaryKey == attributeNames[i]) {
+		if (primaryKeyIn == attributeNames[i]) {
 			primaryKeyIndex = i;
 		}
 	}
+	primaryKey = primaryKeyIn;
 }
 
 /* 	Destructor
@@ -99,5 +100,6 @@ unsigned int Relation::getPrimaryKeyIndex()
 
 string Relation::getPrimaryKey()
 {
-	return attributes[primaryKeyIndex].getName();
+	//return attributes[primaryKeyIndex].getName();
+	return primaryKey;
 }

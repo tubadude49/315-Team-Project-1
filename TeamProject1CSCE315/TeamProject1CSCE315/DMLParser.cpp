@@ -24,8 +24,9 @@ Parse Response Codes
 0x7: missing keyword "SET" in "UPDATE"
 0x8: missing keyword "WHERE" in "UPDATE"
 0x9: missing keyword "PRIMARY KEY" in "CREATE TABLE"
+0xA: missing keyword "WHERE" in "DELETE FROM"
 
-0xA: std::invalid_argument was thrown by DMLParser::parse
+0xB: std::invalid_argument was thrown by DMLParser::parse
 
 0xE: not yet implemented
 */
@@ -49,7 +50,6 @@ int DMLParser::parse(string &line) {
 					booleanArgs.push_back(tokens[i]);
 				}
 				dataManager->update(outputRelation, setArgs, booleanArgs);
-				dataManager->addBuildCmd(outputRelation, line);
 			}
 			else {
 				return 0x8;
@@ -84,13 +84,12 @@ int DMLParser::parse(string &line) {
 			}
 			string primaryKey;
 			if (tokens[resumeAt] == "PRIMARY KEY") {
-				primaryKey = tokens[resumeAt + 1];
+				primaryKey = tokens[resumeAt + 2];
 			}
 			else {
 				return 0x9;
 			}
 			dataManager->create(outputRelation, attrNames, attrTypes, primaryKey);
-			dataManager->addBuildCmd(outputRelation, line);
 		}
 		else {
 			return 0x6;
@@ -105,7 +104,6 @@ int DMLParser::parse(string &line) {
 					values.push_back(tokens[i]);
 				}
 				dataManager->insert(outputRelation, values);
-				dataManager->addBuildCmd(outputRelation, line);
 			}
 			else {
 				return 0x6;
@@ -116,36 +114,31 @@ int DMLParser::parse(string &line) {
 		}
 	}
 	else if (tokens[0] == "DELETE FROM") {
+		string outputRelation = tokens[1];
+		if (tokens[2] == "WHERE") {
+			vector<string> booleanArgs;
+			if (tokens[3] == "(") {
+				for (int i = 3; tokens[i] != ")" && i < tokens.size(); i++) {
+					booleanArgs.push_back(tokens[i]);
+				}
+			}
+			else {
+				booleanArgs.push_back(tokens[3]);
+				booleanArgs.push_back(tokens[4]);
+				booleanArgs.push_back(tokens[5]);
+			}
+			dataManager->del(outputRelation, booleanArgs); // this will not work
+		}
+		else {
+			return 0xA;
+		}
 		return 0xE;
 	}
 	else if (tokens[1] == "<-") {
 		string outputRelation = tokens[0];
 		if (tokens[2] == "project" || tokens[2] == "rename" || tokens[2] == "select") {
-			if (tokens[3] == "(") {
-				vector<string> newArgs;
-				int oldRelationIndex = 0;
-				for (int i = 0; tokens[i] != ")"; i++) {
-					newArgs.push_back(tokens[i]);
-					oldRelationIndex = i + 2;
-				}
-				string oldRelation = tokens[oldRelationIndex];
-				cout << "old relation = " << oldRelation << " new relation = " << outputRelation << endl;
-				if (tokens[2] == "project") {
-					dataManager->project(oldRelation, outputRelation, newArgs);
-					dataManager->addBuildCmd(outputRelation, line);
-				}
-				else if (tokens[2] == "rename") {
-					dataManager->rename(oldRelation, outputRelation, newArgs);
-					dataManager->addBuildCmd(outputRelation, line);
-				}
-				else if (tokens[2] == "select") {
-					dataManager->select(oldRelation, outputRelation, newArgs);
-					dataManager->addBuildCmd(outputRelation, line);
-				}
-			}
-			else {
-				return 0x6;
-			}
+			string o = parseComplex(tokens, 2, outputRelation);
+			cout << "parsed Complex: " << o << endl;
 		}	
 		else {
 			string firstRelation = tokens[2];
@@ -153,19 +146,15 @@ int DMLParser::parse(string &line) {
 			string secondRelation = tokens[4];
 			if(op == "+") {
 				dataManager->setUnion(firstRelation, secondRelation, outputRelation);
-				dataManager->addBuildCmd(outputRelation, line);
 			}
 			else if(op == "-") {
 				dataManager->setDifference(firstRelation, secondRelation, outputRelation);
-				dataManager->addBuildCmd(outputRelation, line);
 			}
 			else if(op == "*") {
 				dataManager->crossProduct(firstRelation, secondRelation, outputRelation);
-				dataManager->addBuildCmd(outputRelation, line);
 			}
 			else if(op == "JOIN") {
 				dataManager->naturalJoin(firstRelation, secondRelation, outputRelation);
-				dataManager->addBuildCmd(outputRelation, line);
 			}
 			else {
 				return 0x3;
@@ -178,6 +167,60 @@ int DMLParser::parse(string &line) {
 		
 	//cout << "[DMLParser]: " << line << endl;
 	return 0x0;
+}
+
+string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRelation) {
+	for (int i = startAt; i < tokens.size(); i++) {
+		cout << tokens[i] << ",";
+	}
+	cout << endl;
+	if (tokens[startAt] == "(") {
+		if (tokens[startAt + 1] == "project" || tokens[startAt + 1] == "select" || tokens[startAt + 1] == "rename") {
+			string operation = tokens[startAt + 1];
+			vector<string> args;
+			int startIncr = 0;
+			for (int i = startAt + 3; tokens[i] != ")" && i < tokens.size(); i++) {
+				args.push_back(tokens[i]);
+				startIncr = i + 2;
+			}
+			string source = parseComplex(tokens, startIncr, destRelation);
+			if (operation == "project") {
+				dataManager->project(source, destRelation, args);
+			}
+			else if (operation == "select") {
+				dataManager->select(source, destRelation, args);
+			}
+			else {
+				dataManager->rename(source, destRelation, args);
+			}
+			return destRelation;
+		}
+	}
+	else if (tokens[startAt] == "project" || tokens[startAt] == "select" || tokens[startAt] == "rename") {
+		startAt--;
+		string operation = tokens[startAt + 1];
+		vector<string> args;
+		int startIncr = 0;
+		for (int i = startAt + 3; tokens[i] != ")" && i < tokens.size(); i++) {
+			args.push_back(tokens[i]);
+			startIncr = i + 2;
+		}
+		string source = parseComplex(tokens, startIncr, destRelation);
+		if (operation == "project") {
+			dataManager->project(source, destRelation, args);
+		}
+		else if (operation == "select") {
+			dataManager->select(source, destRelation, args);
+		}
+		else {
+			dataManager->rename(source, destRelation, args);
+		}
+		return destRelation;
+	}
+	else {
+		return tokens[startAt];
+	}
+	
 }
 
 DMLParser::DMLParser(DataManager* dataManager) {
@@ -203,8 +246,6 @@ int DMLParser::parseProgram(string &programs) {
 	return 0x0;
 }
 
-/*assumptions: takes in a command string such as "SHOW animals; \n WRITE animals; \nOPEN animals;", and 
-produces a vector<string> that contains { "SHOW animals", "WRITE animals", "OPEN animals" }*/
 vector<string> DMLParser::splitProgram(string &input) {
 	stringstream reader(input);
 	vector<string> splitString;

@@ -11,7 +11,7 @@ SHOW test_Select1;
 test_Select2 <- select (Test_Types == "Type2") table1;
 SHOW test_Select2;
 
-test_ <- select (Test_Types == "Type1") (select (Test_Numbers1 >= 444) table1);
+test_Double_Select <- select (Test_Types == "Type1") (select (Test_Numbers1 >= 444) table1);
 SHOW test_Double_Select;
 
 CREATE TABLE table2 (Test_Names1 VARCHAR(20)) PRIMARY KEY (Test_Names1);

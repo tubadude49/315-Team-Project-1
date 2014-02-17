@@ -18,6 +18,8 @@ class DMLParser {
 private:
 	DataManager* dataManager;
 	int parse(string &line);
+	string getRelation(vector<string> tokens, int startAt, string recursiveRelation);
+	string parseComplex(vector<string> tokens, int startAt, string recursiveRelation);
 public:
 	DMLParser(DataManager* dataManager);
 	~DMLParser();

@@ -23,6 +23,7 @@ class Relation
 
 	string name;
 	unsigned int primaryKeyIndex;
+	string primaryKey;
 	vector<Attribute> attributes;
 	vector<vector<string>> tuples; //relation[tuple][attribute]
 	vector<string> buildCmds;

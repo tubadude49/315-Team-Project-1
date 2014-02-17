@@ -35,16 +35,6 @@ DataManager::DataManager() {
 DataManager::~DataManager() {
 }
 
-/*	Add a build command to a relation, to be saved to file.
-*/
-void DataManager::addBuildCmd(string &relationName, string &buildCmd) {
-	Relation* relation = getRelationByName(relationName);
-
-	if (relation != NULL) {
-		relation->addCmd(buildCmd);
-	}
-}
-
 /*	Create a new relation with the given attribute names and attribute types
 */
 void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey) {
@@ -564,8 +554,24 @@ void DataManager::relationToFile(string relationName){
 	Relation* relation = getRelationByName(relationName);
 	string name = relation->name + ".txt";
 	ofstream out(name.c_str());
-	for (int i = 0; i < relation->buildCmds.size(); i++){
-		out << relation->buildCmds[i];
+	out << "CREATE TABLE " << relation->name << "(";
+	for (int i = 0; i < relation->attributes.size(); i++) {
+		out << relation->attributes[i].getName() << " " << relation->attributes[i].getType();
+		if (i + 1 < relation->attributes.size()) out << ", ";
+	}
+	out << ") PRIMARY KEY(" << relation->getPrimaryKey() << ");";
+	for (int i = 0; i < relation->tuples.size(); i++){
+		out << "INSERT INTO " << relation->name << " VALUES FROM (";
+		for (int j = 0; j < relation->tuples[i].size(); j++){
+			if (relation->attributes[j].getType()[0] == 'V') {
+				out << '\"' << relation->tuples[i][j] << '\"';
+			}
+			else {
+				out << relation->tuples[i][j];
+			}
+			if (j + 1 < relation->tuples[i].size()) out << ", ";
+		}
+		out << ");";
 	}
 	out.close();
 }
