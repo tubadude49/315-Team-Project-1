@@ -111,8 +111,7 @@ namespace DBMS_Engine_Tester
 			string unionRelatName = "Test_SetUnion";
 			vector<string> unionAttrNames = { "test", "name" };
 			vector<string> unionAttrTypes = { "INTEGER", "VARCHAR(20)" };
-			vector<string> unionTuples = { "1", "Thomas" };
-			vector<vector<string>> unionTupleResults = { unionTuples };
+			vector<vector<string>> unionTupleResults = { { "1", "Thomas" }, { "2", "Colin" }, { "2", "Jack" } };
 
 			dataManager.setUnion(dataRelatName1, dataRelatName2, unionRelatName);
 
