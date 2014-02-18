@@ -19,7 +19,7 @@ SHOW table2;
 WRITE table1;
 
 test_Project <- project (Team_First_Names1, Team_Last_Names1) table1;
-SHOW Test_Project;
+SHOW test_Project;
 
 test_Rename <- rename (Team_First_Names3, Team_Last_Names3, Team_Random_Numbers3, Team_Types3) table2;
 SHOW test_Rename;
