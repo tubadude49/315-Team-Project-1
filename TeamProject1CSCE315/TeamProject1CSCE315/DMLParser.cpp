@@ -205,7 +205,6 @@ string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRe
 				dataManager->setUnion(firstRelation, secondRelation, destRelation);
 			}
 			else if (op == "-") {
-				return 0x0;
 				dataManager->setDifference(firstRelation, secondRelation, destRelation);
 			}
 			else if (op == "*") {
