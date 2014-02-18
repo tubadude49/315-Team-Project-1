@@ -69,7 +69,7 @@ int DMLParser::parse(string &line) {
 	}
 	else if (tokens[0] == "OPEN") {
 		string outputRelation = tokens[1];
-		//dataManager->relationFromFile(outputRelation);
+		parseProgram(dataManager->relationFromFile(outputRelation));
 	}
 	else if (tokens[0] == "CREATE TABLE") {
 		string outputRelation = tokens[1];
@@ -105,6 +105,9 @@ int DMLParser::parse(string &line) {
 				}
 				dataManager->insert(outputRelation, values);
 			}
+			else if (tokens[3] == "RELATION") {
+				string o = parseComplex(tokens, 5, outputRelation);
+			}
 			else {
 				return 0x6;
 			}
@@ -123,31 +126,31 @@ int DMLParser::parse(string &line) {
 				}
 			}
 			else {
-				booleanArgs.push_back(tokens[3]);
-				booleanArgs.push_back(tokens[4]);
-				booleanArgs.push_back(tokens[5]);
+				for (int i = 3; tokens[i] != ";" && i < tokens.size(); i++) {
+					booleanArgs.push_back(tokens[i]);
+				}				
 			}
 			dataManager->del(outputRelation, booleanArgs); // this will not work
 		}
 		else {
 			return 0xA;
 		}
-		return 0xE;
 	}
 	else if (tokens[1] == "<-") {
 		string outputRelation = tokens[0];
 		if (tokens[2] == "project" || tokens[2] == "rename" || tokens[2] == "select") {
 			string o = parseComplex(tokens, 2, outputRelation);
-			cout << "parsed Complex: " << o << endl;
 		}	
 		else {
 			string firstRelation = tokens[2];
 			string op = tokens[3];
 			string secondRelation = tokens[4];
+			//cout << firstRelation << " " << op << " " << secondRelation << " = " << outputRelation << endl;
 			if(op == "+") {
 				dataManager->setUnion(firstRelation, secondRelation, outputRelation);
 			}
-			else if(op == "-") {
+			else if (op == "-") {
+				return 0x0;
 				dataManager->setDifference(firstRelation, secondRelation, outputRelation);
 			}
 			else if(op == "*") {
@@ -170,10 +173,10 @@ int DMLParser::parse(string &line) {
 }
 
 string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRelation) {
-	for (int i = startAt; i < tokens.size(); i++) {
+	/*for (int i = startAt; i < tokens.size(); i++) {
 		cout << tokens[i] << ",";
 	}
-	cout << endl;
+	cout << endl;*/
 	if (tokens[startAt] == "(") {
 		if (tokens[startAt + 1] == "project" || tokens[startAt + 1] == "select" || tokens[startAt + 1] == "rename") {
 			string operation = tokens[startAt + 1];
@@ -192,6 +195,25 @@ string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRe
 			}
 			else {
 				dataManager->rename(source, destRelation, args);
+			}
+			return destRelation;
+		}
+		else {
+			string firstRelation = tokens[startAt + 1];
+			string op = tokens[startAt + 2];
+			string secondRelation = tokens[startAt + 3];
+			if (op == "+") {
+				dataManager->setUnion(firstRelation, secondRelation, destRelation);
+			}
+			else if (op == "-") {
+				return 0x0;
+				dataManager->setDifference(firstRelation, secondRelation, destRelation);
+			}
+			else if (op == "*") {
+				dataManager->crossProduct(firstRelation, secondRelation, destRelation);
+			}
+			else if (op == "JOIN") {
+				dataManager->naturalJoin(firstRelation, secondRelation, destRelation);
 			}
 			return destRelation;
 		}
