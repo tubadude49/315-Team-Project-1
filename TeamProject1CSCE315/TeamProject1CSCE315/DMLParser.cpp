@@ -262,16 +262,16 @@ vector<string> DMLParser::splitProgram(string &input) {
 	while (reader)
 	{
 		string next = "";
-		while (isspace(reader.peek()))
+		while (isspace(reader.peek()))//Clear leading whitespace
 		{
 			reader.get();
 		}
-		while (reader && reader.peek() != ';')
+		while (reader && reader.peek() != ';')//Get everything up to semi-colon
 		{
 			next += reader.get();
 		}
 		char c = reader.get();
-		if (c == ';')
+		if (c == ';')//Add ;
 		{
 			next += c;
 		}
@@ -279,8 +279,7 @@ vector<string> DMLParser::splitProgram(string &input) {
 		{
 			break;
 		}
-		
-		splitString.push_back(next);
+		splitString.push_back(next);//Store command
 	}
 	return splitString;
 }
@@ -326,7 +325,7 @@ vector<string> DMLParser::split(string &input){
 			}
 
 			next = next.substr(1);
-			while (reader.peek() != 34)
+			while (reader.peek() != 34)//Get everything up to the next quote(34 is ASCII for ")
 			{
 				next += reader.get();
 			}
@@ -335,20 +334,20 @@ vector<string> DMLParser::split(string &input){
 
 		if (next.size() > 1 && next.find_last_of(")") == next.size() - 1)//Seperate ) if not VARCHAR
 		{
-			if (next.find("V") != 0)
+			if (next.find("V") != 0)//Not VARCHAR
 			{
 				next = next.substr(0, next.size() - 1);
 			}
-			else if (next.find(")") == next.find_last_of(")"))//VARCHAR
+			else if (next.find(")") == next.find_last_of(")"))//VARCHAR not in a statement
 			{
 				splitString.push_back(next);
 				continue;
 			}
 			else
 			{
-				next = next.substr(0, next.find(")"));//VARCHAR W/PARENS
+				next = next.substr(0, next.find(")"));//VARCHAR in a statement
 			}
-			if (next.find(")") != -1)
+			if (next.find(")") != -1)//Multiple )s to parse out
 			{
 				next = next.substr(0, next.size() - 1);
 				splitString.push_back(next);
