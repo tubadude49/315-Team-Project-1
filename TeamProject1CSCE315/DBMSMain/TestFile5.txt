@@ -8,6 +8,7 @@ SHOW animals;
 WRITE animals;
 
 OPEN animals;
+EXIT;
 
 CREATE TABLE tools (kind VARCHAR(8), weight INTEGER, cost INTEGER) PRIMARY KEY (kind);
 INSERT INTO tools VALUES FROM ("hammer", 3, 10);

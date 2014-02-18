@@ -1,4 +1,4 @@
-CREATE TABLE table1 (Test_Names VARCHAR(20), Test_Types VARCHAR(12), Test_Numbers INTEGER) PRIMARY KEY (Test_Names);
+CREATE TABLE table1 (Test_Names VARCHAR(20), Test_Types VARCHAR(12), Test_Numbers INTEGER) PRIMARY KEY (Test_Names, Test_Types);
 INSERT INTO table1 VALUES FROM ("TestName1", "TestType1", 111);
 INSERT INTO table1 VALUES FROM ("TestName2", "TestType2", 222);
 INSERT INTO table1 VALUES FROM ("TestName3", "TestType2", 333);
@@ -29,10 +29,10 @@ INSERT INTO table4 VALUES FROM ("TestFirstName1", "N/A", "TestType1", 111);
 INSERT INTO table4 VALUES FROM ("TestFirstName4", "TestLastName3", "TestType4", 111);
 INSERT INTO table4 VALUES FROM ("TestFirstName5", "N/A", "TestType4", 123);
 
-Test_Project <- project (Test_First_Names1, Test_Last_Names1) table3;
+test_Project <- project (Test_First_Names1, Test_Last_Names1) table3;
 SHOW test_Project;
 
-Test_Rename <- rename (NEW_Test_First_Names2, NEW_Test_Last_Names2, NEW_Test_Types2, NEW_Test_Numbers2) table4;
+test_Rename <- rename (NEW_Test_First_Names2, NEW_Test_Last_Names2, NEW_Test_Types2, NEW_Test_Numbers2) table4;
 SHOW test_Rename;
 
 test_Add <- table3 + table4;
