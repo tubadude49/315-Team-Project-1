@@ -316,12 +316,15 @@ void DataManager::project(string &relationName, string &newRelationName, vector<
 */
 void DataManager::rename(string &relationName, string &relationNewName, vector<string> &attributeNewName) {
 	Relation* relation = getRelationByName(relationName);
-	Relation newRelation = Relation(*relation);
-	newRelation.name = relationNewName;
-	for(int i=0;i<newRelation.attributes.size();i++) {
-		newRelation.attributes[i] = Attribute(attributeNewName[i], relation->attributes[i].getType());
+
+	if (relation != NULL) {
+		Relation newRelation = Relation(*relation);
+		newRelation.name = relationNewName;
+		for (int i = 0; i<newRelation.attributes.size(); i++) {
+			newRelation.attributes[i] = Attribute(attributeNewName[i], relation->attributes[i].getType());
+		}
+		database.push_back(newRelation);
 	}
-	database.push_back(newRelation);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
