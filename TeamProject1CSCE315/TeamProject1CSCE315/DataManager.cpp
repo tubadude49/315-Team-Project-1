@@ -121,6 +121,9 @@ void DataManager::show(string &relationName, ostream& os) {
 		}
 		os << "\n";
 	}
+	else {
+		os << "NULL relation: " << relationName << endl;
+	}
 }
 
 /*	Remove the requested relation name from storage in this data manager.
@@ -327,14 +330,6 @@ void DataManager::rename(string &relationName, string &relationNewName, vector<s
 void DataManager::setUnion(string &relationName1, string &relationName2, string &newRelationName) {
 	Relation* relation1 = getRelationByName(relationName1);
 	Relation* relation2 = getRelationByName(relationName2);
-
-	if (relation1->attributes.size() != relation2->attributes.size()) return;
-	for (int i = 0; i < relation1->attributes.size();i++) {
-		if (relation1->attributes[i].getName() != relation2->attributes[i].getName() ||
-			relation1->attributes[i].getType() != relation2->attributes[i].getType()) {
-			return;		//these two sets are not relatable or union-compatible
-		}
-	}	
 
 	Relation newRelation = Relation(*relation1);
 	newRelation.name = newRelationName;
