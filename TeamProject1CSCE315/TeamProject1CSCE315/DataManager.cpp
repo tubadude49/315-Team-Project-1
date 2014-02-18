@@ -260,7 +260,6 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 			}
 		}
 
-		cout << toDelete.size() << endl;
 		// Remove the marked relations
 		for (int i = 0; i < toDelete.size(); i++) {
 			newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
