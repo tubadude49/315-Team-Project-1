@@ -1,16 +1,10 @@
 CREATE TABLE table1 (Team_First_Names1 VARCHAR(20), Team_Last_Names1 VARCHAR(20), Team_Random_Numbers1 INTEGER, Team_Types1 VARCHAR(12)) PRIMARY KEY (Team_First_Names1, Team_Last_Names1);
-INSERT INTO table1 VALUES FROM ("Jason", "Sitzman", 349862, "team1");
-INSERT INTO table1 VALUES FROM ("Thomas", "Bateson", 438753, "team1");
-INSERT INTO table1 VALUES FROM ("Yankee", "Doodle", 348964, "team2");
-INSERT INTO table1 VALUES FROM ("Mary", "N/A", 236437, "team2");
-INSERT INTO table1 VALUES FROM ("Billy", "Bob", 839464, "team2");
-INSERT INTO table1 VALUES FROM ("That", "Guy", 105474, "team2");
-
-CREATE TABLE table2 (Team_First_Names2 VARCHAR(20), Team_Last_Names2 VARCHAR(20), Team_Random_Numbers2 INTEGER, Team_Types2 VARCHAR(12)) PRIMARY KEY (Team_First_Names2, Team_Last_Names2);
-INSERT INTO table2 VALUES FROM ("Billy", "Bob", 839464, "team2");
-INSERT INTO table2 VALUES FROM ("That", "Guy", 105474, "team2");
 INSERT INTO table2 VALUES FROM ("Colin", "Lenzen", 968743, "team1");
 INSERT INTO table2 VALUES FROM ("Josh", "Tutt", 349857, "team1");
+INSERT INTO table2 VALUES FROM ("Thomas", "Bateson", 438753, "team1");
+
+CREATE TABLE table2 (Team_First_Names2 VARCHAR(20), Team_Last_Names2 VARCHAR(20), Team_Random_Numbers2 INTEGER, Team_Types2 VARCHAR(12)) PRIMARY KEY (Team_First_Names2, Team_Last_Names2);
+INSERT INTO table2 VALUES FROM ("Colin", "Lenzen", 968743, "team1");
 INSERT INTO table2 VALUES FROM ("Jason", "Sitzman", 349862, "team1");
 INSERT INTO table2 VALUES FROM ("Thomas", "Bateson", 438753, "team1");
 
@@ -18,7 +12,6 @@ CREATE TABLE table3 (Test_Names1 VARCHAR(20), Test_Numbers1 INTEGER) PRIMARY KEY
 INSERT INTO table3 VALUES FROM ("Name1", 1);
 INSERT INTO table3 VALUES FROM ("Name2", 2);
 INSERT INTO table3 VALUES FROM ("Name3", 3);
-INSERT INTO table3 VALUES FROM ("Name4", 4);
 
 CREATE TABLE table4 (Test_Names2 VARCHAR(20), Test_Numbers2 INTEGER) PRIMARY KEY (Test_Names2);
 INSERT INTO table4 VALUES FROM ("Name5", 5);
@@ -62,7 +55,7 @@ SHOW test_Product1;
 test_Product2 <- table3 * table5;
 SHOW test_Product2;
 
-test_Set_Diff <- test_Product - table1;
+test_Set_Diff <- test_Product1 - table1;
 SHOW test_Set_Diff;
 
 SHOW test_failer;

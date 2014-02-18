@@ -7,10 +7,6 @@
 #include <iostream>
 #include <algorithm>
 
-/* 	Main implementation of the DMLParser.
-All functionality of the parser is here.
-*/
-
 /*
 Parse Response Codes
 
@@ -31,7 +27,6 @@ Parse Response Codes
 0xE: not yet implemented
 */
 int DMLParser::parse(string &line) {
-	//add try/catch for bounds checking (std::invalid_argument)
 	vector<string> tokens = split(line);
 	
 	if (tokens[0] == "EXIT") {
@@ -130,7 +125,7 @@ int DMLParser::parse(string &line) {
 					booleanArgs.push_back(tokens[i]);
 				}				
 			}
-			dataManager->del(outputRelation, booleanArgs); // this will not work
+			dataManager->del(outputRelation, booleanArgs);
 		}
 		else {
 			return 0xA;
@@ -145,7 +140,6 @@ int DMLParser::parse(string &line) {
 			string firstRelation = tokens[2];
 			string op = tokens[3];
 			string secondRelation = tokens[4];
-			//cout << firstRelation << " " << op << " " << secondRelation << " = " << outputRelation << endl;
 			if(op == "+") {
 				dataManager->setUnion(firstRelation, secondRelation, outputRelation);
 			}
@@ -172,10 +166,6 @@ int DMLParser::parse(string &line) {
 }
 
 string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRelation) {
-	/*for (int i = startAt; i < tokens.size(); i++) {
-		cout << tokens[i] << ",";
-	}
-	cout << endl;*/
 	if (tokens[startAt] == "(") {
 		if (tokens[startAt + 1] == "project" || tokens[startAt + 1] == "select" || tokens[startAt + 1] == "rename") {
 			string operation = tokens[startAt + 1];
