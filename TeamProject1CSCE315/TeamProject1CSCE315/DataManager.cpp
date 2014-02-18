@@ -428,12 +428,7 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	for (int i = 0; i < crossTuples.size(); i++)
 	{
 		crossRel->tuples.push_back(crossTuples[i]);
-<<<<<<< HEAD
-	}
-	
-=======
 	}	
->>>>>>> 191af184a97fbd97fed5f138abcda2e208d6dcf7
 }
 
 /*	In addition to these operations, we include the natural join operation.
