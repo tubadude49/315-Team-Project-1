@@ -247,27 +247,30 @@ bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> 
 */
 void DataManager::select(string &relationName, string &newRelationName, vector<string> booleanArgs) {
 	Relation* relation = getRelationByName(relationName);
-	Relation newRelation = Relation(*relation);
-	newRelation.name = newRelationName;
 
-	// Find the relations to remove
-	vector<int> toDelete;
-	for (int i = 0; i < newRelation.tuples.size(); i++) {
-		if (!compare(newRelation.attributes, newRelation.tuples[i], booleanArgs)) {
-			toDelete.push_back(i);
+	if (relation != NULL) {
+		Relation newRelation = Relation(*relation);
+		newRelation.name = newRelationName;
+
+		// Find the relations to remove
+		vector<int> toDelete;
+		for (int i = 0; i < newRelation.tuples.size(); i++) {
+			if (!compare(newRelation.attributes, newRelation.tuples[i], booleanArgs)) {
+				toDelete.push_back(i);
+			}
 		}
-	}
 
-	cout << toDelete.size() << endl;
-	// Remove the marked relations
-	for (int i = 0; i < toDelete.size(); i++) {
-		newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
-		for (int j = i + 1; j < toDelete.size(); j++) {
-			toDelete[j]--;
+		cout << toDelete.size() << endl;
+		// Remove the marked relations
+		for (int i = 0; i < toDelete.size(); i++) {
+			newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
+			for (int j = i + 1; j < toDelete.size(); j++) {
+				toDelete[j]--;
+			}
 		}
-	}
 
-	database.push_back(newRelation);
+		database.push_back(newRelation);
+	}
 }
 
 /*	select a subset of the attributes in a relation.
@@ -275,32 +278,35 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 */
 void DataManager::project(string &relationName, string &newRelationName, vector<string> &newAttributes) {
 	Relation* relation = getRelationByName(relationName);
-	Relation newRelation = Relation(*relation);
-	newRelation.name = newRelationName;
-	
-	vector<int> toRemove;
-	for (int i = 0; i < newRelation.attributes.size(); i++) {
-		bool keep = false;
-		for (int j = 0; j < newAttributes.size(); j++) {
-			if (newAttributes[j] == newRelation.attributes[i].getName()) {
-				keep = true;
+
+	if (relation != NULL) {
+		Relation newRelation = Relation(*relation);
+		newRelation.name = newRelationName;
+
+		vector<int> toRemove;
+		for (int i = 0; i < newRelation.attributes.size(); i++) {
+			bool keep = false;
+			for (int j = 0; j < newAttributes.size(); j++) {
+				if (newAttributes[j] == newRelation.attributes[i].getName()) {
+					keep = true;
+				}
+			}
+			if (!keep) {
+				toRemove.push_back(i);
 			}
 		}
-		if (!keep) {
-			toRemove.push_back(i);
-		}
-	}
 
-	for (int i = 0; i < toRemove.size(); i++) {
-		newRelation.attributes.erase(newRelation.attributes.begin() + toRemove[i]);
-		for (int j = 0; j < newRelation.tuples.size(); j++) {
-			newRelation.tuples[j].erase(newRelation.tuples[j].begin() + toRemove[i]);
+		for (int i = 0; i < toRemove.size(); i++) {
+			newRelation.attributes.erase(newRelation.attributes.begin() + toRemove[i]);
+			for (int j = 0; j < newRelation.tuples.size(); j++) {
+				newRelation.tuples[j].erase(newRelation.tuples[j].begin() + toRemove[i]);
+			}
+			for (int j = i + 1; j < toRemove.size(); j++) {
+				toRemove[j]--;
+			}
 		}
-		for (int j = i + 1; j < toRemove.size(); j++) {
-			toRemove[j]--;
-		}
+		database.push_back(newRelation);
 	}
-	database.push_back(newRelation);
 }
 	
 /*	rename the attributes in a relation.
