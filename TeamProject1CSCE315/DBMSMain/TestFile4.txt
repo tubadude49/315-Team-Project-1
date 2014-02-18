@@ -1,12 +1,12 @@
 CREATE TABLE table1 (Team_First_Names1 VARCHAR(20), Team_Last_Names1 VARCHAR(20), Team_Random_Numbers1 INTEGER, Team_Types1 VARCHAR(12)) PRIMARY KEY (Team_First_Names1, Team_Last_Names1);
-INSERT INTO table2 VALUES FROM ("Colin", "Lenzen", 968743, "team1");
-INSERT INTO table2 VALUES FROM ("Josh", "Tutt", 349857, "team1");
-INSERT INTO table2 VALUES FROM ("Thomas", "Bateson", 438753, "team1");
+INSERT INTO table1 VALUES FROM ("Colin", "Lenzen", 968743, "Team1");
+INSERT INTO table1 VALUES FROM ("Josh", "Tutt", 349857, "Team2");
+INSERT INTO table1 VALUES FROM ("Thomas", "Bateson", 438753, "Team1");
 
 CREATE TABLE table2 (Team_First_Names2 VARCHAR(20), Team_Last_Names2 VARCHAR(20), Team_Random_Numbers2 INTEGER, Team_Types2 VARCHAR(12)) PRIMARY KEY (Team_First_Names2, Team_Last_Names2);
-INSERT INTO table2 VALUES FROM ("Colin", "Lenzen", 968743, "team1");
-INSERT INTO table2 VALUES FROM ("Jason", "Sitzman", 349862, "team1");
-INSERT INTO table2 VALUES FROM ("Thomas", "Bateson", 438753, "team1");
+INSERT INTO table2 VALUES FROM ("Colin", "Lenzen", 968743, "Team1");
+INSERT INTO table2 VALUES FROM ("Jason", "Sitzman", 349862, "Team2");
+INSERT INTO table2 VALUES FROM ("Thomas", "Bateson", 438753, "Team1");
 
 CREATE TABLE table3 (Test_Names1 VARCHAR(20), Test_Numbers1 INTEGER) PRIMARY KEY (Test_Names1);
 INSERT INTO table3 VALUES FROM ("Name1", 1);
