@@ -417,14 +417,22 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	}
 
 	vector<vector<string>> tuples;
-	for (int i = 0; i < rel1->tuples.size(); i++)
-	{			
-		for (int j = 0; j < rel2->tuples.size(); j++)
-		{
-			tuples.push_back(rel1->tuples[i]);
-			tuples.push_back(rel2->tuples[j]);
+	for (int x = 0; x < rel1->tuples.size(); x++) {
+		vector<string> baseTuple;
+		for (int i = 0; i < rel1->tuples[x].size(); i++) {
+			baseTuple.push_back(rel1->tuples[x][i]);
 		}
-	}
+		for (int y = 0; y < rel2->tuples.size(); y++) {
+			vector<string> addTo;
+			for (int i = 0; i < baseTuple.size(); i++) {
+				addTo.push_back(baseTuple[i]);
+			}
+			for (int i = 0; i < rel2->tuples[y].size(); i++){
+				addTo.push_back(rel2->tuples[y][i]);
+			}
+			tuples.push_back(addTo);
+		}		
+	}	
 
 	create(newRelationName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
 	Relation* crossRel = getRelationByName(newRelationName);
