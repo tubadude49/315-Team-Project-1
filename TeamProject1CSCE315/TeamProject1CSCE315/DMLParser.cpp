@@ -351,17 +351,28 @@ vector<string> DMLParser::split(string &input){
 			{
 				next = next.substr(0, next.size() - 1);
 			}
-			else if (next.find(")") == next.find_last_of(")"))
+			else if (next.find(")") == next.find_last_of(")"))//VARCHAR
 			{
 				splitString.push_back(next);
 				continue;
 			}
 			else
 			{
-				next = next.substr(0, next.find(")"));
+				next = next.substr(0, next.find(")"));//VARCHAR W/PARENS
 			}
-			splitString.push_back(next);
-			splitString.push_back(")");
+			if (next.find(")") != -1)
+			{
+				next = next.substr(0, next.size() - 1);
+				splitString.push_back(next);
+				splitString.push_back(")");
+				splitString.push_back(")");
+			}
+			else
+			{
+				splitString.push_back(next);
+				splitString.push_back(")");
+			}
+			
 			continue;
 		}
 		
