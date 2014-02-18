@@ -29,10 +29,10 @@ Parse Response Codes
 int DMLParser::parse(string &line) {
 	vector<string> tokens = split(line);
 	
-	if (tokens[0] == "EXIT") {
+	if (tokens[0] == "EXIT") { //process EXIT
 		return 0x1;
 	}
-	else if (tokens[0] == "UPDATE") {
+	else if (tokens[0] == "UPDATE") { //process UPDATE
 		string outputRelation = tokens[1];
 		if (tokens[2] == "SET") {
 			vector<string> setArgs;
@@ -54,19 +54,19 @@ int DMLParser::parse(string &line) {
 			return 0x7;
 		}
 	}
-	else if (tokens[0] == "SHOW") {
+	else if (tokens[0] == "SHOW") { //process SHOW
 		string outputRelation = tokens[1];
 		dataManager->show(outputRelation, cout);
 	}
-	else if (tokens[0] == "WRITE") {
+	else if (tokens[0] == "WRITE") { //process WRITE
 		string outputRelation = tokens[1];
 		dataManager->relationToFile(outputRelation);		
 	}
-	else if (tokens[0] == "OPEN") {
+	else if (tokens[0] == "OPEN") { //process OPEN
 		string outputRelation = tokens[1];
 		parseProgram(dataManager->relationFromFile(outputRelation));
 	}
-	else if (tokens[0] == "CREATE TABLE") {
+	else if (tokens[0] == "CREATE TABLE") { //process CREATE TABLE
 		string outputRelation = tokens[1];
 		if (tokens[2] == "(") {
 			vector<string> attrNames;
@@ -90,7 +90,7 @@ int DMLParser::parse(string &line) {
 			return 0x6;
 		}
 	}
-	else if (tokens[0] == "INSERT INTO") {
+	else if (tokens[0] == "INSERT INTO") { //process INSERT INTO
 		string outputRelation = tokens[1];
 		if (tokens[2] == "VALUES FROM") {
 			if (tokens[3] == "(") {
@@ -111,7 +111,7 @@ int DMLParser::parse(string &line) {
 			return 0x4;
 		}
 	}
-	else if (tokens[0] == "DELETE FROM") {
+	else if (tokens[0] == "DELETE FROM") { //process DELETE FROM
 		string outputRelation = tokens[1];
 		if (tokens[2] == "WHERE") {
 			vector<string> booleanArgs;
@@ -131,7 +131,7 @@ int DMLParser::parse(string &line) {
 			return 0xA;
 		}
 	}
-	else if (tokens[1] == "<-") {
+	else if (tokens[1] == "<-") { //process any operators
 		string outputRelation = tokens[0];
 		if (tokens[2] == "project" || tokens[2] == "rename" || tokens[2] == "select") {
 			string o = parseComplex(tokens, 2, outputRelation);
@@ -167,7 +167,7 @@ int DMLParser::parse(string &line) {
 
 string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRelation) {
 	if (tokens[startAt] == "(") {
-		if (tokens[startAt + 1] == "project" || tokens[startAt + 1] == "select" || tokens[startAt + 1] == "rename") {
+		if (tokens[startAt + 1] == "project" || tokens[startAt + 1] == "select" || tokens[startAt + 1] == "rename") { // process a project/select/rename command
 			string operation = tokens[startAt + 1];
 			vector<string> args;
 			int startIncr = 0;
@@ -187,7 +187,7 @@ string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRe
 			}
 			return destRelation;
 		}
-		else {
+		else { //or check for operators
 			string firstRelation = tokens[startAt + 1];
 			string op = tokens[startAt + 2];
 			string secondRelation = tokens[startAt + 3];
@@ -206,7 +206,7 @@ string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRe
 			return destRelation;
 		}
 	}
-	else if (tokens[startAt] == "project" || tokens[startAt] == "select" || tokens[startAt] == "rename") {
+	else if (tokens[startAt] == "project" || tokens[startAt] == "select" || tokens[startAt] == "rename") { // process a project/select/rename command
 		startAt--;
 		string operation = tokens[startAt + 1];
 		vector<string> args;
@@ -227,7 +227,7 @@ string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRe
 		}
 		return destRelation;
 	}
-	else {
+	else { //return the table that is invoked
 		return tokens[startAt];
 	}
 	
@@ -241,11 +241,11 @@ DMLParser::~DMLParser() {
 }
 
 int DMLParser::parseProgram(string &programs) {
-	vector<string> program = splitProgram(programs);
+	vector<string> program = splitProgram(programs); //split the program into multiple lines
 	try {
-		for (string line : program) {
+		for (string line : program) { //loop through the programs
 			int error;
-			if (error = parse(line)) {
+			if (error = parse(line)) { //if an error is returned by the parse function, break and return the error
 				return error;
 			}
 		}
