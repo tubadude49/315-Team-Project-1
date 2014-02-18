@@ -1,3 +1,4 @@
+EXIT;
 CREATE TABLE table1 (Test_First_Names VARCHAR(20), Test_Last_Names VARCHAR(30), Test_Types VARCHAR(20), Test_Numbers1 INTEGER, Test_Numbers2 INTEGER) PRIMARY KEY (Test_First_Names, Test_Last_Names);
 INSERT INTO table1 VALUES FROM ("First1", "Last1", "Type1", 444, 1111111);
 INSERT INTO table1 VALUES FROM ("First2", "Last2", "Type2", 111, 5555555);
