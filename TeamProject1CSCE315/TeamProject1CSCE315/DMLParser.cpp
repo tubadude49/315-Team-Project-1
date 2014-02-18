@@ -323,9 +323,21 @@ vector<string> DMLParser::split(string &input){
 			reader.get();
 		}
 
-		if (next.size() > 1 && next.find("V") != 0 && next.find(")") == next.size() - 1)//Seperate ) if not VARCHAR
+		if (next.size() > 1 && next.find_last_of(")") == next.size() - 1)//Seperate ) if not VARCHAR
 		{
-			next = next.substr(0, next.size() - 1);
+			if (next.find("V") != 0)
+			{
+				next = next.substr(0, next.size() - 1);
+			}
+			else if (next.find(")") == next.find_last_of(")"))
+			{
+				splitString.push_back(next);
+				continue;
+			}
+			else
+			{
+				next = next.substr(0, next.find(")"));
+			}
 			splitString.push_back(next);
 			splitString.push_back(")");
 			continue;

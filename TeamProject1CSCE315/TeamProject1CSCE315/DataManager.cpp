@@ -385,7 +385,7 @@ void DataManager::setDifference(string &relationName1, string &relationName2, st
 	code by Colin Lenzen
 */
 void DataManager::crossProduct(string &relationName1, string &relationName2, string &newRelationName) {
-	Relation* rel1 = getRelationByName(relationName1);
+	/*Relation* rel1 = getRelationByName(relationName1);
 	Relation* rel2 = getRelationByName(relationName2);
 	vector<string> crossAttrNames;
 	vector<string> crossAttrTypes;
@@ -424,7 +424,7 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	{
 		crossRel->tuples.push_back(crossTuples[i]);
 	}
-	
+	*/
 }
 
 /*	In addition to these operations, we include the natural join operation.

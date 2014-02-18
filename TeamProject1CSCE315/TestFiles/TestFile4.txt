@@ -36,7 +36,7 @@ SHOW test_Select1;
 test_Select2 <- select (Test_Types1 == "Team2") table1;
 SHOW test_Select2;
 
-test_ <- select (Test_Types1 == "Team2") (select (Team_Random_Numbers1 >= 444444) table1);
+test_Double_Select <- select (Test_Types1 == "Team2") (select (Team_Random_Numbers1 >= 444444) table1);
 SHOW test_Double_Select;
 
 test_Product <- table1 * table2;
