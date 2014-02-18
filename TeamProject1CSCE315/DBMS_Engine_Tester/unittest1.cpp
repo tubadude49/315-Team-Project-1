@@ -212,8 +212,6 @@ namespace DBMS_Engine_Tester
 			dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
 
 			vector<vector<string>> solutionTuples = { { "1", "label1", "test" },
-														{ "1", "label1", "test" }, 
-														{ "3", "label2", "test" }, 
 														{ "3", "label2", "test" } };
 			vector<string> crossedNames = { "A", "B","X"};
 			vector<string> crossedTypes = { "INTEGER", "VARCHAR(1)","VARCHAR(10)" };
