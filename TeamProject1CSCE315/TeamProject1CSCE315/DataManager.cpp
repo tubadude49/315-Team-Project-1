@@ -121,6 +121,9 @@ void DataManager::show(string &relationName, ostream& os) {
 		}
 		os << "\n";
 	}
+	else {
+		os << "NULL relation: " << relationName << endl;
+	}
 }
 
 /*	Remove the requested relation name from storage in this data manager.
@@ -260,7 +263,6 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 			}
 		}
 
-		cout << toDelete.size() << endl;
 		// Remove the marked relations
 		for (int i = 0; i < toDelete.size(); i++) {
 			newRelation.tuples.erase(newRelation.tuples.begin() + toDelete[i]);
@@ -314,12 +316,15 @@ void DataManager::project(string &relationName, string &newRelationName, vector<
 */
 void DataManager::rename(string &relationName, string &relationNewName, vector<string> &attributeNewName) {
 	Relation* relation = getRelationByName(relationName);
-	Relation newRelation = Relation(*relation);
-	newRelation.name = relationNewName;
-	for(int i=0;i<newRelation.attributes.size();i++) {
-		newRelation.attributes[i] = Attribute(attributeNewName[i], relation->attributes[i].getType());
+
+	if (relation != NULL) {
+		Relation newRelation = Relation(*relation);
+		newRelation.name = relationNewName;
+		for (int i = 0; i<newRelation.attributes.size(); i++) {
+			newRelation.attributes[i] = Attribute(attributeNewName[i], relation->attributes[i].getType());
+		}
+		database.push_back(newRelation);
 	}
-	database.push_back(newRelation);
 }
 
 /*	compute the union of two relations; the relations must be union-compatible.
@@ -328,14 +333,6 @@ void DataManager::rename(string &relationName, string &relationNewName, vector<s
 void DataManager::setUnion(string &relationName1, string &relationName2, string &newRelationName) {
 	Relation* relation1 = getRelationByName(relationName1);
 	Relation* relation2 = getRelationByName(relationName2);
-
-	if (relation1->attributes.size() != relation2->attributes.size()) return;
-	for (int i = 0; i < relation1->attributes.size();i++) {
-		if (relation1->attributes[i].getName() != relation2->attributes[i].getName() ||
-			relation1->attributes[i].getType() != relation2->attributes[i].getType()) {
-			return;		//these two sets are not relatable or union-compatible
-		}
-	}	
 
 	Relation newRelation = Relation(*relation1);
 	newRelation.name = newRelationName;
@@ -431,8 +428,12 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	for (int i = 0; i < crossTuples.size(); i++)
 	{
 		crossRel->tuples.push_back(crossTuples[i]);
+<<<<<<< HEAD
 	}
 	
+=======
+	}	
+>>>>>>> 191af184a97fbd97fed5f138abcda2e208d6dcf7
 }
 
 /*	In addition to these operations, we include the natural join operation.

@@ -15,7 +15,7 @@ SHOW test_failer;
 test_bad_command <- project (t) table1;
 table2_to_table1 <- rename (Test_Numbers7, Test_Numbers8, Test_Numbers9) table2;
 
-UPDATE table2 SET Test_Numbers4 = 0 WHERE (Test_Numbers4 < 0);
+UPDATE table2 SET Test_Numbers4 = 0 WHERE Test_Numbers4 < 0;
 SHOW table2;
 
 INSERT INTO table1 VALUES FROM RELATION (select (Test_Numbers9 > 0) table2_to_table1);

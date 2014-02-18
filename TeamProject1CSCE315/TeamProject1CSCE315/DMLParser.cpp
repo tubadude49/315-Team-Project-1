@@ -149,8 +149,7 @@ int DMLParser::parse(string &line) {
 			if(op == "+") {
 				dataManager->setUnion(firstRelation, secondRelation, outputRelation);
 			}
-			else if (op == "-") {
-				return 0x0;
+			else if (op == "-") {				
 				dataManager->setDifference(firstRelation, secondRelation, outputRelation);
 			}
 			else if(op == "*") {
@@ -206,7 +205,6 @@ string DMLParser::parseComplex(vector<string> tokens, int startAt, string destRe
 				dataManager->setUnion(firstRelation, secondRelation, destRelation);
 			}
 			else if (op == "-") {
-				return 0x0;
 				dataManager->setDifference(firstRelation, secondRelation, destRelation);
 			}
 			else if (op == "*") {
