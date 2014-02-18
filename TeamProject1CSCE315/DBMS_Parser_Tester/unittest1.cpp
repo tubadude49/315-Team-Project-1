@@ -234,18 +234,5 @@ namespace DBMS_Parser_Tester
 			}
 			Assert::AreEqual(result.size(), solution.size());
 		}
-		TEST_METHOD(TestParse)
-		{
-			DataManager dataManager = DataManager();
-			DMLParser dmlParser = DMLParser(&dataManager);
-
-			string myProgram = "My Program";
-
-			Assert::IsFalse(dmlParser.parseProgram(myProgram));
-
-			/*	Input from a file name
-				Return the contents of the file in a single string
-			*/
-		}
 	};
 }
