@@ -334,22 +334,34 @@ void DataManager::setUnion(string &relationName1, string &relationName2, string 
 	Relation newRelation = Relation(*relation1);
 	newRelation.name = newRelationName;
 	newRelation.tuples.clear();
-
-	// Find similar tuples then add them to the new relation
-	for (int i = 0; i < relation1->tuples.size(); i++) {
-		for (int h = 0; h < relation2->tuples.size(); h++) {		
+	for (int i = 0; i < relation1->tuples.size(); i++)//Add all tuples of first
+	{
+		newRelation.tuples.push_back(relation1->tuples[i]);
+	}
+	for (int j = 0; j < relation2->tuples.size(); j++)
+	{
+		bool notAdded = true;
+		for (int i = 0; i < relation1->tuples.size(); i++)//Check if first already added it
+		{
 			bool isSame = true;
-			for (int j = 0; j < relation1->tuples[i].size(); j++) {
-				if (relation1->tuples[i][j] != relation2->tuples[h][j]) {
+			for (int k = 0; k < relation1->tuples[i].size(); k++) 
+			{
+				if (relation1->tuples[i][k] != relation2->tuples[j][k]) {
 					isSame = false;
 					break;
-				}				
-				if (!isSame) break;
+				}
 			}
-			if (isSame) {
-				newRelation.tuples.push_back(relation1->tuples[i]);
+			if (isSame)
+			{
+				notAdded = true;
+				break;
 			}
 		}
+		if (notAdded)//Add unique tuples
+		{
+			newRelation.tuples.push_back(relation2->tuples[j]);
+		}
+		newRelation.tuples.push_back(relation1->tuples[j]);
 	}
 	
 	database.push_back(newRelation);
