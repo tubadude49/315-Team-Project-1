@@ -13,8 +13,7 @@
 #include <algorithm>
 using namespace std;
 
-/*	Get a relation by its name field.
-*/
+
 Relation* DataManager::getRelationByName(string &relationName) {
 	// Loop through this backwards to search through newly created relations first and older ones last
 	for (int i = database.size() - 1; i >= 0; i--) {
@@ -25,24 +24,20 @@ Relation* DataManager::getRelationByName(string &relationName) {
 	return NULL;
 }
 
-/*	Default Constructor.
-*/
+
 DataManager::DataManager() {
 }
 
-/*	Default Destructor.
-*/
+
 DataManager::~DataManager() {
 }
 
-/*	Create a new relation with the given attribute names and attribute types
-*/
+
 void DataManager::create(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey) {
 	database.push_back(Relation(relationName, attributeNames, attributeTypes, primaryKey));
 }
 
-/*	Insert a tuple (row) into a relation.
-*/
+
 void DataManager::insert(string &relationName, vector<string> &values) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -51,9 +46,7 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 	}
 }
 
-/*	Update a tuple to represent new information.
-	Search by tuple (not index).
-*/
+
 void DataManager::update(string &relationName, vector<string> &oldValues, vector<string> &newValues) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -66,9 +59,6 @@ void DataManager::update(string &relationName, vector<string> &oldValues, vector
 	}
 }
 
-/*	Delete a tuple.
-	Search by tuple (not index).
-*/
 void DataManager::del(string &relationName, vector<string> &values) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -81,9 +71,6 @@ void DataManager::del(string &relationName, vector<string> &values) {
 	}
 }
 
-/*	Print the given relation to an ostream,
-	If unsure, send cout as the ostream.
-*/
 void DataManager::show(string &relationName, ostream& os) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -126,9 +113,7 @@ void DataManager::show(string &relationName, ostream& os) {
 	}
 }
 
-/*	Remove the requested relation name from storage in this data manager.
-	Effectively deletes it from memory
-*/
+
 void DataManager::drop(string &relationName) {
 	for (int i = database.size() - 1; i >= 0; i--) {
 		if (database[i].is(relationName)) {
@@ -137,8 +122,7 @@ void DataManager::drop(string &relationName) {
 	}
 }
 
-/*	Write the given relation to a file.
-*/
+
 void DataManager::write(string &relationName) {
 	Relation* relation = getRelationByName(relationName);
 	vector<string> buildCmds = relation->buildCmds;
@@ -149,9 +133,7 @@ void DataManager::write(string &relationName) {
 	ofs.close();
 }
 
-/*	Perform a shell sort on a vector<string>.
-	Best performance is O(n). Worst is O(n*log^2(n)).
-*/
+
 void DataManager::shellSort(vector<string> &toSort) {
 	for (int h = toSort.size(); h /= 2;) {
 		for (int i = h; i < toSort.size(); i++) {
@@ -215,10 +197,10 @@ bool parseBooleanStmt(string type, string arg1, string op, string arg2) {
 	return false;
 }
 
-/*	Compare a given tuple. Attributes are used for type information. 
-	booleanArgs hold the necessarily comparison information.
-	For internal use by Select
-	code by Thomas Bateson
+/*	Compare a given tuple. Attributes are used for type information.
+booleanArgs hold the necessarily comparison information.
+For internal use by Select
+code by Thomas Bateson
 */
 bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> booleanArgs) {
 	bool shouldKeep = false;
@@ -245,9 +227,7 @@ bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> 
 	return shouldKeep;
 }
 
-/*	select the tuples in a relation that satisfy a particular condition.
-	code by Thomas Bateson
-*/
+
 void DataManager::select(string &relationName, string &newRelationName, vector<string> booleanArgs) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -275,9 +255,7 @@ void DataManager::select(string &relationName, string &newRelationName, vector<s
 	}
 }
 
-/*	select a subset of the attributes in a relation.
-	code by Jason Sitzman
-*/
+
 void DataManager::project(string &relationName, string &newRelationName, vector<string> &newAttributes) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -311,9 +289,7 @@ void DataManager::project(string &relationName, string &newRelationName, vector<
 	}
 }
 	
-/*	rename the attributes in a relation.
-	code by Thomas Bateson.
-*/
+
 void DataManager::rename(string &relationName, string &relationNewName, vector<string> &attributeNewName) {
 	Relation* relation = getRelationByName(relationName);
 
@@ -327,9 +303,7 @@ void DataManager::rename(string &relationName, string &relationNewName, vector<s
 	}
 }
 
-/*	compute the union of two relations; the relations must be union-compatible.
-	code by Thomas Bateson.
-*/
+
 void DataManager::setUnion(string &relationName1, string &relationName2, string &newRelationName) {
 	Relation* relation1 = getRelationByName(relationName1);
 	Relation* relation2 = getRelationByName(relationName2);
@@ -370,9 +344,7 @@ void DataManager::setUnion(string &relationName1, string &relationName2, string 
 	database.push_back(newRelation);
 }
 
-/*	compute the set difference of two relations; the relations must be union-compatible.
-	Author: Josh Tutt
-*/
+
 void DataManager::setDifference(string &relationName1, string &relationName2, string &newRelationName) {
 	//Create pointers to the indicated relations
 	Relation* relation1 = getRelationByName(relationName1);
@@ -396,9 +368,6 @@ void DataManager::setDifference(string &relationName1, string &relationName2, st
 }
 
 
-/*	compute the Cartesian product of two relations.
-	code by Colin Lenzen
-*/
 void DataManager::crossProduct(string &relationName1, string &relationName2, string &newRelationName) {
 	Relation* rel1 = getRelationByName(relationName1);
 	Relation* rel2 = getRelationByName(relationName2);
@@ -442,20 +411,7 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	}	
 }
 
-/*	In addition to these operations, we include the natural join operation.
-	The result of the natural join between relations R and S is the set of all combinations of tuples in R and S
-	that are equal on their common attribute names. The common attributes only appear once in the result.
 
-	Natural join is expressible using the six fundamental operations,
-	but a direct implementation for joins can reduce the need to use the (expensive) Cartesian product operation.
-
-	Author: Josh Tutt
-
-	NOTE: Currently, this function creates a duplicate of the first relation if there are no shared attributes
-	or attempts to create a new relation from a Natural Join of the two.
-	However, it does not yet populate any rows of the new relation
-	but only decides the correct attribute columns to include.
-*/
 void DataManager::naturalJoin(string &relationName1, string &relationName2, string newName) {
 	//Create pointers to the indicated relations
 	Relation* relationPointer1 = getRelationByName(relationName1);
