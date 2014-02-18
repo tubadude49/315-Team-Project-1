@@ -1,3 +1,4 @@
+EXIT;
 CREATE TABLE table1 (Test_Numbers1 INTEGER, Test_Numbers2 INTEGER, Test_Numbers3 INTEGER) PRIMARY KEY (Test_Numbers1, Test_Numbers2, Test_Numbers3);
 INSERT INTO table1 VALUES FROM (0, 0, 0);
 INSERT INTO table1 VALUES FROM (111, 111, 111);
