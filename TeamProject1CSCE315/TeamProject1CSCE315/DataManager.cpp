@@ -404,41 +404,33 @@ void DataManager::crossProduct(string &relationName1, string &relationName2, str
 	Relation* rel2 = getRelationByName(relationName2);
 	vector<string> crossAttrNames;
 	vector<string> crossAttrTypes;
-	vector<vector<string>> crossTuples;
 	string crossPrimaryKey = rel1->getPrimaryKey();
 	for (int i = 0; i < rel1->attributes.size(); i++)
 	{
-		for (int j = 0; j < rel2->attributes.size(); j++)
+		crossAttrNames.push_back(rel1->attributes[i].getName());
+		crossAttrTypes.push_back(rel1->attributes[i].getType());		
+	}
+	for (int j = 0; j < rel2->attributes.size(); j++)
+	{
+		crossAttrNames.push_back(rel2->attributes[j].getName());
+		crossAttrTypes.push_back(rel2->attributes[j].getType());
+	}
+
+	vector<vector<string>> tuples;
+	for (int i = 0; i < rel1->tuples.size(); i++)
+	{			
+		for (int j = 0; j < rel2->tuples.size(); j++)
 		{
-			crossAttrNames.push_back(rel1->attributes[i].getName());
-			crossAttrNames.push_back(rel1->attributes[j].getName());
-			crossAttrTypes.push_back(rel1->attributes[i].getType());
-			crossAttrTypes.push_back(rel2->attributes[j].getType());
+			tuples.push_back(rel1->tuples[i]);
+			tuples.push_back(rel2->tuples[j]);
 		}
 	}
 
-	for (int x = 0; x < rel1->tuples.size(); x++)
-	{
-		for (int y = 0; y < rel2->tuples.size(); y++)
-		{
-			vector<string> curTuple;
-			for (int i = 0; i < rel1->tuples[x].size(); i++)
-			{			
-				for (int j = 0; j < rel2->tuples[y].size(); j++)
-				{
-					curTuple.push_back(rel1->tuples[x][i]);
-					curTuple.push_back(rel2->tuples[y][j]);
-				}
-			}
-			crossTuples.push_back(curTuple);
-			
-		}
-	}
 	create(newRelationName, crossAttrNames, crossAttrTypes, crossPrimaryKey);
 	Relation* crossRel = getRelationByName(newRelationName);
-	for (int i = 0; i < crossTuples.size(); i++)
+	for (int i = 0; i < tuples.size(); i++)
 	{
-		crossRel->tuples.push_back(crossTuples[i]);
+		crossRel->tuples.push_back(tuples[i]);
 	}	
 }
 

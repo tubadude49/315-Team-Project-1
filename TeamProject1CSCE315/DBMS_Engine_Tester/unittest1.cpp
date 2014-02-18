@@ -211,9 +211,12 @@ namespace DBMS_Engine_Tester
 			string crossName = "Test_CrossProduct";
 			dataManager.crossProduct(dataRelatName1, dataRelatName2, crossName);
 
-			vector<vector<string>> solutionTuples = { { "1", "test", "3", "test" }, { "1", "test", "label2", "test" }, { "label1", "test", "3", "test" }, { "label1", "test", "label2", "test" } };
-			vector<string> crossedNames = { "A", "X","B","X"};
-			vector<string> crossedTypes = { "INTEGER", "VARCHAR(10)","VARCHAR(1)","VARCHAR(10)" };
+			vector<vector<string>> solutionTuples = { { "1", "label1", "test" },
+														{ "1", "label1", "test" }, 
+														{ "3", "label2", "test" }, 
+														{ "3", "label2", "test" } };
+			vector<string> crossedNames = { "A", "B","X"};
+			vector<string> crossedTypes = { "INTEGER", "VARCHAR(1)","VARCHAR(10)" };
 			Assert::IsTrue(dataManager.testRelation(crossName, crossedNames, crossedTypes, solutionTuples));
 		}
 		TEST_METHOD(TestSetProject)
