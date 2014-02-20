@@ -79,27 +79,54 @@ void DataManager::show(string &relationName, ostream& os) {
 		
 		vector<Attribute> attrs = relation->attributes;
 		vector<int> widths(attrs.size());
+		vector<string> fullNames;
 		for (int i = 0; i < attrs.size(); i++)
 		{
 			Attribute attr = attrs[i];
 			
 			string fullname = " " + attr.getName() + "[" + attr.getType() + "]";
-
 			widths[i] = max(widths[i], (int)fullname.length());			//Either length of title or largest data
-			os << setw(widths[i]) << fullname;
-
+			fullNames.push_back(fullname);
+			//os << setw(widths[i]) << fullNames[i];
 		}
-		os << "\n";
-		
-		for (int i = 0; i < relation->tuples.size(); i++)
+
+		int wrap_index = 0;
+		int j = 0;
+		int j_min = 0;
+		int j_max = 0;
+		if (relation->tuples.size() == 0)
 		{
-			for (int j = 0; j < relation->tupleSize(i); j++)
+			return;
+		}
+		while (j_min < relation->tuples[0].size())
+		{
+			j_max = j_min;
+			while (j_max < relation->tupleSize(0))
 			{
-				os << setw(widths[j]) << relation->at(i, j);
+				wrap_index += widths[j_max];
+				if (wrap_index <= 80)
+				{
+					os << setw(widths[j_max]) << fullNames[j_max];
+					j_max++;
+				}
+				else
+				{
+					wrap_index = 0;
+					break;
+				}
 			}
 			os << "\n";
+			for (int i = 0; i < relation->tuples.size(); i++)
+			{
+				for (j = j_min; j < j_max; j++)
+				{
+					os << setw(widths[j]) << relation->at(i, j);
+				}
+				os << "\n";
+			}
+			j_min = j_max;
+			os << "\n\n";
 		}
-		os << "\n";
 	}
 	else {
 		os << "NULL relation: " << relationName << endl;
