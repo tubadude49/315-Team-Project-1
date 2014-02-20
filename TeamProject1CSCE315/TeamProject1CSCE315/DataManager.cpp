@@ -74,27 +74,20 @@ void DataManager::del(string &relationName, vector<string> &values) {
 void DataManager::show(string &relationName, ostream& os) {
 	Relation* relation = getRelationByName(relationName);
 
-	if (relation != NULL) {
+	if (relation != NULL) {	
 		os << relation->getName() << "\n";
 		
 		vector<Attribute> attrs = relation->attributes;
 		vector<int> widths(attrs.size());
-		for (int j = 0; j < attrs.size(); j++ )
+		for (int i = 0; i < attrs.size(); i++)
 		{
-			Attribute attr = attrs[j];
+			Attribute attr = attrs[i];
 			
-			string typestr = attr.getType();
-			int varcharPos = typestr.find("(");
-			if((varcharPos != -1) && (typestr.find(" X ") == -1))//Type is VARCHAR and field is not crossed
-			{
-				string parenContent =  typestr.substr(varcharPos + 1, typestr.length() - 2 - varcharPos);
-				widths[j] = stoi(parenContent);
-			}
-			
-			string fullname = " " + attr.getName() + "[" + typestr + "]";
-			int fieldLength = fullname.length();
-			widths[j] = max(widths[j], fieldLength);//Either length of title or largest data
-			os << setw(widths[j]) << fullname;
+			string fullname = " " + attr.getName() + "[" + attr.getType() + "]";
+
+			widths[i] = max(widths[i], (int)fullname.length());			//Either length of title or largest data
+			os << setw(widths[i]) << fullname;
+
 		}
 		os << "\n";
 		
@@ -112,6 +105,7 @@ void DataManager::show(string &relationName, ostream& os) {
 		os << "NULL relation: " << relationName << endl;
 	}
 }
+
 
 
 void DataManager::drop(string &relationName) {
