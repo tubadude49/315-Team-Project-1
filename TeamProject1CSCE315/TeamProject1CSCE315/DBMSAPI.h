@@ -14,5 +14,7 @@ private:
 public:
 	DBMSAPI();
 	~DBMSAPI();
+	/* 	Send the parseable program to the DMLParser.
+	*/
 	void parseProgram(string &program, string &response);
 };

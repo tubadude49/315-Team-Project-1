@@ -28,15 +28,27 @@ class Relation
 	vector<vector<string>> tuples; //relation[tuple][attribute]
 	vector<string> buildCmds;
 	
+	/*	Default constructor
+	*/
 	Relation();
+	/*	Constructor with field definitions.
+	Instantiating the relation without these fields is not possible.
+	*/
 	Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKey);
 	//~Relation();
+	/* 	Check the relations' name, true if there is a match, false otherwise.
+	*/
 	bool is(string &name);
+	/* 	Getter function for the relations field.
+	Call in the order of (attribute,tuple)
+	*/
 	string& const at(unsigned int i, unsigned int j);
-
+	/*	Add a new tuple (row) onto the relation field.
+	*/
 	void addTuple(vector<string> &values);
 	void addCmd(string &command);
-
+	/* 	Getter function for the name field.
+	*/
 	string& const getName();
 	Attribute* getAttributeByName(string &attributeName);
 	//vector<string>& const getBuildCmds();

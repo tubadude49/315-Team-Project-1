@@ -7,14 +7,11 @@
 
 #include "Relation.h"
 
-/*	Default constructor
-*/
+
 Relation::Relation(){
 }
 
-/*	Constructor with field definitions.
-Instantiating the relation without these fields is not possible.
-*/
+
 Relation::Relation(string &relationName, vector<string> &attributeNames, vector<string> &attributeTypes, string &primaryKeyIn) {
 	name = relationName;
 	for (int i = 0; i < attributeNames.size(); i++) {
@@ -31,8 +28,7 @@ Relation::Relation(string &relationName, vector<string> &attributeNames, vector<
 //Relation::~Relation() { //causes error
 //}
 
-/* 	Check the relations' name, true if there is a match, false otherwise.
-*/
+
 bool Relation::is(string &name) {
 	if (Relation::name == name) {
 		return true;
@@ -40,21 +36,17 @@ bool Relation::is(string &name) {
 	else return false;
 }
 
-/* 	Getter function for the name field.
-*/
+
 string& const Relation::getName() {
 	return name;
 }
 
-/* 	Getter function for the relations field.
-Call in the order of (attribute,tuple)
-*/
+
 string& const Relation::at(unsigned int tuple, unsigned int attribute) {
 	return tuples[tuple][attribute];
 }
 
-/*	Add a new tuple (row) onto the relation field.
-*/
+
 void Relation::addTuple(vector<string> &values) {
 	unsigned int requiredSize = attributes.size();
 	if (values.size() == requiredSize) { // This should never be false in a situation where the parsed program has no errors

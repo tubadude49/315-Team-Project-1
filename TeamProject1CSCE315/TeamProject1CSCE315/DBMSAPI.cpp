@@ -14,8 +14,7 @@ DBMSAPI::DBMSAPI() {
 DBMSAPI::~DBMSAPI() {
 }
 
-/* 	Send the parseable program to the DMLParser.
-*/
+
 void DBMSAPI::parseProgram(string &program, string &response) {
 	dmlParser->parseProgram(program);
 	cout << response << endl;
