@@ -1,0 +1,1 @@
+CREATE TABLE sales (Price INTEGER, Date_Sold VARCHAR(20), VIN VARCHAR(17), Dealership_Name VARCHAR(30), Buyer_Name VARCHAR(50)) PRIMARY KEY (VIN);

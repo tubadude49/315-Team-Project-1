@@ -1,5 +1,8 @@
-// Shell code by Thomas Bateson
-// 2/3/2014
+// Thomas Bateson
+// Jason Sitzman
+// Colin Lenzen
+// Josh Tutt
+// 2/10/2014
 // CSCE 315
 
 #include "DMLParser.h"
@@ -44,7 +47,7 @@ int DMLParser::parse(string &line) {
 				for (int i = 7; i < 10; i++) {
 					booleanArgs.push_back(tokens[i]);
 				}
-				dataManager->update(outputRelation, setArgs, booleanArgs);
+				dataManager->update(outputRelation, setArgs[0], setArgs[2], booleanArgs);
 			}
 			else {
 				return 0x8;
@@ -53,6 +56,10 @@ int DMLParser::parse(string &line) {
 		else {
 			return 0x7;
 		}
+	}
+	else if (tokens[0] == "CLOSE") {
+		string outputRelation = tokens[1];
+		dataManager->drop(outputRelation);
 	}
 	else if (tokens[0] == "SHOW") { //process SHOW
 		string outputRelation = tokens[1];
@@ -116,7 +123,7 @@ int DMLParser::parse(string &line) {
 		if (tokens[2] == "WHERE") {
 			vector<string> booleanArgs;
 			if (tokens[3] == "(") {
-				for (int i = 3; tokens[i] != ")" && i < tokens.size(); i++) {
+				for (int i = 4; tokens[i] != ")" && i < tokens.size(); i++) {
 					booleanArgs.push_back(tokens[i]);
 				}
 			}

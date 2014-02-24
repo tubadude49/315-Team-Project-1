@@ -34,12 +34,12 @@ public:
 	/*	Update a tuple to represent new information.
 	Search by tuple (not index).
 	*/
-	void update(string &relationName, vector<string> &oldValues, vector<string> &newValues);
+	void update(string &relationName, string &attribute, string &value, vector<string> &booleanArgs);
 
 	/*	Delete a tuple.
 	Search by tuple (not index).
 	*/
-	void del(string &relationName, vector<string> &values);
+	void del(string &relationName, vector<string> &booleanArgs);
 
 	/*	Print the given relation to an ostream,
 	If unsure, send cout as the ostream.

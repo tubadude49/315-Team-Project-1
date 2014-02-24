@@ -13,6 +13,7 @@
 #include <algorithm>
 using namespace std;
 
+bool compare(vector<Attribute> attributes, vector<string> tuple, vector<string> booleanArgs);
 
 Relation* DataManager::getRelationByName(string &relationName) {
 	// Loop through this backwards to search through newly created relations first and older ones last
@@ -47,25 +48,41 @@ void DataManager::insert(string &relationName, vector<string> &values) {
 }
 
 
-void DataManager::update(string &relationName, vector<string> &oldValues, vector<string> &newValues) {
+void DataManager::update(string &relationName, string &attribute, string &value, vector<string> &booleanArgs) {
 	Relation* relation = getRelationByName(relationName);
 
 	if (relation != NULL) {
 		for (int i = 0; i < relation->tuples.size(); i++) {
-			if (relation->tuples[i] == oldValues) {
-				relation->tuples[i] = newValues;
+			if (compare(relation->attributes, relation->tuples[i], booleanArgs)) {
+
+				for (int j = 0; j < relation->attributes.size(); j++) {
+					if (relation->attributes[j].getName() == attribute) {
+						relation->tuples[i][j] = value;
+					}
+				}
+
 			}
-		}
+		}		
 	}
 }
 
-void DataManager::del(string &relationName, vector<string> &values) {
+void DataManager::del(string &relationName, vector<string> &booleanArgs) {
 	Relation* relation = getRelationByName(relationName);
 
 	if (relation != NULL) {
+		// Find the relations to remove
+		vector<int> toDelete;
 		for (int i = 0; i < relation->tuples.size(); i++) {
-			if (relation->tuples[i] == values) {
-				relation->tuples.erase(relation->tuples.begin() + i);
+			if (compare(relation->attributes, relation->tuples[i], booleanArgs)) {
+				toDelete.push_back(i);
+			}
+		}
+
+		// Remove the marked relations
+		for (int i = 0; i < toDelete.size(); i++) {
+			relation->tuples.erase(relation->tuples.begin() + toDelete[i]);
+			for (int j = i + 1; j < toDelete.size(); j++) {
+				toDelete[j]--;
 			}
 		}
 	}
@@ -152,20 +169,6 @@ void DataManager::write(string &relationName) {
 		ofs << buildCmds[i] << endl;
 	}
 	ofs.close();
-}
-
-
-void DataManager::shellSort(vector<string> &toSort) {
-	for (int h = toSort.size(); h /= 2;) {
-		for (int i = h; i < toSort.size(); i++) {
-			string k = toSort[i];
-			int j;
-			for (j = i; j >= h && k < toSort[j - h]; j -= h) {
-				toSort[j] = toSort[j - h]; 							
-			}
-			toSort[j] = k; 										
-		}
-	}
 }
 
 /*	parse the given boolean statement either by string or integer comparisons
@@ -548,12 +551,17 @@ void DataManager::relationToFile(string relationName){
 	if (relation != NULL) {
 		string name = relation->name + ".txt";
 		ofstream out(name.c_str());
-		out << "CREATE TABLE " << relation->name << "(";
+		out << "CREATE TABLE " << relation->name << " (";
 		for (int i = 0; i < relation->attributes.size(); i++) {
 			out << relation->attributes[i].getName() << " " << relation->attributes[i].getType();
-			if (i + 1 < relation->attributes.size()) out << ", ";
+			if (i + 1 < relation->attributes.size()) {
+				out << ", ";
+			}
+			else if (i + 1 == relation->attributes.size() && relation->attributes[i].getType()[0] == 'V') {
+				out << ")";
+			}
 		}
-		out << ") PRIMARY KEY(" << relation->getPrimaryKey() << ");";
+		out << ") PRIMARY KEY (" << relation->getPrimaryKey() << ");";
 		for (int i = 0; i < relation->tuples.size(); i++){
 			out << "INSERT INTO " << relation->name << " VALUES FROM (";
 			for (int j = 0; j < relation->tuples[i].size(); j++){

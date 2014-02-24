@@ -1,0 +1,1 @@
+CREATE TABLE listings (Price INTEGER, Date_Listed VARCHAR(20), VIN VARCHAR(17), Dealership_Name VARCHAR(30)) PRIMARY KEY (VIN);

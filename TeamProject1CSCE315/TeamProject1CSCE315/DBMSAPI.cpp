@@ -1,5 +1,8 @@
-// Shell code by Thomas Bateson
-// 2/3/2014
+// Thomas Bateson
+// Jason Sitzman
+// Colin Lenzen
+// Josh Tutt
+// 2/10/2014
 // CSCE 315
 
 #include <iostream>

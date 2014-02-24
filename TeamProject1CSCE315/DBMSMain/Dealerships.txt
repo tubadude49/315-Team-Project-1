@@ -1,14 +1,1 @@
-CREATE TABLE Dealerships (Name VARCHAR(30), City, VARCHAR(20), State VARCHAR(12)) PRIMARY KEY (State, City);
-INSERT INTO Dealerships VALUES FROM ("Sterling McCall Toyota", "Houston", "Texas");
-INSERT INTO Dealerships VALUES FROM ("Charles Maund Toyota", "Austin", "Texas");
-INSERT INTO Dealerships VALUES FROM ("Seegar Toyota", "St. Louis", "Missouri");
-INSERT INTO Dealerships VALUES FROM ("LegendsToyota", "Kansas City", "Kansas");
-INSERT INTO Dealerships VALUES FROM ("Sterling McCall Ford", "Houston", "Texas");
-INSERT INTO Dealerships VALUES FROM ("Bill Pierre Ford", "Seattle", "Washington");
-INSERT INTO Dealerships VALUES FROM ("Pat Milliken Ford", "Detriot", "Michigan");
-INSERT INTO Dealerships VALUES FROM ("Randall Reed Ford", "Oklahoma City", "Oklahoma");
-INSERT INTO Dealerships VALUES FROM ("Bale Honda", "Little Rock", "Arkansas");
-INSERT INTO Dealerships VALUES FROM ("Howdy Honda", "Austin", "Texas");
-INSERT INTO Dealerships VALUES FROM ("Bob Howard Honda", "Oklahoma City", "Oklahoma");
-INSERT INTO Dealerships VALUES FROM ("Eskridge Honda", "Oklahoma City", "Oklahoma");
-EXIT;
+CREATE TABLE dealerships (Dealership_Name VARCHAR(30), City VARCHAR(20), State VARCHAR(12)) PRIMARY KEY (State);INSERT INTO dealerships VALUES FROM ("Sterling McCall Toyota", "Houston", "Texas");INSERT INTO dealerships VALUES FROM ("Charles Maund Toyota", "Austin", "Texas");INSERT INTO dealerships VALUES FROM ("Seegar Toyota", "St. Louis", "Missouri");INSERT INTO dealerships VALUES FROM ("LegendsToyota", "Kansas City", "Kansas");INSERT INTO dealerships VALUES FROM ("Sterling McCall Ford", "Houston", "Texas");INSERT INTO dealerships VALUES FROM ("Bill Pierre Ford", "Seattle", "Washington");INSERT INTO dealerships VALUES FROM ("Pat Milliken Ford", "Detriot", "Michigan");INSERT INTO dealerships VALUES FROM ("Randall Reed Ford", "Oklahoma City", "Oklahoma");INSERT INTO dealerships VALUES FROM ("Bale Honda", "Little Rock", "Arkansas");INSERT INTO dealerships VALUES FROM ("Howdy Honda", "Austin", "Texas");INSERT INTO dealerships VALUES FROM ("Bob Howard Honda", "Oklahoma City", "Oklahoma");INSERT INTO dealerships VALUES FROM ("Eskridge Honda", "Oklahoma City", "Oklahoma");
