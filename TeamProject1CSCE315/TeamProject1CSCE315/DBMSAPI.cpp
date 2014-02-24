@@ -15,7 +15,6 @@ DBMSAPI::~DBMSAPI() {
 }
 
 
-void DBMSAPI::parseProgram(string &program, string &response) {
-	dmlParser->parseProgram(program);
-	cout << response << endl;
+int DBMSAPI::execute(string &program) {
+	return dmlParser->parseProgram(program);
 }

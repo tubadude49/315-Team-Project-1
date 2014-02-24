@@ -544,28 +544,32 @@ bool DataManager::testRelation(string &relationName, vector<string> attrNames, v
 */
 void DataManager::relationToFile(string relationName){
 	Relation* relation = getRelationByName(relationName);
-	string name = relation->name + ".txt";
-	ofstream out(name.c_str());
-	out << "CREATE TABLE " << relation->name << "(";
-	for (int i = 0; i < relation->attributes.size(); i++) {
-		out << relation->attributes[i].getName() << " " << relation->attributes[i].getType();
-		if (i + 1 < relation->attributes.size()) out << ", ";
-	}
-	out << ") PRIMARY KEY(" << relation->getPrimaryKey() << ");";
-	for (int i = 0; i < relation->tuples.size(); i++){
-		out << "INSERT INTO " << relation->name << " VALUES FROM (";
-		for (int j = 0; j < relation->tuples[i].size(); j++){
-			if (relation->attributes[j].getType()[0] == 'V') {
-				out << '\"' << relation->tuples[i][j] << '\"';
-			}
-			else {
-				out << relation->tuples[i][j];
-			}
-			if (j + 1 < relation->tuples[i].size()) out << ", ";
+
+	if (relation != NULL) {
+		string name = relation->name + ".txt";
+		ofstream out(name.c_str());
+		out << "CREATE TABLE " << relation->name << "(";
+		for (int i = 0; i < relation->attributes.size(); i++) {
+			out << relation->attributes[i].getName() << " " << relation->attributes[i].getType();
+			if (i + 1 < relation->attributes.size()) out << ", ";
 		}
-		out << ");";
+		out << ") PRIMARY KEY(" << relation->getPrimaryKey() << ");";
+		for (int i = 0; i < relation->tuples.size(); i++){
+			out << "INSERT INTO " << relation->name << " VALUES FROM (";
+			for (int j = 0; j < relation->tuples[i].size(); j++){
+				if (relation->attributes[j].getType()[0] == 'V') {
+					out << '\"' << relation->tuples[i][j] << '\"';
+				}
+				else {
+					out << relation->tuples[i][j];
+				}
+				if (j + 1 < relation->tuples[i].size()) out << ", ";
+			}
+			out << ");";
+		}
+		out.close();
 	}
-	out.close();
+	
 }
 
 /*	Read build commands from fileName and set them to the specified relation.

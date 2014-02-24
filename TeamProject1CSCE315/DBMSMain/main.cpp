@@ -9,6 +9,7 @@
 #include <fstream>
 #include "DBMSAPI.h"
 
+/*
 int main() {
 
 	string testName = "TestFile";
@@ -34,3 +35,4 @@ int main() {
 	string tester;
 	cin >> tester;
 }
+*/
