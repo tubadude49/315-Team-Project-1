@@ -22,6 +22,8 @@ int main() {
 
 	initRelations(&dbms);
 	cout << displayMainMenu() << endl;
+
+	int searchResults = 0;
 	
 	while (1) {
 		string in;
@@ -43,6 +45,7 @@ int main() {
 					values.push_back(tokens[i]);
 				}
 				insertValue("cars", values, &dbms);
+				cout << "Addition approved!" << endl << endl;
 			}
 			else if (tokens[1] == "DEALERSHIP") {
 				vector<string> values;
@@ -50,11 +53,12 @@ int main() {
 					values.push_back(tokens[i]);
 				}
 				insertValue("dealerships", values, &dbms);
+				cout << "Addition approved!" << endl << endl;
 			}
 		}
 		else if (tokens[0] == "LIST") {
 			if (tokens.size() != 5) {
-				cout << "Invalid number of arguments!" << endl;
+				cout << "Invalid number of arguments!" << endl << endl;
 			}
 			else {
 				//Price INTEGER, Date_Listed VARCHAR(20), VIN VARCHAR(17), Dealership_Name VARCHAR(30)
@@ -65,7 +69,7 @@ int main() {
 		}
 		else if (tokens[0] == "UNLIST") {
 			if (tokens.size() != 2) {
-				cout << "Invalid number of arguments!" << endl;
+				cout << "Invalid number of arguments!" << endl << endl;
 			}
 			else {
 				string removeListing = "DELETE FROM listings WHERE (VIN == \"" + tokens[1] + "\");";
@@ -74,7 +78,7 @@ int main() {
 		}
 		else if (tokens[0] == "SELL") {
 			if (tokens.size() != 6) {
-				cout << "Invalid number of arguments!" << endl;
+				cout << "Invalid number of arguments!" << endl << endl;
 			}
 			else {
 				//Price INTEGER, Date_Sold VARCHAR(20), VIN VARCHAR(17), Dealership_Name VARCHAR(30), Buyer_Name VARCHAR(50)
@@ -84,7 +88,7 @@ int main() {
 				dbms.execute(removeListing);
 				string removeInventory = "DELETE FROM cars WHERE (VIN == \"" + tokens[3] + "\");";
 				dbms.execute(removeInventory);
-				cout << "Sale approved!" << endl;
+				cout << "Sale approved!" << endl << endl;
 			}			
 		}
 		else if (tokens[0] == "INVENTORY") {
@@ -100,15 +104,19 @@ int main() {
 			showRelation("sales", &dbms);
 		}
 		else if (tokens[0] == "SEARCH") {
-			string query = "searchresult <- select (";
+			searchResults++;
+			stringstream ss;
+			ss << searchResults;
+			string query = "searchresult" + ss.str() + " <- select (";
 			for (int i = 2; i < tokens.size(); i++) {
 				query += tokens[i];
 				if (i + 1 < tokens.size()) { query += " "; }
 			}
 			query += ") " + tokens[1] + ";";
 			dbms.execute(query);			
-			string showResult = "SHOW searchresult;";
+			string showResult = "SHOW searchresult" + ss.str() + ";";
 			dbms.execute(showResult);
+			cout << endl;
 		}
 		else if (tokens[0] == "UPDATE") {
 			if (tokens[1] == "LISTING") {
@@ -142,6 +150,29 @@ int main() {
 			string closeProject = "CLOSE projectResult;";
 			dbms.execute(closeProject);
 		}
+		else if (tokens[0] == "UNION") {
+			if (tokens[1] == "SEARCHES") {
+				string unionQuery = "unionResult <- " + tokens[2] + " + " + tokens[3] + ";";
+				dbms.execute(unionQuery);
+				string showUnion = "SHOW unionResult;";
+				dbms.execute(showUnion);
+				string closeUnion = "CLOSE unionResult;";
+				dbms.execute(closeUnion);
+			}
+		}
+		else if (tokens[0] == "DIFFERENCE") {
+			if (tokens[1] == "SEARCHES") {
+				string diffQuery = "diffResult <- " + tokens[2] + " - " + tokens[3] + ";";
+				dbms.execute(diffQuery);
+				string showDiff = "SHOW diffResult;";
+				dbms.execute(showDiff);
+				string closeDiff = "CLOSE diffResult;";
+				dbms.execute(closeDiff);
+			}
+		}
+		else {
+			cout << "Unknown command!" << endl << endl;
+		}
 
 	}
 }
@@ -173,8 +204,11 @@ string displayMainMenu() {
 		"LIST <Price> <Date_Listed> <VIN> <Dealership_Name>.\n"
 		"UNLIST <VIN>.\n"
 		"SELL <Price> <Date_Sold> <VIN> <Dealership_Name> <Buyer_Name>.\n"
-		"SEARCH <Relation_Name> <Condition(s)> - Search a relation bounded by a conditional statement.\n"
-		"CROSS.\n"
+		"SEARCH <Relation Name> <Condition(s)> - Search a relation bounded by a conditional statement.\n"
+		"CROSS - Obtain the cross product of the inventory of cars and dealerships.\n"
+		"PROJECT <Relation Name> <Attribute(s)> - Project attributes onto a resultant.\n"
+		"UNION SEARCHES <Search Name> <Search Name>.\n"
+		"DIFFERENCE SEARCHES <Search Name> <Search Name>.\n"
 		"HELP - Display this menu again\n"
 		"EXIT - Exit the program.\n";
 }
@@ -185,7 +219,6 @@ void insertValue(string relation, vector<string> values, DBMSAPI* dbms) {
 		request += values[i];
 		if (i + 1 < values.size()) { request += ", "; }
 	}
-	//cout << "Sent req: " << request << endl;
 	dbms->execute(request);
 }
 
