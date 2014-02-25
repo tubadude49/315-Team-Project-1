@@ -9,37 +9,44 @@
 #include <fstream>
 #include "DBMSAPI.h"
 
+/* Split a given string into a vector<string>. Split at space. */
 vector<string> splitAtSpace(string splitThis);
 
+/* Return the string constant that holds the main menu display. */
 string displayMainMenu();
+/* Construct a request to the dbms api to insert a value into a relation. */
 void insertValue(string relation, vector<string> values, DBMSAPI* dbms);
+/* use the OPEN command to read from files to open the databases. */
 void initRelations(DBMSAPI* dbms);
+/* use the WRITE command to save to files the opened databases. 
+Used at the end of program execution. */
 void saveRelations(DBMSAPI* dbms);
+/* send a SHOW command to the dbms api to print out a relation. */
 void showRelation(string relation, DBMSAPI* dbms);
 
 int main() {
-	DBMSAPI dbms;
+	DBMSAPI dbms;	//Declare the dbms api
 
 	initRelations(&dbms);
 	cout << displayMainMenu() << endl;
 
 	int searchResults = 0;
 	
-	while (1) {
+	while (1) {		//input loop
 		string in;
 		getline(cin, in);
 
-		vector<string> tokens = splitAtSpace(in);
+		vector<string> tokens = splitAtSpace(in);	//split the command given by spaces
 
-		if (tokens[0] == "HELP") {
+		if (tokens[0] == "HELP") {				//process HELP
 			cout << displayMainMenu() << endl;
 		}
-		else if (tokens[0] == "EXIT") {
-			//saveRelations(&dbms);
+		else if (tokens[0] == "EXIT") {			//process EXIT
+			saveRelations(&dbms);
 			exit(0);
 		}
-		else if (tokens[0] == "ADD") {
-			if (tokens[1] == "CAR") {
+		else if (tokens[0] == "ADD") {			
+			if (tokens[1] == "CAR") {			//process ADD CAR
 				vector<string> values;
 				for (int i = 2; i < tokens.size(); i++) {
 					values.push_back(tokens[i]);
@@ -47,7 +54,7 @@ int main() {
 				insertValue("cars", values, &dbms);
 				cout << "Addition approved!" << endl << endl;
 			}
-			else if (tokens[1] == "DEALERSHIP") {
+			else if (tokens[1] == "DEALERSHIP") {//process ADD DEALERSHIP
 				vector<string> values;
 				for (int i = 2; i < tokens.size(); i++) {
 					values.push_back(tokens[i]);
@@ -56,7 +63,7 @@ int main() {
 				cout << "Addition approved!" << endl << endl;
 			}
 		}
-		else if (tokens[0] == "LIST") {
+		else if (tokens[0] == "LIST") {			//process LIST
 			if (tokens.size() != 5) {
 				cout << "Invalid number of arguments!" << endl << endl;
 			}
@@ -67,7 +74,7 @@ int main() {
 				cout << "Listing approved!" << endl << endl;
 			}
 		}
-		else if (tokens[0] == "UNLIST") {
+		else if (tokens[0] == "UNLIST") {		//process UNLIST
 			if (tokens.size() != 2) {
 				cout << "Invalid number of arguments!" << endl << endl;
 			}
@@ -76,7 +83,7 @@ int main() {
 				dbms.execute(removeListing);
 			}
 		}
-		else if (tokens[0] == "SELL") {
+		else if (tokens[0] == "SELL") {			//process SELL
 			if (tokens.size() != 6) {
 				cout << "Invalid number of arguments!" << endl << endl;
 			}
@@ -91,19 +98,19 @@ int main() {
 				cout << "Sale approved!" << endl << endl;
 			}			
 		}
-		else if (tokens[0] == "INVENTORY") {
+		else if (tokens[0] == "INVENTORY") {	//process INVENTORY
 			showRelation("cars", &dbms);
 		}
-		else if (tokens[0] == "DEALERSHIPS") {
+		else if (tokens[0] == "DEALERSHIPS") {	//process DEALERSHIPS
 			showRelation("dealerships", &dbms);
 		}
-		else if (tokens[0] == "LISTINGS") {
+		else if (tokens[0] == "LISTINGS") {		//process LISTINGS
 			showRelation("listings", &dbms);
 		}
-		else if (tokens[0] == "SALES") {
+		else if (tokens[0] == "SALES") {		//process SALES
 			showRelation("sales", &dbms);
 		}
-		else if (tokens[0] == "SEARCH") {
+		else if (tokens[0] == "SEARCH") {		//process SEARCH
 			searchResults++;
 			stringstream ss;
 			ss << searchResults;
@@ -119,7 +126,7 @@ int main() {
 			cout << endl;
 		}
 		else if (tokens[0] == "UPDATE") {
-			if (tokens[1] == "LISTING") {
+			if (tokens[1] == "LISTING") {		//process UPDATE LISTING
 				if (tokens.size() != 4) {
 					cout << "Invalid number of arguments!" << endl;
 				}
@@ -129,7 +136,7 @@ int main() {
 				}				
 			}
 		}
-		else if (tokens[0] == "CROSS") {
+		else if (tokens[0] == "CROSS") {		//process CROSS
 			string cross = "crossResult <- dealerships * cars;";
 			dbms.execute(cross);
 			string showCross = "SHOW crossResult;";
@@ -137,7 +144,7 @@ int main() {
 			string closeCross = "CLOSE crossResult;";
 			dbms.execute(closeCross);
 		}
-		else if (tokens[0] == "PROJECT") {
+		else if (tokens[0] == "PROJECT") {		//process PROJECT
 			string project = "projectResult <- project (";
 			for (int i = 2; i < tokens.size(); i++) {
 				project += tokens[i];
@@ -150,8 +157,8 @@ int main() {
 			string closeProject = "CLOSE projectResult;";
 			dbms.execute(closeProject);
 		}
-		else if (tokens[0] == "UNION") {
-			if (tokens[1] == "SEARCHES") {
+		else if (tokens[0] == "UNION") {		
+			if (tokens[1] == "SEARCHES") {		//process UNION SEARCHES
 				string unionQuery = "unionResult <- " + tokens[2] + " + " + tokens[3] + ";";
 				dbms.execute(unionQuery);
 				string showUnion = "SHOW unionResult;";
@@ -160,8 +167,8 @@ int main() {
 				dbms.execute(closeUnion);
 			}
 		}
-		else if (tokens[0] == "DIFFERENCE") {
-			if (tokens[1] == "SEARCHES") {
+		else if (tokens[0] == "DIFFERENCE") {	
+			if (tokens[1] == "SEARCHES") {		//process DIFFERENCE SEARCHES
 				string diffQuery = "diffResult <- " + tokens[2] + " - " + tokens[3] + ";";
 				dbms.execute(diffQuery);
 				string showDiff = "SHOW diffResult;";
@@ -170,7 +177,7 @@ int main() {
 				dbms.execute(closeDiff);
 			}
 		}
-		else {
+		else {									//process unknown command
 			cout << "Unknown command!" << endl << endl;
 		}
 
